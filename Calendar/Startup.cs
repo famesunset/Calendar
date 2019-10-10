@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Calendar.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Business_Layer;
 
 namespace Calendar
 {
@@ -32,7 +33,12 @@ namespace Calendar
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
-            });           
+            });
+
+            // Dependency Injection
+            // TODO: Заменить ILogic на интерфейс работы с бд
+            // Logic - класс, который будет реализовать этот интерфейс
+            services.AddSingleton<ILogic, Logic>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
