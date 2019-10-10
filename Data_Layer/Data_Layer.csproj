@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Access.cs" />
     <Compile Include="Calendar.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schedule.cs" />
