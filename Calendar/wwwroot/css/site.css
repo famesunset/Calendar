@@ -1,5 +1,5 @@
 ﻿body {
-    font-family: Roboto, sans-serif;
+    font-family: var(--font-main-family);
     font-weight: 500;
     color: var(--color-main-gray);
 }
