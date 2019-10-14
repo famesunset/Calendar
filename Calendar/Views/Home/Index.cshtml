@@ -1,9 +1,15 @@
 ﻿@{
-    ViewData["Title"] = "Main Page";
+ViewData["Title"] = "Main Page";
 }
 
 @section Styles{
-    <link rel="stylesheet" href="~/css/header.css">   
+<link rel="stylesheet" href="~/css/header/header.css">
+<link rel="stylesheet" href="~/css/main/create-event.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 }
 
-<p>Main Page</p>
+@section Scripts{
+<script type="module" src="~/js/event/time.js"></script>
+}
+
+<partial name="CreateEventForms/CreateEventPartial" />
