@@ -1,0 +1,45 @@
+<div id="options" class="options">
+    <div class="inline-group">
+        <div>
+            <i class="replay-icon material-icons">replay</i>
+        </div>
+        <div class="all-day-event">
+            <label>
+                <input type="checkbox" class="filled-in" />
+                <span>All day</span>
+            </label>
+        </div>
+        <div class="repeat">
+            <!-- Dropdown Trigger -->
+            <div class="dropdown">
+                <a class='dropdown-trigger' data-target='dropdown'>Don't repeat</a>
+                <i class="material-icons tiny">arrow_drop_down</i>
+            </div>
+
+            <!-- Dropdown Structure -->
+            <ul id='dropdown' class='dropdown-content'>
+                <li><a class="no-repeat">Don't repeat</a></li>
+                <li><a class="everyday">Everyday</a></li>
+                <li><a id="every-week" class="every-week"></a></li>
+                <li><a id="every-month" class="every-month"></a></li>
+                <li><a id="every-year" class="every-year"></a></li>
+                <li>
+                    <!-- Modal Trigger -->
+                    <a href="#custom-repeat" class="custom-repeat modal-trigger">Custom...</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="description">
+        <i class="material-icons">format_align_left</i>
+        <textarea placeholder="Description" id="description" class="materialize-textarea"></textarea>
+    </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="custom-repeat" class="modal">
+    <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+    </div>
+</div>

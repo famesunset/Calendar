@@ -6,6 +6,8 @@
     -webkit-box-shadow: var(--box-shadow-event-form);
     -moz-box-shadow: var(--box-shadow-event-form);
     box-shadow: var(--box-shadow-event-form);
+    transition-property: all;
+    transition-duration: 500ms;
 }
 
 .close {
@@ -25,7 +27,7 @@
 
 .create-event-form .title {
     margin-left: 42px;    
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 }
 
 .create-event-form .title input {
@@ -37,7 +39,7 @@
     color: var(--color-main-gray);
 }
 
-.create-event-form span {
+.select-date span {
     opacity: .7;
 }
 
@@ -45,7 +47,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 }
 
 .select-date i {
@@ -96,14 +98,14 @@
     box-shadow: none;
 }
 
-.actions .more-options {
+.actions .more-options-btn {
     padding: 8px 16px;
     color: var(--color-main-gray);
     transition-property: all;
     transition-duration: var(--transition-main-duration);
 }
 
-.actions .more-options:hover {
+.actions .more-options-btn:hover {
     background-color: var(--color-items-main-gray-bg);
     cursor: pointer;
     transition-property: all;

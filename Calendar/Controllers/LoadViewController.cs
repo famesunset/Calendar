@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Calendar.Models;
 
 namespace Calendar.Controllers
 {
-    public class HomeController : Controller
+    public class LoadViewController : Controller
     {
-        public IActionResult Index()
+        public IActionResult EventMoreOptions()
         {
-            return View();
+            return PartialView("CreateEventForms/MoreOptionsPartial");
         }
     }
 }
