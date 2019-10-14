@@ -9,9 +9,12 @@
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Data.Tools.Msbuild" Version="10.0.61804.210" />
-    <PackageReference Include="Microsoft.Data.Tools.UnitTest" Version="10.0.60809" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Business_Layer\Business_Layer.csproj" />
+    <ProjectReference Include="..\Data_Layer\Data_Layer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
