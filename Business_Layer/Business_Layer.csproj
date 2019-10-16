@@ -88,9 +88,19 @@
     <Compile Include="Models\Access.cs" />
     <Compile Include="Models\Calendar.cs" />
     <Compile Include="Models\Event.cs" />
-    <Compile Include="Models\Schedule.cs" />
+    <Compile Include="Models\EventSchedule.cs" />
+    <Compile Include="Models\NotificationSchedule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\User.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data_Layer\Data_Layer.csproj">
+      <Project>{70368386-f971-4152-8420-027bd0ae8e9a}</Project>
+      <Name>Data_Layer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
