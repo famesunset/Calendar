@@ -29,17 +29,17 @@ namespace Data_Layer
             this.Title = title;
         }
 
-        public void AddEvent(int idCalendar, string description, string notification, string title)
+        public void AddEvent(Event eEvent)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
             {
-                DataSource = "WIN-BR9AAF20AAG",
+                DataSource = "20.188.35.217",
                 UserID = "sa",
                 Password = "Sunsetfame05!",
                 InitialCatalog = "Calendar"
             };
             SqlConnection connection = new SqlConnection(builder.ConnectionString);
-            var AddEvent = connection.Query<Event>("AddEvent", new {idCalendar, notification, description, title},
+            var AddEvent = connection.Query<Event>("AddEvent", new {eEvent.id_Calendar, eEvent.Notification, eEvent.Description, eEvent.Title},
                 commandType: CommandType.StoredProcedure);
         }
 
