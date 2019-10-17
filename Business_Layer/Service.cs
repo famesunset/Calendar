@@ -42,7 +42,7 @@ namespace Business_Layer
             }
             // TODO: Map BusinessEvent to DataEvent
             Data_Layer.Event dataEvent = Map.Map<Event, Data_Layer.Event>(@event);
-            // TODO: Invoke AddEvent() from DataLayer
+            dataEvent.AddEvent();
             return -1;
         }
     }
