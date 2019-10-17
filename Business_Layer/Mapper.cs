@@ -11,10 +11,10 @@ namespace Business_Layer
             {
                 // User
                 cfg.CreateMap<User, Data_Layer.User>()
-                    .ForMember(dest => dest.id_User, map => map.MapFrom(src => src.Id));
+                    .ForMember(dest => dest.IdUser, map => map.MapFrom(src => src.Id));
 
                 cfg.CreateMap<Data_Layer.User, User>()
-                    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.id_User));
+                    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.IdUser));
 
                 // Calendar
                 cfg.CreateMap<Calendar, Data_Layer.Calendar>()
