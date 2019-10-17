@@ -9,6 +9,9 @@ namespace Business_Layer.Tests
         [TestMethod]
         public void TestMethod1()
         {
+            IService service = new Service();
+
+            service.AddEvent(null, new Models.Event { CalendarId = 2, Description = "Desc", Title = "Calendar00" });
         }
     }
 }

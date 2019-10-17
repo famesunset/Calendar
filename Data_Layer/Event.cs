@@ -28,7 +28,10 @@ namespace Data_Layer
             this.Notification = notification;
             this.Title = title;
         }
+        public Event()
+        {
 
+        }
         public void AddEvent(Event eEvent)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
@@ -42,6 +45,21 @@ namespace Data_Layer
             var AddEvent = connection.Query<Event>("AddEvent", new {eEvent.id_Calendar, eEvent.Notification, eEvent.Description, eEvent.Title},
                 commandType: CommandType.StoredProcedure);
         }
+
+        public void AddEvent()
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+            {
+                DataSource = "20.188.35.217",
+                UserID = "sa",
+                Password = "Sunsetfame05!",
+                InitialCatalog = "Calendar"
+            };
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+            var AddEvent = connection.Query<Event>("AddEvent", new { this.id_Calendar, this.Notification, this.Description, this.Title },
+                commandType: CommandType.StoredProcedure);
+        }
+
 
         /// <summary>
         /// Get data from view to put it into the db.
