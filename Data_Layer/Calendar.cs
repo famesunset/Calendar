@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data_Layer
 {
-    class Calendar
+    public class Calendar
     {
         public int id_Calendar { get; set; }
         public string Name { get; set; }

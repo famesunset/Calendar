@@ -1,10 +1,11 @@
 ﻿using System;
 using Business_Layer.Models;
 using System.Collections.Generic;
+using static Business_Layer.Mapper;
 
 namespace Business_Layer
 {
-    public class Logic : ILogic
+    public class Service : IService
     {
         private const bool Debug = true;
 
@@ -40,6 +41,7 @@ namespace Business_Layer
                 // TODO: Get user by session
             }
             // TODO: Map BusinessEvent to DataEvent
+            Data_Layer.Event dataEvent = Map.Map<Event, Data_Layer.Event>(@event);
             // TODO: Invoke AddEvent() from DataLayer
             return -1;
         }

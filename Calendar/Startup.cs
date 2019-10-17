@@ -36,9 +36,9 @@ namespace Calendar
             });
 
             // Dependency Injection
-            // TODO: Заменить ILogic на интерфейс работы с бд
-            // Logic - класс, который будет реализовать этот интерфейс
-            services.AddSingleton<ILogic, Logic>();
+            // TODO: Заменить IService на интерфейс работы с бд
+            // Service - класс, который будет реализовать этот интерфейс
+            services.AddSingleton<IService, Service>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

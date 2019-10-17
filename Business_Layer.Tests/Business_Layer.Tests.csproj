@@ -96,6 +96,10 @@
       <Project>{7ff4227e-ebda-426c-9422-c3db93d2b6cc}</Project>
       <Name>Business_Layer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Data_Layer\Data_Layer.csproj">
+      <Project>{70368386-F971-4152-8420-027BD0AE8E9A}</Project>
+      <Name>Data_Layer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

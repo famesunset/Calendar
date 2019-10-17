@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data_Layer
 {
-    class User
+    public class User
     {
         public int id_User { get; set; }
         public string Role { get; set; }

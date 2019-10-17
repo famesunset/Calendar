@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace Data_Layer
 {
-    class Event
+    public class Event
     {
+        public int id { get; set; }
+        public int id_Calendar { get; set; }
+        public string Description { get; set; }
+        public string Notification { get; set; }
+        public string Title { get; set; }
+
         /// <summary>
         /// Get data from view to put it into the db.
         /// </summary>
