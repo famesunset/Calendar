@@ -50,3 +50,8 @@
 .description i {
     margin-right: 18px;
 }
+
+.description textarea {
+    font-family: var(--font-main-family) !important;
+    color: var(--color-main-gray) !important;
+}

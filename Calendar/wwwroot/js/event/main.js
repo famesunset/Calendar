@@ -3,19 +3,50 @@ import { TimePicker } from "../models/TimePicker.js";
 
 const HOUR = 1000 * 60 * 60; // hour in ms
 
-$(function() {         
+var datePickers = { };
+var timePickers = { };
+
+$(function () {
     let now = new Date();
     let nextHour = new Date();
     nextHour.setHours(now.getHours() + 1);
 
-    let datePicker = new DatePicker(new Date());
-    let leftTimePicker = new TimePicker(now, { defaultTime: "now" }, '.timepicker.left-range');
-    let rightTimePicker = new TimePicker(nextHour, { defaultTime: `now`, fromNow: HOUR }, '.timepicker.right-range');
+    datePickers = {
+        "date-start": new DatePicker('#date-start', {
+            setDefaultDate: true,
+            defaultDate: new Date(),
+            firstDay: 1
+        }),
 
-    leftTimePicker.setDefaultInputValue();
-    rightTimePicker.setDefaultInputValue();
+        "date-finish": new DatePicker('#date-finish', {
+            setDefaultDate: true,
+            defaultDate: new Date(),
+            firstDay: 1
+        })
+    };
 
-    datePicker.runDatePickers();
-    leftTimePicker.runTimePicker();
-    rightTimePicker.runTimePicker();
+    timePickers = {
+        'time-start': new TimePicker(now, {
+            defaultTime: "now"
+        }, '#time-start'),
+
+        'time-finish': new TimePicker(nextHour, {
+            defaultTime: `now`,
+            fromNow: HOUR
+        }, '#time-finish')
+    };
+
+    for (let key in datePickers) {        
+        datePickers[key].runDatePicker();
+    }
+
+    for (let key in timePickers) {
+        timePickers[key].setDefaultInputValue();
+        timePickers[key].runTimePicker();
+    }
 });
+
+export {
+    datePickers,
+    timePickers
+};

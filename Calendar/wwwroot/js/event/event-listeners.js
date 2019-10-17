@@ -1,18 +1,21 @@
 import { RepeatDropdown } from '../models/RepeatDropdown.js';
+import { TimePicker } from '../models/TimePicker.js';
+import { Event } from '../models/Event.js';
+import { datePickers, timePickers } from './main.js';
 
-$(function() {
+$(function () {
     $('.more-options-btn').click(() => {
-        let options = document.getElementById("options");
-
         // Options are already open
-        let isOpenOptions = options != null;
-        if (isOpenOptions) {            
-            return;
-        }            
+        if (document.getElementById("options") != null) 
+            return;        
 
         // Load more options to container
         $('#more-options').load('LoadView/EventMoreOptions', () => {
-            let dropdown = new RepeatDropdown(new Date(), { constrainWidth: false });
+            // TODO: переколхозить
+            // Тянуть значения для dropdown из backend
+            var dropdown = new RepeatDropdown(new Date(), {
+                constrainWidth: false
+            });
 
             dropdown.setEveryWeekText(`#every-week`);
             dropdown.setEveryMonthText('#every-month');
@@ -23,8 +26,32 @@ $(function() {
             $('.dropdown-content a').click((event) => {
                 dropdown.clickHandler(event);
             });
-            
-            $('.modal').modal();
-        });        
+
+            $('#custom-repeat').modal();        
+        });
+    });
+
+    $('#btn-save').click((event) => {
+        let title = $('#title').val();
+        let description = $('#description').val();
+        let isAllDay = $('#all-day').is(":checked");
+        let dateStart = datePickers['date-start'].getDate();
+        let dateFinish = datePickers['date-finish'].getDate();
+        let timeStart = timePickers['time-start'].getDate();
+        let timeFinish = timePickers['time-finish'].getDate();
+
+        var event = new Event(
+            title,
+            description,
+            dateStart,
+            dateFinish,
+            timeStart,
+            timeFinish,
+            isAllDay,
+            null,
+            null
+        );
+
+        event.sendToMVC();        
     });
 });

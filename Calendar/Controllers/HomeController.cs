@@ -14,5 +14,13 @@ namespace Calendar.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult CreateEvent([FromBody] Event @event)
+        {
+            ;
+
+            return Json("Event created");
+        }
     }
 }

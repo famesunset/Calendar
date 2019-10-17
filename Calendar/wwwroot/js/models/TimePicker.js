@@ -1,13 +1,10 @@
-var Time = function(date) {
-    this.hours = date.getHours();
-    this.minutes = date.getMinutes();
-    this.ampm = `${date.getHours() < 12 ? 'AM' : 'PM'}`;
-};
+import { Time } from './Time.js';
 
-var TimePicker = function(date, options, inputSelector) {    
+var TimePicker = function(date, options, selector) {    
     this.time = new Time(date);
-    this.selector = inputSelector;
+    this.selector = selector;
     this.options = options;    
+    this.instance = null;
 };
 
 TimePicker.prototype.setDefaultInputValue = function() {    
@@ -17,16 +14,28 @@ TimePicker.prototype.setDefaultInputValue = function() {
 };
 
 TimePicker.prototype.runTimePicker = function() {
-    $(this.selector).timepicker(this.options);
+    this.instance = $(this.selector).timepicker(this.options);
+
+    let instance = this.getInstance();
+    instance.amOrPm = this.time.ampm;
 };
 
-Time.prototype.getTime = function() {
-    if (this.hours > 12)
-        this.hours -= 12;
+TimePicker.prototype.getInstance = function() {    
+    return this.instance[0].M_Timepicker;
+};
 
-    let showMinutes = this.minutes < 10 ? `0${this.minutes}` : this.minutes;
-    
-    return `${this.hours}:${showMinutes} ${this.ampm}`;
-}
+TimePicker.prototype.getDate = function() {    
+    let time = $(this.selector).val();
+    // delete AM or PM and split hours from minutes
+    let [hours, minutes] = time.slice(0, -3).split(':');
+    let ampm = this.getInstance().amOrPm;
+
+    hours = ampm === 'PM' ? +hours + 12 : hours;
+
+    let date = new Date();
+    date.setHours(hours, minutes);
+
+    return date;
+};
 
 export { TimePicker };
