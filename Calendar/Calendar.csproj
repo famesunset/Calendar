@@ -13,9 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Business_Layer">
-      <HintPath>..\Business_Layer\obj\Debug\Business_Layer.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Business_Layer\Business_Layer.csproj" />
   </ItemGroup>
 
 </Project>

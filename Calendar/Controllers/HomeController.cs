@@ -4,7 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Calendar.Models;
+using Business_Layer;
+using Business_Layer.Models;
 
 namespace Calendar.Controllers
 {
@@ -16,9 +17,10 @@ namespace Calendar.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEvent([FromBody] Event @event)
+        public IActionResult CreateEvent([FromServices] IService service, [FromBody] Event @event)
         {
-            ;
+            @event.CalendarId = 2;
+            service.AddEvent(null, @event);
 
             return Json("Event created");
         }
