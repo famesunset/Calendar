@@ -21,6 +21,28 @@ namespace Data_Layer
         public string Notification { get; set; }
         public string Title { get; set; }
 
+        public Event(int idCalendar, string description, string notification, string title)
+        {
+            this.id_Calendar = idCalendar;
+            this.Description = description;
+            this.Notification = notification;
+            this.Title = title;
+        }
+
+        public void AddEvent(int idCalendar, string description, string notification, string title)
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+            {
+                DataSource = "WIN-BR9AAF20AAG",
+                UserID = "sa",
+                Password = "Sunsetfame05!",
+                InitialCatalog = "Calendar"
+            };
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+            var AddEvent = connection.Query<Event>("AddEvent", new {idCalendar, notification, description, title},
+                commandType: CommandType.StoredProcedure);
+        }
+
         /// <summary>
         /// Get data from view to put it into the db.
         /// </summary>
