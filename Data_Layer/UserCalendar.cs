@@ -17,7 +17,7 @@ namespace Data_Layer
         public UserCalendar(int idUser, int idCalendar)
         {
             this.id_Calendar = idCalendar;
-            this.id_User = id_User;
+            this.id_User = idUser;
         }
 
         public void SetCalendarToUser(UserCalendar userCalendar)
@@ -31,6 +31,20 @@ namespace Data_Layer
             };
             SqlConnection connection = new SqlConnection(builder.ConnectionString);
             var AddEvent = connection.Query<UserCalendar>("SetCalendarToUser", new { userCalendar.id_Calendar, userCalendar.id_User },
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public void SetCalendarToUser()
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+            {
+                DataSource = "20.188.35.217",
+                UserID = "sa",
+                Password = "Sunsetfame05!",
+                InitialCatalog = "Calendar"
+            };
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+            var AddEvent = connection.Query<UserCalendar>("SetCalendarToUser", new { this.id_Calendar, this.id_User },
                 commandType: CommandType.StoredProcedure);
         }
     }

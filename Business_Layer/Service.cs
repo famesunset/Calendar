@@ -21,7 +21,10 @@ namespace Business_Layer
 
         public int AddCalendar(string session, Calendar calendar)
         {
-            throw new NotImplementedException();
+            int userId = 1;
+            Data_Layer.UserCalendar userCalendar = new Data_Layer.UserCalendar(userId, calendar.Id);
+            userCalendar.SetCalendarToUser();
+            return -1;
         }
 
         public Event GetEvent(string session, int id)
@@ -40,7 +43,6 @@ namespace Business_Layer
             {
                 // TODO: Get user by session
             }
-            // TODO: Map BusinessEvent to DataEvent
             Data_Layer.Event dataEvent = Map.Map<Event, Data_Layer.Event>(@event);
             dataEvent.AddEvent();
             return -1;
