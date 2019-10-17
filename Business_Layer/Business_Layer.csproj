@@ -83,8 +83,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ILogic.cs" />
-    <Compile Include="Logic.cs" />
+    <Compile Include="IService.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="Mapper.cs" />
     <Compile Include="Models\Access.cs" />
     <Compile Include="Models\Calendar.cs" />
     <Compile Include="Models\Event.cs" />

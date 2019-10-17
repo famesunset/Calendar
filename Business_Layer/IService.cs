@@ -3,7 +3,7 @@ using Business_Layer.Models;
 
 namespace Business_Layer
 {
-    public interface ILogic
+    public interface IService
     {
         /// <summary>
         /// Получить список календарей
