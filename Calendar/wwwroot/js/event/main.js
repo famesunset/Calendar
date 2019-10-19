@@ -1,5 +1,6 @@
 import { DatePicker } from "../models/DatePicker.js";
 import { TimePicker } from "../models/TimePicker.js";
+import { Dropdown } from "../models/Dropdown.js";
 
 const HOUR = 1000 * 60 * 60; // hour in ms
 
@@ -44,6 +45,10 @@ $(function () {
         timePickers[key].setDefaultInputValue();
         timePickers[key].runTimePicker();
     }
+
+    let dropdownViewMode = new Dropdown('.view-mode', { constrainWidth: false });
+    dropdownViewMode.runDropDown();
+    $('#view-mode a').click(event => dropdownViewMode.clickHandler(event));
 });
 
 export {

@@ -19,11 +19,11 @@
 
         <div class="swich-date">
             <div class="swich-wrapper">
-                <img src="~/images/left-arrow.png" alt="prev" />
+                <i class="material-icons">navigate_before</i>
             </div>
 
             <div class="swich-wrapper">
-                <img src="~/images/right-arrow.png" alt="prev" />
+                <i class="material-icons">navigate_next</i>
             </div>
         </div>
 
@@ -32,13 +32,19 @@
 
     <div class="right-side">
         <div class="search">
-            <img src="~/images/search.png" alt="search" />
+            <i class="material-icons">search</i>
         </div>
 
-        <div class="view-mode">
-            <span>Day</span>
-            <img src="~/images/caret-down.png" alt="caret-down" />
-        </div>
+        <!-- Dropdown Trigger -->
+        <a class='view-mode' data-target='view-mode'>Day</a>
+
+        <!-- Dropdown Structure -->
+        <ul id='view-mode' class='dropdown-content'>
+            <li><a>Day</a></li>
+            <li><a>Week</a></li>
+            <li><a>Month</a></li>
+            <li><a>Year</a></li>            
+        </ul>
 
         <div class="user-menu">
             <img src="~/images/user.png" alt="user-icon" />

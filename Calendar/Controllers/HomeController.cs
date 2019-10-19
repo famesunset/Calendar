@@ -17,12 +17,10 @@ namespace Calendar.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEvent([FromServices] IService service, [FromBody] Event @event)
+        public void CreateEvent([FromServices] IService service, [FromBody] Event @event)
         {
             @event.CalendarId = 2;
             service.AddEvent(null, @event);
-
-            return Json("Event created");
         }
     }
 }

@@ -86,13 +86,11 @@ header .right-side {
 }
 
 .swich-date .swich-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 100%;
-    padding: 5px 10px;    
-}
-
-.swich-wrapper img {
-    height: 10px;
-    width: 10px;
+    padding: 5px;    
 }
 
 .header-date {
@@ -108,20 +106,12 @@ header .right-side {
     padding: 10px;
 }
 
-.search img {
-    height: 20px;
-    width: 20px; 
-}
-
 .view-mode {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    color: var(--color-main-gray);
 }
 
-.view-mode img {
-    margin-left: 10px;
-    height: 10px;
+#view-mode a {
+    color: var(--color-main-gray);
 }
 
 .user-menu {

@@ -1,6 +1,6 @@
-import { RepeatDropdown } from '../models/RepeatDropdown.js';
-import { TimePicker } from '../models/TimePicker.js';
+import { Dropdown } from '../models/Dropdown.js';
 import { Event } from '../models/Event.js';
+import { MoreOptionsAnimation } from '../animations/MoreOptionsAnimation.js';
 import { datePickers, timePickers } from './main.js';
 
 $(function () {
@@ -10,23 +10,14 @@ $(function () {
             return;        
 
         // Load more options to container
-        $('#more-options').load('LoadView/EventMoreOptions', () => {
-            // TODO: переколхозить
-            // Тянуть значения для dropdown из backend
-            var dropdown = new RepeatDropdown(new Date(), {
-                constrainWidth: false
-            });
+        $('#more-options').load('LoadView/EventMoreOptions', () => {  
+            var optionsAnimation = new MoreOptionsAnimation('#more-options', '.options');
+            optionsAnimation.runAnimation();
 
-            dropdown.setEveryWeekText(`#every-week`);
-            dropdown.setEveryMonthText('#every-month');
-            dropdown.setEveryYearText('#every-year');
-
-            dropdown.runDropDown('.dropdown-trigger');
-
-            $('.dropdown-content a').click((event) => {
-                dropdown.clickHandler(event);
-            });
-
+            var dropdown = new Dropdown('#repeat-dropdown-trigger', { constrainWidth: false });
+            dropdown.runDropDown();
+            $('#repeat-dropdown-content a').click(event => dropdown.clickHandler(event));
+            
             $('#custom-repeat').modal();        
         });
     });
@@ -52,6 +43,6 @@ $(function () {
             null
         );
 
-        event.sendToMVC();        
+        event.sendToMVC('Home/CreateEvent');        
     });
 });

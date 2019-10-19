@@ -1,3 +1,5 @@
+@model Calendar.Models.ViewModelInitializers.EventScheduleDropdown;
+
 <div id="options" class="options">
     <div class="inline-group">
         <div>
@@ -11,18 +13,20 @@
         </div>
         <div class="repeat">
             <!-- Dropdown Trigger -->
-            <div class="dropdown">
-                <a class='dropdown-trigger' data-target='dropdown'>Don't repeat</a>
+            <div class="repeat-dropdown">
+                <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>Don't repeat</a>
                 <i class="material-icons tiny">arrow_drop_down</i>
             </div>
 
             <!-- Dropdown Structure -->
-            <ul id='dropdown' class='dropdown-content'>
+            <ul id='repeat-dropdown-content' class='dropdown-content'>
                 <li><a class="no-repeat">Don't repeat</a></li>
-                <li><a class="everyday">Everyday</a></li>
-                <li><a id="every-week" class="every-week"></a></li>
-                <li><a id="every-month" class="every-month"></a></li>
-                <li><a id="every-year" class="every-year"></a></li>
+
+                @foreach (var item in Model.Items)
+                {
+                    <li><a id="@item.Selector" class="no-repeat">@item.Value</a></li>
+                }
+
                 <li>
                     <!-- Modal Trigger -->
                     <a href="#custom-repeat" class="custom-repeat modal-trigger">Custom...</a>

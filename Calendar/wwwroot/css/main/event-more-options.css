@@ -1,3 +1,8 @@
+.options {
+    display: none;
+    opacity: 0;
+}
+
 .inline-group {
     display: flex;
     justify-content: flex-start;
@@ -13,7 +18,7 @@
     color:var(--color-main-gray);
 }
 
-.repeat .dropdown {
+.repeat .repeat-dropdown {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,15 +29,15 @@
     margin-left: 20px;
 }
 
-.dropdown .dropdown-trigger {
+.repeat-dropdown #repeat-dropdown-trigger {
     color: var(--color-main-gray);
 }
 
-.dropdown i {
+.repeat-dropdown i {
     margin-left: 4px;
 }
 
-.repeat .dropdown:hover {
+.repeat .repeat-dropdown:hover {
     cursor: pointer;
 }
 
