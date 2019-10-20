@@ -1,7 +1,15 @@
+#load-create-event-form {
+    position: absolute;
+    left: 50%;
+    margin-left: -225px;
+    top: 20%;
+}
+
 .create-event-form {
+    display: none;
+    opacity: 0;
     padding: 10px 20px 20px 20px;
     width: 450px;
-    margin: 50px auto;    
     border-radius: 10px;
     -webkit-box-shadow: var(--box-shadow-event-form);
     -moz-box-shadow: var(--box-shadow-event-form);
@@ -26,7 +34,7 @@
 }
 
 .create-event-form .title {
-    margin-left: 42px;    
+    margin-left: 42px;
     margin-bottom: 25px;
 }
 
@@ -88,7 +96,7 @@
 .actions a {
     font-size: 14px;
     margin-left: 10px;
-    border-radius: 4px;    
+    border-radius: 4px;
     text-transform: none;
     box-shadow: none;
     user-select: none;

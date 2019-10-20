@@ -1,4 +1,8 @@
 ﻿body {
+    height: 100vh;
+    width: 100vw;
+    padding: 0;
+    margin: 0;
     font-family: var(--font-main-family);
     font-weight: 500;
     color: var(--color-main-gray);

@@ -3,6 +3,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
+    height: var(--header-height);
     width: 100%;
     border-bottom: 1px solid var(--color-main-border);
 }
@@ -74,7 +75,7 @@ header .right-side {
     border-radius: 4px;
     line-height: 20px;
     font-style: 14px;
-    padding: 10px 15px;
+    padding: 8px 20px;
     border: 1px solid var(--color-main-border);
 }
 

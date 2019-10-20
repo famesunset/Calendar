@@ -1,0 +1,4 @@
+#calendar-table {
+    height: 100%;
+    width: calc(100% - var(--side-bar-width));
+}

@@ -1,0 +1,17 @@
+#side-bar {
+    width: var(--side-bar-width);
+    height: 100%;
+    padding: 10px;
+}
+
+.create-event-btn {
+    font-size: 16px;
+    color: var(--color-minor-gray);
+    border-radius: 24px;
+    padding: 10px 25px;
+    margin-top: 4px; 
+    box-sizing: border-box;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,0.14), 
+                0 2px 1px -1px rgba(0,0,0,0.12), 
+                0 1px 3px 0 rgba(0,0,0,0.2);                           
+}

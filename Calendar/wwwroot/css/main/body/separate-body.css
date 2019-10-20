@@ -1,0 +1,5 @@
+.body-wrapper {
+    height: calc(100% - var(--header-height));
+    width: 100%;
+    display: flex;    
+}

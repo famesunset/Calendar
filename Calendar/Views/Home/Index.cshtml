@@ -4,15 +4,30 @@ ViewData["Title"] = "Calendar";
 
 @section Styles{
 <link rel="stylesheet" href="~/css/header/header.css">
-<link rel="stylesheet" href="~/css/main/create-event.css">
-<link rel="stylesheet" href="~/css/main/event-more-options.css">
-<link rel="stylesheet" href="~/css/main/custom-repeat.css">
+<link rel="stylesheet" href="~/css/main/body/separate-body.css">
+<link rel="stylesheet" href="~/css/main/body/side-bar.css">
+<link rel="stylesheet" href="~/css/main/body/calendar-table.css">
+<link rel="stylesheet" href="~/css/main/event/create-event.css">
+<link rel="stylesheet" href="~/css/main/event/event-more-options.css">
+<link rel="stylesheet" href="~/css/main/event/custom-repeat.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 }
 
 @section Scripts{
+<script type="module" src="~/js/main/event-listeners.js"></script>
 <script type="module" src="~/js/event/main.js"></script>
 <script type="module" src="~/js/event/event-listeners.js"></script>
 }
 
-<partial name="CreateEventForms/CreateEventPartial" />
+<div class="body-wrapper">
+    <div id="side-bar">
+        <partial name="Sidebar/SidebarPartial" />        
+    </div>
+    <div id="calendar-table">
+
+    </div>
+</div>
+
+<div id="load-create-event-form">
+    <partial name="CreateEventForms/CreateEventPartial" />
+</div>
