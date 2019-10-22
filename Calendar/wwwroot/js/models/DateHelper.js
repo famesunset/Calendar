@@ -4,7 +4,7 @@ var DateHelper = function(date) {
 
 DateHelper.prototype.getDayOfWeek = function() {
     let dayNum = this.date.getDay();    
-    let weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    let weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     return weekDays[dayNum];
 };

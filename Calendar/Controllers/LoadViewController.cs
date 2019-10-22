@@ -12,6 +12,6 @@ namespace Calendar.Controllers
         public IActionResult EventMoreOptions()
         {           
             return PartialView("CreateEventForms/MoreOptionsPartial", new EventScheduleDropdown());
-        }        
+        }  
     }
 }

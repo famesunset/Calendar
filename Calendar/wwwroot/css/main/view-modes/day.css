@@ -1,0 +1,70 @@
+#day-view-mode {
+    margin-top: 4px;     
+    height: 100%;
+}
+
+#day-view-mode .date {
+    color: var(--color-minor-gray);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 25px;
+}
+
+#day-view-mode .date .day-of-week {
+    font-size: 11px;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+#day-view-mode .date .day {
+    font-size: 26px;
+    font-weight: normal;
+}
+
+.day-view-presentation {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    margin-left: 50px;
+}
+
+.day-view-presentation .vertical-line {
+    position: absolute;
+    left: 55px;    
+    top: 45px;
+    height: 100%;
+    width: 1px;
+    background-color: var(--color-main-border);    
+}
+
+.day-view-presentation #table-events {
+    width: calc(100% - 50px);
+    height: 100%;
+    overflow-y: scroll;
+    padding-left: 45px;    
+}
+
+.cell {
+    display: flex;
+    height: 50px;
+    width: calc(100% - 10px);
+    position: relative;
+    border-top: 1px solid var(--color-main-border);    
+}
+
+.cell::before {
+    content: attr(data-content);
+    width: 40px;
+    text-align: end;
+    white-space: nowrap;
+    position: absolute;
+    left: -45px;
+    top: -8px;
+    font-size: 10px;      
+    display: inline;
+    text-transform: uppercase;
+    color: var(--color-small-font-size);
+}

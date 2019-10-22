@@ -13,6 +13,7 @@ using Calendar.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Business_Layer;
+using Newtonsoft.Json;
 
 namespace Calendar
 {
@@ -46,7 +47,12 @@ namespace Calendar
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(options =>  
+                {  
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
+                }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

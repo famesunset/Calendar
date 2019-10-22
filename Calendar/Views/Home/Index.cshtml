@@ -10,13 +10,15 @@ ViewData["Title"] = "Calendar";
 <link rel="stylesheet" href="~/css/main/event/create-event.css">
 <link rel="stylesheet" href="~/css/main/event/event-more-options.css">
 <link rel="stylesheet" href="~/css/main/event/custom-repeat.css">
+<link rel="stylesheet" href="~/css/main/view-modes/day.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 }
 
 @section Scripts{
-<script type="module" src="~/js/main/event-listeners.js"></script>
-<script type="module" src="~/js/event/main.js"></script>
-<script type="module" src="~/js/event/event-listeners.js"></script>
+<script type="module" src="~/js/site/main/event-listeners.js"></script>
+<script type="module" src="~/js/site/event-form/main.js"></script>
+<script type="module" src="~/js/site/event-form/event-listeners.js"></script>
+<script type="module" src="~/js/site/view-modes/day.js"></script>
 }
 
 <div class="body-wrapper">
@@ -24,7 +26,7 @@ ViewData["Title"] = "Calendar";
         <partial name="Sidebar/SidebarPartial" />        
     </div>
     <div id="calendar-table">
-
+        <partial name="TableViewModes/DayPartial" />        
     </div>
 </div>
 

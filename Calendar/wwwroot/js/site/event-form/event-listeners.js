@@ -1,7 +1,7 @@
-import { Dropdown } from '../models/Dropdown.js';
-import { Event } from '../models/Event.js';
-import { MoreOptionsAnimation } from '../animations/MoreOptionsAnimation.js';
-import { AddEventAnimation } from '../animations/AddEventAnimation.js'
+import { Dropdown } from '../../models/Dropdown.js';
+import { Event } from '../../models/Event.js';
+import { MoreOptionsAnimation } from '../../animations/MoreOptionsAnimation.js';
+import { AddEventAnimation } from '../../animations/AddEventAnimation.js'
 import { datePickers, timePickers } from './main.js';
 
 $(function () {    
@@ -40,7 +40,7 @@ $(function () {
             return;        
 
         // Load more options to container
-        $('#more-options').load('LoadView/EventMoreOptions', () => {  
+        $('#more-options').load('LoadView/EventMoreOptions', () => {              
             var optionsAnimation = new MoreOptionsAnimation('#more-options', '.options');
             optionsAnimation.runAnimation();
 

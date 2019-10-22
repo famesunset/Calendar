@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 namespace Calendar.Models.ViewModelInitializers
 {
     public class EventScheduleDropdown
-    {
-        private DateTime today = DateTime.UtcNow;
+    {        
+        public DateTime Today { get; set; }
         public List<DropdownItem> Items { get; set; }
 
         public EventScheduleDropdown()
         {
+            Today = DateTime.UtcNow;
             Items = new List<DropdownItem>();
 
             InitContent();
@@ -23,14 +24,15 @@ namespace Calendar.Models.ViewModelInitializers
             var thTH = new System.Globalization.CultureInfo("en-US");
 
             string everyDay = "Everyday";
-            string everyWeek = $"Every week on {today.ToString("dddd", thTH)}"; 
-            string everyMonth = $"Every month of the {today.Day}"; 
-            string everyYear = $"Every year on {today.ToString("MMM", thTH)} {today.Day}";
+            string everyWeek = $"Every week on {Today.ToString("dddd", thTH)}"; 
+            string everyMonth = $"Every month of the {Today.Day}"; 
+            string everyYear = $"Every year on {Today.ToString("MMM", thTH)} {Today.Day}";
 
             Items.Add(new DropdownItem("everyday", everyDay));
             Items.Add(new DropdownItem("every-week", everyWeek));
             Items.Add(new DropdownItem("every-month", everyMonth));
             Items.Add(new DropdownItem("every-year", everyYear));
+
         }
     }
 }

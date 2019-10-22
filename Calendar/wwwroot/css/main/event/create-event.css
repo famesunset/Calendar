@@ -16,6 +16,8 @@
     box-shadow: var(--box-shadow-event-form);
     transition-property: all;
     transition-duration: 500ms;
+    z-index: 99;
+    background-color: #fff;
 }
 
 .close {
