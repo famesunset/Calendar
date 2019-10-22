@@ -21,6 +21,10 @@ namespace Data_Layer
         public string Notification { get; set; }
         public string Title { get; set; }
 
+        public Event()
+        {
+        }
+
         public Event(int idCalendar, string description, string notification, string title)
         {
             this.id_Calendar = idCalendar;
@@ -28,50 +32,17 @@ namespace Data_Layer
             this.Notification = notification;
             this.Title = title;
         }
-        public Event()
-        {
-
-        }
-        public void AddEvent(Event eEvent)
-        {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
-            {
-                DataSource = "20.188.35.217",
-                UserID = "sa",
-                Password = "Sunsetfame05!",
-                InitialCatalog = "Calendar"
-            };
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-            var AddEvent = connection.Query<Event>("AddEvent", new {eEvent.id_Calendar, eEvent.Notification, eEvent.Description, eEvent.Title},
-                commandType: CommandType.StoredProcedure);
-        }
 
         public void AddEvent()
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+            using (SqlConnection connection = new SqlConnection(Properties.Settings.Default.Server))
             {
-                DataSource = "20.188.35.217",
-                UserID = "sa",
-                Password = "Sunsetfame05!",
-                InitialCatalog = "Calendar"
-            };
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-            var AddEvent = connection.Query<Event>("AddEvent", new { this.id_Calendar, this.Notification, this.Description, this.Title },
-                commandType: CommandType.StoredProcedure);
+                var AddEvent = connection.Query<Event>("AddEvent",
+                    new {this.id_Calendar, this.Notification, this.Description, this.Title},
+                    commandType: CommandType.StoredProcedure);
+            }
         }
 
-
-        /// <summary>
-        /// Get data from view to put it into the db.
-        /// </summary>
-        /// <param name="id_User">id of User</param>
-        /// <param name="id_Calendar">id of Calendar</param>
-        /// <param name="Title">Title of the Event</param>>
-        /// <param name="Description">Description of the Event</param>
-        /// <param name="EventTimeStart">The event starts at this time (day, hours and minutes)</param>
-        /// <param name="EventTimeFinish">The Event starts at this time (day, hours and minutes)</param>
-        /// <param name="EventPeriodStart">Datetime of the event when it is started (day period since)</param>
-        /// <param name="EventPeriodFinish">Datetime of the event when it is finished (day period till)</param>
         public void GetEventData(int id_User, int id_Calendar, string Title, string Description, DateTime EventTimeStart, DateTime EventTimeFinish, DateTime EventPeriodStart, DateTime EventPeriodFinish)
         {
             
@@ -79,22 +50,11 @@ namespace Data_Layer
 
         public void GetAllData(int idUser, int? idCalendar)
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+            using (SqlConnection connection = new SqlConnection(Properties.Settings.Default.Server))
             {
-                DataSource = "WIN-BR9AAF20AAG",
-                UserID = "sa",
-                Password = "Sunsetfame05!",
-                InitialCatalog = "Calendar"
-            };
-
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-            List<int> idCalendars = new List<int>();
-            idCalendars.Add(4);
-            idCalendars.Add(6);
-            idCalendars.ConvertToDatatable();
-            
-            var AllData = connection.Query<AllData>("GetAllData", new { idUser, idCalendars},
+                var AllData = connection.Query<AllData>("GetAllData", new {idUser, id_Calendar},
                     commandType: CommandType.StoredProcedure);
+            }
         }
     }
 
@@ -111,6 +71,11 @@ namespace Data_Layer
         public DateTime TimeStart { get; set; }
         public DateTime TimeFinish { get; set; }
         public DateTime NotificationTime { get; set; }
+
+        public AllData GetAllData()
+        {
+            return null;
+        }
     }
 
 }

@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Security.AccessControl;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,39 +14,38 @@ namespace Data_Layer
     public class UserCalendar
     {
         public int id_User { get; set; }
-        public int id_Calendar { get; set; }
+        public int id_Calendar { get; set; } 
+        
+        //public List<int> ids_Calendars { get; set; }
+        //todo: insert list of id calendars
+
+        //public UserCalendar()
+        //{
+        //    if (ids_Calendars == null)
+        //    {
+        //        ids_Calendars = new List<int>();
+        //    }
+        //}
+
         public UserCalendar(int idUser, int idCalendar)
         {
             this.id_Calendar = idCalendar;
             this.id_User = idUser;
         }
 
-        public void SetCalendarToUser(UserCalendar userCalendar)
+        public void SetCalendarToUser(List<UserCalendar> list)
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+            var CalendarsUsers = list.ConvertToDatatable();
+            using (SqlConnection connection = new SqlConnection(Properties.Settings.Default.Server))
             {
-                DataSource = "20.188.35.217",
-                UserID = "sa",
-                Password = "Sunsetfame05!",
-                InitialCatalog = "Calendar"
-            };
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-            var AddEvent = connection.Query<UserCalendar>("SetCalendarToUser", new { userCalendar.id_Calendar, userCalendar.id_User },
-                commandType: CommandType.StoredProcedure);
+                var AddEvent = connection.Query<UserCalendar>("SetCalendarToUser", new { CalendarsUsers },
+                    commandType: CommandType.StoredProcedure);
+            }
         }
 
-        public void SetCalendarToUser()
-        {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
-            {
-                DataSource = "20.188.35.217",
-                UserID = "sa",
-                Password = "Sunsetfame05!",
-                InitialCatalog = "Calendar"
-            };
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-            var AddEvent = connection.Query<UserCalendar>("SetCalendarToUser", new { this.id_Calendar, this.id_User },
-                commandType: CommandType.StoredProcedure);
-        }
+        //public void AddIdCalendarToList(int id_Calendar)
+        //{
+        //    this.ids_Calendars.Add(id_Calendar);
+        //}
     }
 }

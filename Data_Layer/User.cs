@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -13,12 +15,25 @@ namespace Data_Layer
         public string Name { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
+        //Get new id default calendar during creating a new user through stored procedure
         public int IdCalendarDefault { get; set; }
         public int IdIdentity { get; set; }
 
-        public void CreateUser(string name, string email, string mobile)
+        public User(string name, string mobile, string email, int idIdentity)
         {
-            //sp 
+            this.Name = name;
+            this.Mobile = mobile;
+            this.Email = email;
+            this.IdIdentity = idIdentity;
+        }
+
+        public void AddUser()
+        {
+            using (SqlConnection connection = new SqlConnection(Properties.Settings.Default.Server))
+            {
+                var AddEvent = connection.Query<User>("AddUser", new { this.Name, this.Mobile, this.Email, this.IdIdentity },
+                    commandType: CommandType.StoredProcedure);
+            }
         }
     }
 }
