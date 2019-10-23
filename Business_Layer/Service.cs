@@ -23,7 +23,7 @@ namespace Business_Layer
         {
             int userId = 1;
             Data_Layer.UserCalendar userCalendar = new Data_Layer.UserCalendar(userId, calendar.Id);
-            userCalendar.SetCalendarToUser();
+            userCalendar.SetCalendarToUser(null);
             return -1;
         }
 

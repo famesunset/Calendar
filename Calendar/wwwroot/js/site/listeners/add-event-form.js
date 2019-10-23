@@ -2,7 +2,7 @@ import { Dropdown } from '../../models/Dropdown.js';
 import { Event } from '../../models/Event.js';
 import { MoreOptionsAnimation } from '../../animations/MoreOptionsAnimation.js';
 import { AddEventAnimation } from '../../animations/AddEventAnimation.js'
-import { datePickers, timePickers } from './main.js';
+import { datePickers, timePickers } from '../initializers/add-event-form.js';
 
 $(function () {    
     var addEventAnimation = new AddEventAnimation('', '.create-event-form');

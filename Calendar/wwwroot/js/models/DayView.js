@@ -4,7 +4,7 @@ var DayView = function(date) {
     this.date = date;
 };
 
-DayView.prototype.nextDay = function() {    
+DayView.prototype.next = function() {    
     var nextDay = new Date();
     nextDay.setDate(this.date.getDate() + 1);
 
@@ -16,7 +16,7 @@ DayView.prototype.nextDay = function() {
     this.date = nextDay;
 };
 
-DayView.prototype.prevDay = function() {
+DayView.prototype.prev = function() {
     var prevDay = new Date();
     prevDay.setDate(this.date.getDate() - 1);
 

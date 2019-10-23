@@ -28,7 +28,6 @@
     display: flex;
     justify-content: flex-start;
     position: relative;
-    margin-left: 50px;
 }
 
 .day-view-presentation .vertical-line {
@@ -41,7 +40,7 @@
 }
 
 .day-view-presentation #table-events {
-    width: calc(100% - 50px);
+    width: 100%;
     height: 100%;
     overflow-y: scroll;
     padding-left: 45px;    
