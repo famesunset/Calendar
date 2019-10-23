@@ -1,9 +1,5 @@
-import {
-    DatePicker
-} from "../../models/DatePicker.js";
-import {
-    TimePicker
-} from "../../models/TimePicker.js";
+import { DatePicker } from "../../models/DatePicker.js";
+import { TimePicker } from "../../models/TimePicker.js";
 
 const HOUR = 1000 * 60 * 60; // hour in ms
 
