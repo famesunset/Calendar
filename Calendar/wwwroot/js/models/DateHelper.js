@@ -11,8 +11,8 @@ DateHelper.prototype.getDayOfWeek = function() {
 
 DateHelper.prototype.getMonthOfYear = function() {
     let monthNum = this.date.getMonth();
-    var yearMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var yearMonths = ["January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December"];
 
     return yearMonths[monthNum];   
 };

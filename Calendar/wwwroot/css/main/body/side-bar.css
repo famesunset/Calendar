@@ -2,7 +2,7 @@
     width: var(--side-bar-width);
     height: 100%;
     padding: 10px;
-    background-color: var(--color-items-main-gray-bg);
+    /* background-color: var(--color-items-main-gray-bg); */
 }
 
 .create-event-btn {
@@ -16,3 +16,29 @@
                 0 2px 1px -1px rgba(0,0,0,0.12), 
                 0 1px 3px 0 rgba(0,0,0,0.2);                           
 }
+
+#mini-calendar {
+    visibility: hidden;
+    position: fixed;
+}
+
+.mini-calendar .modal-overlay,
+.mini-calendar .datepicker-date-display,
+.mini-calendar .datepicker-footer {
+    display: none !important;
+}
+
+.mini-calendar .modal {
+    position: relative;
+    margin: 0;
+    box-shadow: none !important;
+    background-color: #fff;  
+    margin-top: 25px;  
+}
+
+.mini-calendar .datepicker-modal {
+    /* min-width: 330px;     */
+}
+
+
+

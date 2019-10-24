@@ -5,7 +5,7 @@
     margin: 0;
     font-family: var(--font-main-family);
     font-weight: 500;
-    color: var(--color-main-gray);
+    /* color: var(--color-main-gray); */
     overflow: hidden;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .scrollbar::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {

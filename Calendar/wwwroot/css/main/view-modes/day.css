@@ -65,6 +65,10 @@
     border-top: 1px solid var(--color-main-border);    
 }
 
+.cell:hover {
+    cursor: pointer;
+}
+
 .cell::before {
     content: attr(data-content);
     width: 40px;
