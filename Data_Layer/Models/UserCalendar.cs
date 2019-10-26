@@ -33,6 +33,10 @@ namespace Data_Layer
             this.id_User = idUser;
         }
 
+        public void SetCalendarToUser()
+        {
+        }
+
         public void SetCalendarToUser(List<UserCalendar> list)
         {
             var CalendarsUsers = list.ConvertToDatatable();
