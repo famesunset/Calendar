@@ -14,18 +14,7 @@ namespace Data_Layer
     public class UserCalendar
     {
         public int id_User { get; set; }
-        public int id_Calendar { get; set; } 
-        
-        //public List<int> ids_Calendars { get; set; }
-        //todo: insert list of id calendars
-
-        //public UserCalendar()
-        //{
-        //    if (ids_Calendars == null)
-        //    {
-        //        ids_Calendars = new List<int>();
-        //    }
-        //}
+        public int id_Calendar { get; set; }
 
         public UserCalendar(int idUser, int idCalendar)
         {

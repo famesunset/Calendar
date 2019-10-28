@@ -44,7 +44,7 @@ namespace Business_Layer
                 // TODO: Get user by session
             }
             Data_Layer.Event dataEvent = Map.Map<Event, Data_Layer.Event>(@event);
-            dataEvent.AddEvent();
+            //dataEvent.AddEvent();
             return -1;
         }
     }
