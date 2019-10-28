@@ -14,6 +14,22 @@ namespace Data_Layer
         public string Description { get; set; }
         public string Notification { get; set; }
         public string Title { get; set; }
+        public DateTime TimeStart { get; set; }
+        public DateTime TimeFinish { get; set; }
+        public DateTime TimePeriodStart { get; set; }
+        public DateTime TimePeriodFinish { get; set; }
+
+        public Event(int id, int calendarId, string description, string notification, string title, 
+            DateTime timeStart, DateTime timeFinish)
+        {
+            this.Id = id;
+            this.CalendarId = calendarId;
+            this.Description = description;
+            this.Notification = notification;
+            this.Title = title;
+            this.TimeStart = timeStart;
+            this.TimeFinish = timeFinish;
+        }
 
         public Event(int id, int calendarId, string description, string notification, string title)
         {

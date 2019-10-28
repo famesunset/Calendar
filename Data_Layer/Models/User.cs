@@ -19,6 +19,12 @@ namespace Data_Layer
         public int IdCalendarDefault { get; set; }
         public int IdIdentity { get; set; }
 
+        public User(int idUser, int idCalendarDefault)
+        {
+            this.IdUser = idUser;
+            this.IdCalendarDefault = idCalendarDefault;
+        }
+
         public User(string name, string mobile, string email, int idIdentity)
         {
             this.Name = name;
@@ -27,13 +33,14 @@ namespace Data_Layer
             this.IdIdentity = idIdentity;
         }
 
-        public void AddUser()
+        public User(int idUser, string name, string mobile, string email, int idCalendarDefault, int idIdentity)
         {
-            using (SqlConnection connection = new SqlConnection(Properties.Settings.Default.Server))
-            {
-                var AddEvent = connection.Query<User>("AddUser", new { this.Name, this.Mobile, this.Email, this.IdIdentity },
-                    commandType: CommandType.StoredProcedure);
-            }
+            this.IdUser = idUser;
+            this.Name = name;
+            this.Mobile = mobile;
+            this.Email = email;
+            this.IdCalendarDefault = idCalendarDefault;
+            this.IdIdentity = idIdentity;
         }
     }
 }

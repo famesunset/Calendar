@@ -8,6 +8,6 @@ namespace Data_Layer.Models
 {
     interface IUserCalendarRepository
     {
-        IEnumerable<UserCalendar> SetCalendarToUser(UserCalendar userCalendar, int userId, List<UserCalendar> userCalendars);
+        //IEnumerable<UserCalendar> SetCalendarToUser(UserCalendar userCalendar, int userId, List<UserCalendar> userCalendars);
     }
 }

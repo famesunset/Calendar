@@ -6,16 +6,22 @@ using System.Threading.Tasks;
 
 namespace Data_Layer
 {
-    class Notification
+    public class Notification
     {
-        /// <summary>
-        /// Get data from view to put it into the db
-        /// </summary>
-        /// <param name="id_EventSchedule">id of the Event entity</param>
-        /// <param name="NotificationTime">Datetime of the Event entity when notification has to be appeared</param>
-        public void GetNotificationData(int id_EventSchedule, DateTime NotificationTime)
-        {
+        public int Id { get; set; }
+        public int EventScheduleId { get; set; }
+        public DateTime NotificationTime { get; set; }
 
+        public Notification(int id, int eventScheduleId, DateTime notificationTime)
+        {
+            this.Id = id;
+            this.EventScheduleId = eventScheduleId;
+            this.NotificationTime = notificationTime;
+        }
+        public Notification(int eventScheduleId, DateTime notificationTime)
+        {
+            this.EventScheduleId = eventScheduleId;
+            this.NotificationTime = notificationTime;
         }
     }
 }

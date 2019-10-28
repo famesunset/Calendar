@@ -24,5 +24,17 @@ namespace Repository
                 return s;
             }
         }
+
+        public IEnumerable<Data_Layer.Event> CreateScheduledEvent(int calendarId, string notification, string description, string title,
+            DateTime timeStart, DateTime timeFinish)
+        {
+            using (SqlConnection connection = new SqlConnection(Data_Layer.Properties.Settings.Default.Server))
+            {
+                IEnumerable<Data_Layer.Event> s = connection.Query<Event>("uspCreateScheduledEvent",
+                    new { calendarId, notification, description, title, timeStart, timeFinish },
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
     }
 }
