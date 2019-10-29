@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Dapper;
-using Data_Layer;
-using Data_Layer.Models;
-using Data_Layer.Repository;
 using Data_Layer.Repository.Interfaces;
 
-namespace Repository
+namespace Data_Layer.Repository
 {
-    class CalendarRepo : BaseRepository<Calendar>, ICalendar
+    public class CalendarRepo : BaseRepository<Calendar>, ICalendar
     {
-        public IEnumerable<Calendar> AddCalendar(string name, int accessId)
+        public IEnumerable<Calendar> AddCalendar(string name, int accessId/*? , int userId*/)
         {
             using (SqlConnection connection = new SqlConnection(Data_Layer.Properties.Settings.Default.Server))
             {

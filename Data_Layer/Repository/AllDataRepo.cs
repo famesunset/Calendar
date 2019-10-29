@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Dapper;
-using Data_Layer;
 using Data_Layer.Models;
-using Data_Layer.Repository;
 using Data_Layer.Repository.Interfaces;
 
-namespace Repository
+namespace Data_Layer.Repository
 {
-    class AllDataRepo : BaseRepository<AllData>, IAllData
+    public class AllDataRepo : BaseRepository<AllData>, IAllData
     {
         public IEnumerable<AllData> GetDataEvents(int userId, List<int> idCalendarList, DateTime dateTimeStart, DateTime dateTimeFinish)
         {

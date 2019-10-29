@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using Data_Layer;
-using Data_Layer.Repository;
 
-namespace Repository.Interfaces
+namespace Data_Layer.Repository.Interfaces
 {
     public interface IUser : IRepository<User>
     {

@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Calendar.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Business_Layer;
+using Business_Layer.Services;
 using Newtonsoft.Json;
 
 namespace Calendar
@@ -37,9 +32,8 @@ namespace Calendar
             });
 
             // Dependency Injection
-            // TODO: Заменить IService на интерфейс работы с бд
-            // Service - класс, который будет реализовать этот интерфейс
-            services.AddSingleton<IService, Service>();
+            services.AddSingleton<ICalendarService, CalendarService>();
+            services.AddSingleton<IEventService, EventService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

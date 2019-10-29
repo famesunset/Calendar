@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
-using Data_Layer;
-using Data_Layer.Repository;
+using Data_Layer.Repository.Interfaces;
 
-namespace Repository
+namespace Data_Layer.Repository
 {
     public class AccessRepo : BaseRepository<Access>, IAccess
     {

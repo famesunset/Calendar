@@ -10,20 +10,20 @@ namespace Business_Layer
             var config = new MapperConfiguration(cfg =>
             {
                 // User
-                cfg.CreateMap<User, Data_Layer.User>()
-                    .ForMember(dest => dest.IdUser, map => map.MapFrom(src => src.Id));
+                //cfg.CreateMap<User, Data_Layer.User>()
+                //    .ForMember(dest => dest.IdUser, map => map.MapFrom(src => src.Id));
 
-                cfg.CreateMap<Data_Layer.User, User>()
-                    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.IdUser));
+                //cfg.CreateMap<Data_Layer.User, User>()
+                //    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.IdUser));
 
                 // Calendar
-                cfg.CreateMap<Calendar, Data_Layer.Calendar>()
-                    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.AccessId, map => map.MapFrom(src => src.Access));
+                //cfg.CreateMap<Calendar, Data_Layer.Calendar>()
+                //    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id))
+                //    .ForMember(dest => dest.AccessId, map => map.MapFrom(src => src.Access));
 
-                cfg.CreateMap<Data_Layer.Calendar, Calendar>()
-                    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.Access, map => map.MapFrom(src => src.AccessId));
+                //cfg.CreateMap<Data_Layer.Calendar, Calendar>()
+                //    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id))
+                //    .ForMember(dest => dest.Access, map => map.MapFrom(src => src.AccessId));
 
                 // Event
                 cfg.CreateMap<Event, Data_Layer.Event>()

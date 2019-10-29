@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using Dapper;
-using Repository.Interfaces;
+using Data_Layer.Repository.Interfaces;
 
 namespace Data_Layer.Repository
 {

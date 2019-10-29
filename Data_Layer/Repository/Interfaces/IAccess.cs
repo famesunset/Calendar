@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using Data_Layer;
-using Data_Layer.Repository;
 
-namespace Repository
+namespace Data_Layer.Repository.Interfaces
 {
     public interface IAccess : IRepository<Access>
     {

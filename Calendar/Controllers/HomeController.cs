@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Business_Layer;
+﻿using Microsoft.AspNetCore.Mvc;
 using Business_Layer.Models;
+using Business_Layer.Services;
 
 namespace Calendar.Controllers
 {
@@ -17,7 +12,7 @@ namespace Calendar.Controllers
         }
 
         [HttpPost]
-        public void CreateEvent([FromServices] IService service, [FromBody] Event @event)
+        public void CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
         {
             @event.CalendarId = 2;
             service.AddEvent(null, @event);

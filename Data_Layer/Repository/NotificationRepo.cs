@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Dapper;
-using Data_Layer.Repository;
-using Data_Layer;
 
-namespace Repository
+namespace Data_Layer.Repository
 {
     public class NotificationRepo : BaseRepository<Notification>, INotification
     {
