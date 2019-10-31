@@ -8,25 +8,29 @@ namespace Business_Layer.Services
 {
     public class EventService : IEventService
     {
+        public int AddEvent(string session, int calendarId, Event @event)
+        {
+            IEvent eventRepos = new EventRepo();
+            Data_Layer.Event dataEvent = Mapper.MapBussinesEvent(@event, calendarId);
+            eventRepos.AddEvent(0, dataEvent.Notification, dataEvent.Description, dataEvent.Title);
+            // FIXME: тут падает
+            return -1;
+        }
+
         public Event GetEvent(string session, int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Event> GetEvents(string session, ICollection<int> calendarIds, DateUnit dateUnit, DateTime beginning)
+        public IEnumerable<Event> GetEvents(string session, ICollection<int> calendarIds, DateTime beginning, DateUnit dateUnit)
         {
             throw new NotImplementedException();
         }
 
-        public int AddEvent(string session, Event @event)
+        public IEnumerable<Event> GetAllEvents(string session, DateTime beginning, DateUnit dateUnit)
         {
-            IEvent eventRepos = new EventRepo();
+            throw new NotImplementedException();
 
-            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@event);
-            eventRepos.AddEvent(@event.Id, null, @event.Description, @event.Title);
-
-
-            return -1;
         }
     }
 }

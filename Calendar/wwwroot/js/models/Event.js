@@ -1,14 +1,12 @@
 class Event {
-  constructor(title, description, dateStart, dateFinish, timeStart, timeFinish, isAllDay, repeat, notify) {
+  constructor(title, description, start, finish, color, isAllDay, notify) {
     this.data = {
       Title: title,
       Description: description,
-      DateStart: dateStart,
-      DateFinish: dateFinish,
-      TimeStart: timeStart,
-      timeFinish: timeFinish,
+      Start: start,
+      Finish: finish,
+      Color: color,
       IsAllDay: isAllDay,
-      Repeat: repeat,
       Notify: notify
     };
   }

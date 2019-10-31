@@ -14,8 +14,8 @@ namespace Calendar.Controllers
         [HttpPost]
         public void CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
         {
-            @event.CalendarId = 2;
-            service.AddEvent(null, @event);
+            int calendarId = 2;
+            service.AddEvent(null, calendarId, @event);
         }
     }
 }

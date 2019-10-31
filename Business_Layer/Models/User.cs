@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.AccessControl;
 
 namespace Business_Layer.Models
 {
@@ -8,6 +9,7 @@ namespace Business_Layer.Models
         public string Role { get; set; }
         public string Mobile { get; set; }
         public string Name { get; set; }
-        public List<Calendar> Calendars { get; set; }
+        public List<int> SelectedCalendars { get; set; }
+        // календари которые отображаются
     }
 }

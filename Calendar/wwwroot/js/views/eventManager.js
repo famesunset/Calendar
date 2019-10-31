@@ -128,20 +128,25 @@ $(function() {
       let title = $('#title').val();
       let description = $('#description').val();
       let isAllDay = $('#all-day').is(":checked");
-      let dateStart = datePickers['date-start'].getDate();
-      let dateFinish = datePickers['date-finish'].getDate();
+      let start = datePickers['date-start'].getDate();
+      let finish = datePickers['date-finish'].getDate();
       let timeStart = timePickers['time-start'].getDate();
       let timeFinish = timePickers['time-finish'].getDate();
 
-      new Event(
+        start.setHours(timeStart.getHours());
+        start.setMinutes(timeStart.getMinutes());
+
+        finish.setHours(timeFinish.getHours());
+        finish.setMinutes(timeFinish.getMinutes());
+        
+
+        new Event(
         title,
         description,
-        dateStart,
-        dateFinish,
-        timeStart,
-        timeFinish,
-        isAllDay,
+        start,
+        finish,
         null,
+        isAllDay,
         null
       ).sendToMVC(url); 
       
