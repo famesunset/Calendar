@@ -1,41 +1,41 @@
-import { Time } from './Time.js';
+import { TimeParse } from './share/TimeParse.js';
 
-var TimePicker = function(date, options, selector) {    
-    this.time = new Time(date);
+class TimePicker {
+  constructor(date, options, selector) {
+    this.time = new TimeParse(date);
     this.selector = selector;
-    this.options = options;    
+    this.options = options;
     this.instance = null;
-};
+  }
 
-TimePicker.prototype.setDefaultInputValue = function() {    
+  setDefaultInputValue() {
     let $input = $(this.selector);
+    $input.val(this.time.getTime());
+  }
 
-    $input.val(this.time.getTime());    
-};
-
-TimePicker.prototype.runTimePicker = function() {
+  runTimePicker() {
     this.instance = $(this.selector).timepicker(this.options);
-
     let instance = this.getInstance();
     instance.amOrPm = this.time.ampm;
-};
+  }
 
-TimePicker.prototype.getInstance = function() {    
+  getInstance() {    
     return this.instance[0].M_Timepicker;
-};
+  }
 
-TimePicker.prototype.getDate = function() {    
+  getDate() {
     let time = $(this.selector).val();
+
     // delete AM or PM and split hours from minutes
     let [hours, minutes] = time.slice(0, -3).split(':');
     let ampm = this.getInstance().amOrPm;
-
     hours = ampm === 'PM' ? +hours + 12 : hours;
-
+    
     let date = new Date();
     date.setHours(hours, minutes);
 
     return date;
-};
+  }
+}
 
 export { TimePicker };

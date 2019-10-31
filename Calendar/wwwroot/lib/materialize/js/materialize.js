@@ -3031,7 +3031,10 @@ $jscomp.polyfill = function (e, r, p, m) {
       value: function _handleKeydown(e) {
         // ESC key
         if (e.keyCode === 27 && this.options.dismissible) {
-          this.close();
+          let isMiniCalendar = $(this.el.parentElement).hasClass('mini-calendar');
+
+          if (!isMiniCalendar)
+            this.close();    
         }
       }
 
@@ -3045,7 +3048,7 @@ $jscomp.polyfill = function (e, r, p, m) {
       value: function _handleFocus(e) {
         // Only trap focus if this modal is the last model opened (prevents loops in nested modals).
         if (!this.el.contains(e.target) && this._nthModalOpened === Modal._modalsOpen) {
-          this.el.focus();
+          //this.el.focus();
         }
       }
 
@@ -3076,10 +3079,12 @@ $jscomp.polyfill = function (e, r, p, m) {
           easing: 'easeOutQuad'
         });
 
+        let isMiniCalendar = $(this.el.parentElement).hasClass('mini-calendar');  
+
         // Define modal animation options
         var enterAnimOptions = {
           targets: this.el,
-          duration: this.options.inDuration,
+          duration: isMiniCalendar ? 0 : this.options.inDuration,
           easing: 'easeOutCubic',
           // Handle modal onOpenEnd callback
           complete: function () {

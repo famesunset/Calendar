@@ -24,7 +24,7 @@ header .right-side {
 
 .collapse-sidebar-button:hover,
 .today-button:hover,
-.swich-date .swich-wrapper:hover,
+.switch-date .switch-wrapper:hover,
 .view-mode:hover,
 .search:hover {
     cursor: pointer;
@@ -79,14 +79,14 @@ header .right-side {
     border: 1px solid var(--color-main-border);
 }
 
-.swich-date {
+.switch-date {
     margin-left: 40px;   
     display: flex; 
     justify-content: center;
     align-items: center;
 }
 
-.swich-date .swich-wrapper {
+.switch-date .switch-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;

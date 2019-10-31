@@ -14,26 +14,19 @@ ViewData["Title"] = "Calendar";
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 }
 
-@section Scripts{
-<script type="module" src="~/js/site/initializers/site.js"></script>
-<script type="module" src="~/js/site/initializers/mini-calendar.js"></script>
-<script type="module" src="~/js/site/initializers/add-event-form.js"></script>
-<script type="module" src="~/js/site/initializers/day-view-mode.js"></script>
-<script type="module" src="~/js/site/listeners/add-event-form.js"></script>
-<script type="module" src="~/js/site/listeners/header.js"></script>
-<script type="module" src="~/js/site/listeners/side-bar.js"></script>
-<script type="module" src="~/js/site/listeners/daily-view.js"></script>
+@section Scripts{  
+<script type="module" src="~/js/site.js"></script>
+<script type="module" src="~/js/views/header.js"></script>
+<script type="module" src="~/js/views/eventManager.js"></script>
 }
 
 <div class="body-wrapper">
     <div id="side-bar">
-        <partial name="Sidebar/SidebarPartial" />        
+        <partial name="PartialViews/Sidebar/SidebarPartial" />        
     </div>
     <div id="calendar-table">
-        <partial name="TableViewModes/DayPartial" />        
+        <partial name="PartialViews/TableViewModes/DayPartial" />        
     </div>
 </div>
 
-<div id="load-create-event-form">
-    <partial name="CreateEventForms/CreateEventPartial" />
-</div>
+<div id="load-create-event-form"></div>

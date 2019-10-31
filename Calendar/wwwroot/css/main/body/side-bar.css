@@ -1,3 +1,7 @@
+input {
+    pointer-events: all !important;
+}
+
 #side-bar {
     width: var(--side-bar-width);
     height: 100%;

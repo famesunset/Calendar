@@ -9,9 +9,14 @@ namespace Calendar.Controllers
 {
     public class LoadViewController : Controller
     {
+        public IActionResult CreateEventForm()
+        {
+            return PartialView("PartialViews/CreateEventForms/CreateEventPartial");
+        }
+
         public IActionResult EventMoreOptions()
         {           
-            return PartialView("CreateEventForms/MoreOptionsPartial", new EventScheduleDropdown());
-        }  
+            return PartialView("PartialViews/CreateEventForms/MoreOptionsPartial", new EventScheduleDropdown());
+        }          
     }
 }

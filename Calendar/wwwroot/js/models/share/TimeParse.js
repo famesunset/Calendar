@@ -1,19 +1,20 @@
-var Time = function(date) {
+class TimeParse {
+  constructor(date) {
     this.hours = date.getHours();
     this.minutes = date.getMinutes();
     this.ampm = `${date.getHours() < 12 ? 'AM' : 'PM'}`;
-};
+  }
 
-Time.prototype.getTime = function() {
+  getTime() {
     if (this.hours > 12)
-        this.hours -= 12;
+      this.hours -= 12;
 
     let showMinutes = this.minutes < 10 ? `0${this.minutes}` : this.minutes;
-    
-    return `${this.hours}:${showMinutes} ${this.ampm}`;
-};
 
-Time.prototype.getDate = function() {
+    return `${this.hours}:${showMinutes} ${this.ampm}`;
+  }
+
+  getDate() {
     let hours = this.ampm == 'PM' ? this.hours + 12 : this.hours;
     let minutes = this.minutes;
 
@@ -21,6 +22,7 @@ Time.prototype.getDate = function() {
     date.setHours(hours, minutes);
 
     return date;
-};
+  }
+}
 
-export { Time };
+export { TimeParse };
