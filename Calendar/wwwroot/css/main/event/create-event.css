@@ -1,123 +1,130 @@
 #load-create-event-form {
-    position: absolute;
-    left: 50%;
-    margin-left: -225px;
-    top: 20%;
+  z-index: 100;
+  position: absolute;
+  left: 50%;
+  margin-left: -225px;
+  top: 20%;
 }
 
-.create-event-form {
-    z-index: 1005;
-    display: none;
-    opacity: 0;
-    padding: 10px 20px 20px 20px;
-    width: 450px;
-    border-radius: 10px;
-    -webkit-box-shadow: var(--box-shadow-event-form);
-    -moz-box-shadow: var(--box-shadow-event-form);
-    box-shadow: var(--box-shadow-event-form);
-    transition-property: all;
-    transition-duration: 500ms;    
-    background-color: #fff;
+#event-form-modal {
+  position: absolute;
+  z-index: 99;
+  height: 100%;
+  width: 100%;
+}
+
+.create-event-form {  
+  display: none;
+  opacity: 0;
+  padding: 10px 20px 20px 20px;
+  width: 450px;
+  border-radius: 10px;
+  -webkit-box-shadow: var(--box-shadow-event-form);
+  -moz-box-shadow: var(--box-shadow-event-form);
+  box-shadow: var(--box-shadow-event-form);
+  transition-property: all;
+  transition-duration: 500ms;
+  background-color: #fff;
 }
 
 .close {
-    user-select: none;
-    padding: 5px;
-    border-radius: 100%;
-    transition-property: all;
-    transition-duration: var(--transition-main-duration);
+  user-select: none;
+  padding: 5px;
+  border-radius: 100%;
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
 .close:hover {
-    cursor: pointer;
-    background-color: var(--color-items-main-gray-bg);
-    transition-property: all;
-    transition-duration: var(--transition-main-duration);
+  cursor: pointer;
+  background-color: var(--color-items-main-gray-bg);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
 .create-event-form .title {
-    margin-left: 42px;
-    margin-bottom: 25px;
+  margin-left: 42px;
+  margin-bottom: 25px;
 }
 
 .create-event-form .title input {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .create-event-form input {
-    font-family: var(--font-main-family);
-    color: var(--color-main-gray);
+  font-family: var(--font-main-family);
+  color: var(--color-main-gray);
 }
 
 .select-date span {
-    opacity: .7;
+  opacity: .7;
 }
 
 .select-date {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
 }
 
 .select-date i {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .select-date input[type="text"] {
-    font-size: 14px;
-    width: 90px;
-    height: 35px;
-    text-align: center;
-    border: none;
-    box-sizing: border-box;
-    border-radius: 4px;
-    margin: 0;
-    transition-property: all;
-    transition-duration: var(--transition-main-duration);
+  font-size: 14px;
+  width: 90px;
+  height: 35px;
+  text-align: center;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin: 0;
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
 .select-date input[type="text"]:focus {
-    border-radius: 4px 4px 0 0;
-    border-bottom: none;
-    outline: none;
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+  outline: none;
 }
 
 .select-date input[type="text"]:hover {
-    background-color: var(--color-items-main-gray-bg);
-    transition-property: all;
-    transition-duration: var(--transition-main-duration);
+  background-color: var(--color-items-main-gray-bg);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
 .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .actions a {
-    font-size: 14px;
-    margin-left: 10px;
-    border-radius: 4px;
-    text-transform: none;
-    box-shadow: none;
-    user-select: none;
+  font-size: 14px;
+  margin-left: 10px;
+  border-radius: 4px;
+  text-transform: none;
+  box-shadow: none;
+  user-select: none;
 }
 
 .actions a:hover {
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .actions .more-options-btn {
-    padding: 8px 16px;
-    color: var(--color-main-gray);
-    transition-property: all;
-    transition-duration: var(--transition-main-duration);
+  padding: 8px 16px;
+  color: var(--color-main-gray);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
 .actions .more-options-btn:hover {
-    background-color: var(--color-items-main-gray-bg);
-    cursor: pointer;
-    transition-property: all;
-    transition-duration: var(--transition-main-duration);
+  background-color: var(--color-items-main-gray-bg);
+  cursor: pointer;
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }

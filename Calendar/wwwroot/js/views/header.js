@@ -1,71 +1,78 @@
 import { Dropdown } from '../models/Dropdown.js';
-import { dailyViewMode } from './viewModes/dailyViewMode.js';
+import { ViewMode } from './ViewMode.js';
+import { MainCalendar } from './MainCalendar.js';
+import { DateParse } from '../models/share/DateParse.js';
 
-$(function() {
-  let header = {
-    data: {
-      dropdown: null,
+let Header = {
+  data: {
+    dropdown: null,
 
-      viewModes: {
-        daily: dailyViewMode
-      },
-
-      selectors: {
-        s_switchNext: '.switch-date #next',
-        s_switchPrev: '.switch-date #prev',
-        s_todayBtn: '#today',
-        s_dropdownTrigger: '.view-mode',
-        s_dropdownItem: '#view-mode a'
-      }
-    },
-
-    run: function() {
-      this.data.viewModes.daily.run();
-      this.initializeDropdown();
-      this.setUpListeners();
-    },
-
-    setUpListeners: function() {
-      let s = this.data.selectors;
-
-      $(s.s_dropdownItem).click((e) => this.onSelectDropdownItem(e));
-      $(s.s_switchNext).click(() => this.onSwitchDateNext());
-      $(s.s_switchPrev).click(() => this.onSwitchDatePrev());
-      $(s.s_todayBtn).click(() => this.onSwitchDateToday());
-    },
-
-    // --- Listeners ---- //
-    onSelectDropdownItem: function(e) {
-      this.data.dropdown.clickHandler(e);
-    },
-
-    onSwitchDateNext: function() {
-      // TODO смотреть на текущий выбранный mode 
-      // и изменять значение viewMode
-      let viewMode = this.data.viewModes.daily;
-
-      viewMode.onNext();
-    },
-
-    onSwitchDatePrev: function() {
-      let viewMode = this.data.viewModes.daily;
-
-      viewMode.onPrev();
-    },
-
-    onSwitchDateToday: function() {
-      this.data.viewModes.daily.onToday();
-    },
-    
-
-    // --- Initializers ---- //
-    initializeDropdown: function() {
-      let s = this.data.selectors;
-
-      this.data.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });
-      this.data.dropdown.runDropdown();
+    selectors: {
+      s_date: '.header-date',
+      s_next: '.switch-date #next',
+      s_prev: '.switch-date #prev',
+      s_today: '#today',
+      s_dropdownTrigger: '.view-mode',
+      s_dropdownItem: '#view-mode a'
     }
-  };
+  },
 
-  header.run();
-});
+  run() {
+    let date = new Date(sessionStorage.getItem('currentDate'));
+
+    this.renderDate(date);
+    this.renderDropdown();
+    this.setUpListeners();
+  },
+
+  setUpListeners() {
+    let s = this.data.selectors;
+
+    $(s.s_dropdownItem).click((e) => this.onDropdownSelect(e));
+    $(s.s_next).click(() => this.onNext());
+    $(s.s_prev).click(() => this.onPrev());
+    $(s.s_today).click(() => this.onToday());
+  },
+
+  onNext() {
+    let date = new Date(sessionStorage.getItem('currentDate'));
+    date.setDate(date.getDate() + 1);
+
+    MainCalendar.setDate(date);
+  },
+
+  onPrev() {
+    let date = new Date(sessionStorage.getItem('currentDate'));
+    date.setDate(date.getDate() - 1);
+
+    MainCalendar.setDate(date);    
+  },
+
+  onToday() {
+    MainCalendar.setDate(new Date());  
+  },
+
+  onDropdownSelect(e) {
+    // TODO: change view mode
+    this.data.dropdown.clickHandler(e);
+  },
+
+  renderDate(date) {
+    let s = this.data.selectors;
+    var dateParse = new DateParse(date);
+
+    let year = date.getYear() + 1900;
+    let month = dateParse.getMonthOfYear();
+
+    $(s.s_date).text(`${month} ${year}`);
+  },
+
+  renderDropdown() {
+    let s = this.data.selectors;
+
+    this.data.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });
+    this.data.dropdown.runDropdown();
+  }
+};
+
+export { Header };

@@ -9,18 +9,19 @@ class TimePicker {
   }
 
   setDefaultInputValue() {
-    let $input = $(this.selector);
+    let $input = $(this.selector);    
     $input.val(this.time.getTime());
   }
 
   runTimePicker() {
-    this.instance = $(this.selector).timepicker(this.options);
-    let instance = this.getInstance();
-    instance.amOrPm = this.time.ampm;
+    let instance = $(this.selector).timepicker(this.options);
+
+    this.instance = instance[0].M_Timepicker;
+    this.instance.amOrPm = this.time.ampm;
   }
 
   getInstance() {    
-    return this.instance[0].M_Timepicker;
+    return this.instance;
   }
 
   getDate() {
@@ -28,7 +29,7 @@ class TimePicker {
 
     // delete AM or PM and split hours from minutes
     let [hours, minutes] = time.slice(0, -3).split(':');
-    let ampm = this.getInstance().amOrPm;
+    let ampm = this.instance.amOrPm;
     hours = ampm === 'PM' ? +hours + 12 : hours;
     
     let date = new Date();

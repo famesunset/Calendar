@@ -1,109 +1,118 @@
 #day-view-mode {
-    margin-top: 4px;     
-    height: 100%;
+  margin-top: 4px;
+  height: 100%;
 }
 
 #day-view-mode .date {
-    color: var(--color-minor-gray);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 75px;
+  color: var(--color-minor-gray);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 75px;
 }
 
 #day-view-mode .date .day-of-week {
-    font-size: 11px;
-    font-weight: normal;
-    text-transform: uppercase;
+  font-size: 11px;
+  font-weight: normal;
+  text-transform: uppercase;
 }
 
 #day-view-mode .date .day {
-    font-size: 26px;
-    font-weight: normal;
+  font-size: 26px;
+  font-weight: normal;
 }
 
 .day-view-presentation {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
 }
 
 .day-view-presentation .horizontal-line {
-    position: absolute;
-    top: 65px;
-    left: 45px;
-    height: 1px;
-    width: calc(100% - 60px);
-    background-color: var(--color-main-border);    
+  position: absolute;
+  top: 65px;
+  left: 45px;
+  height: 1px;
+  width: calc(100% - 60px);
+  background-color: var(--color-main-border);
 }
 
 .day-view-presentation .vertical-line {
-    position: absolute;
-    left: 55px;    
-    top: 55px;
-    height: 100%;
-    width: 1px;
-    background-color: var(--color-main-border);    
+  position: absolute;
+  left: 55px;
+  top: 55px;
+  height: 100%;
+  width: 1px;
+  background-color: var(--color-main-border);
 }
 
 .day-view-presentation #table-events {
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    padding-left: 45px;    
-    padding-top: 10px;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding-left: 45px;
+  padding-top: 10px;
 }
 
-.cell {    
-    display: flex;
-    height: 50px;
-    width: calc(100% - 10px);
-    position: relative;
-    border-top: 1px solid var(--color-main-border);    
+.cell {  
+  display: flex;
+  height: 50px;
+  width: calc(100% - 10px);
+  position: relative;
+  border-top: 1px solid var(--color-main-border);
 }
 
 .cell:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .cell::before {
-    content: attr(data-content);
-    width: 40px;
-    text-align: end;
-    white-space: nowrap;
-    position: absolute;
-    left: -45px;
-    top: -8px;
-    font-size: 10px;      
-    display: inline;
-    text-transform: uppercase;
-    color: var(--color-small-font-size);
+  content: attr(data-content);
+  width: 40px;
+  text-align: end;
+  white-space: nowrap;
+  position: absolute;
+  left: -45px;
+  top: -8px;
+  font-size: 10px;
+  display: inline;
+  text-transform: uppercase;
+  color: var(--color-small-font-size);
 }
 
-.daily-event {    
-    position: absolute;
-    background-color: #9E69AF;
-    width: calc(100% - 20px);
-    height: 46px;
-    border-radius: 4px;
-    left: 10px;
-    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 
-                0 1px 18px 0 rgba(0,0,0,0.12), 
-                0 3px 5px -1px rgba(0,0,0,0.2);
+.daily-event {  
+  z-index: 200;
+  position: absolute;
+  background-color: #9E69AF;
+  width: calc(100% - 20px);
+  height: 46px;
+  min-height: 28px;
+  border-radius: 4px;
+  left: 10px;
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+    0 1px 18px 0 rgba(0, 0, 0, 0.12),
+    0 3px 5px -1px rgba(0, 0, 0, 0.2);
+}
+
+.daily-event-tiny {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .daily-event .title,
 .daily-event .time span {
-    color: #fff;
-    font-size: 12px;
-    margin: 5px 0 0 5px;
+  color: #fff;
+  font-size: 12px;
+  margin: 5px 0 0 5px;
 }
 
 .daily-event .time {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }

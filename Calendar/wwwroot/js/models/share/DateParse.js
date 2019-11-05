@@ -39,6 +39,13 @@ class DateParse {
 
     return `GMT ${offset > 0 ? '+' : '-'}${moduleOffset}`;
   }
+
+  hoursOffset(offset) {
+    let date = new Date(this.date);
+    date.setHours(date.getHours() + offset);
+
+    return date;
+  }
 }
 
 export { DateParse };

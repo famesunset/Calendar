@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Business_Layer.Models;
 using Business_Layer.Services;
+using System.Collections.Generic;
+using System;
 
 namespace Calendar.Controllers
 {
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {            
+        {
             return View();
         }
 
@@ -15,7 +17,28 @@ namespace Calendar.Controllers
         public void CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
         {
             int calendarId = 2;
-            service.AddEvent(null, calendarId, @event);
+            //service.AddEvent(null, calendarId, @event);
+        }
+
+        [HttpGet]
+        public IActionResult GetEventList([FromServices] IEventService service)
+        {
+            List<Event> events = new List<Event>();
+
+            for (int i = 0; i < 1; ++i)
+            {
+                events.Add(new Event()
+                {
+                    Id = i + 1,
+                    Color = "#fff",
+                    Description = $"Description {i + 1}",
+                    Title = $"Title {i + 1}",
+                    Start = DateTime.Now.AddHours(-1),
+                    Finish = DateTime.Now
+                });
+            }
+
+            return Json(events);
         }
     }
 }

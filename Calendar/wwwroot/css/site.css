@@ -7,6 +7,7 @@
     font-weight: 500;
     color: var(--color-main-gray);
     overflow: hidden;
+    background-color: #fff;
 }
 
 .scrollbar::-webkit-scrollbar-track {

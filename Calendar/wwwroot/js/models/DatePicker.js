@@ -7,25 +7,25 @@ class DatePicker {
   }
 
   runDatePicker() {
-    this.instance = $(this.selector).datepicker(this.options);
+    let instance = $(this.selector).datepicker(this.options);
+    this.instance = instance[0].M_Datepicker;
   }
 
-  setDate(date) {
-    var instance = this.getInstance();
-    instance.setDate(date);
+  open() {
+    this.instance.open();
+  }
+
+  setDate(date) {    
+    this.instance.setDate(date);
   }
 
   getInstance() {
-    return this.instance[0].M_Datepicker;
+    return this.instance;
   }
 
-  getDate() {
-    let instance = this.getInstance();
-    return instance.date;
+  getDate() {    
+    return this.instance.date;
   }
 }
-
-
-
 
 export { DatePicker }
