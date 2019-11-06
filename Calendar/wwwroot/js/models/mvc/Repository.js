@@ -4,8 +4,6 @@ class Repository {
   }
 
   async getList(url) {
-    let items = [];
-
     return new Promise((resolve, reject) => {
       $.ajax({
         url: url,

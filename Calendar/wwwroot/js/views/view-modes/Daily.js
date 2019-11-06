@@ -6,12 +6,6 @@ import { EventRepository } from '../../models/mvc/EventRepository.js';
 
 let Daily = {
   data: {
-
-    ux: {
-      cellHeight: 50,
-      eventHeight: 46
-    },
-
     cash: {
       c_lastEventId: ''
     },
@@ -25,7 +19,12 @@ let Daily = {
       s_cell: '.cell'     
     },
 
-    classes: {
+    ux: {
+      cellHeight: 50,
+      eventHeight: 46
+    },
+
+    css: {
       s_eventContentWrapper: 'event-content-wrapper',
       s_eventWrapperTiny: 'daily-event-tiny',
     }
@@ -60,7 +59,7 @@ let Daily = {
 
     EventForm.open(start);       
 
-    this.renderEvent(container, guid, id, '(No title)', start, end);
+    this.initDisplayedEventData(container, guid, id, '(No title)', start, end);
     this.cashLastEvent(guid);
   },
 
@@ -98,7 +97,7 @@ let Daily = {
       let guid = GUID();
       
       let container = $(`#cell-${start.getHours()}`);
-      this.renderEvent(container, guid, event.id, event.title, start, end);
+      this.initDisplayedEventData(container, guid, event.id, event.title, start, end);
     });
   },
 
@@ -122,7 +121,7 @@ let Daily = {
     $(s.s_day).text(dateParse.date.getDate());
   },
 
-  renderEvent(container, guid, id, title, start, end) {
+  initDisplayedEventData(container, guid, id, title, start, end) {
     if (!title || title.trim() === '') {
       title = '(No title)';
     }
@@ -131,7 +130,7 @@ let Daily = {
     var timeEnd = new TimeParse(end).getTime();
     
     var eventEl =   `<div class="daily-event" id="${guid}">` +
-                        `<div class="${this.data.classes.s_eventContentWrapper}">` +
+                        `<div class="${this.data.css.s_eventContentWrapper}">` +
                           `<input type="hidden" name="id" value="${id}">` +
                           `<h6 class="title">${title}</h4>` +
                           '<div class="time">' +
@@ -147,19 +146,20 @@ let Daily = {
 
   displayEvent(el, container, id, start, end) {
     let s = this.data.selectors;
-    let c = this.data.classes;
+    let c = this.data.css;
 
     $(container).append(el);
+
     let $event = $(`#${id}`);     
     let $wrapper = $(`#${id} ${s.s_eventContentWrapper}`);  
 
     let minutesDiff = Math.abs(start.getTime() - end.getTime()) / 1000.0 / 60.0;
-    let factor = (this.data.ux.cellHeight * minutesDiff) / 60.0 - 50.0;
+    let factor = (this.data.ux.cellHeight * minutesDiff) / 60.0 - this.data.ux.cellHeight;
     let margin = (this.data.ux.cellHeight * start.getMinutes()) / 60.0;
     
     let height = this.data.ux.eventHeight + factor;
 
-    if (height < 46) {
+    if (height < this.data.ux.eventHeight) {
       $wrapper.addClass(c.s_eventWrapperTiny);
     } else {
       $wrapper.removeClass(c.s_eventWrapperTiny);
@@ -182,7 +182,7 @@ let Daily = {
     let container = $(`${cell}[data-time='${dataTime}']`)[0];
     
     $(`#${guid}`).remove();
-    this.renderEvent(container, guid, id, title, start, end);
+    this.initDisplayedEventData(container, guid, id, title, start, end);
   },
 
   setEventTitle(title, guid) {

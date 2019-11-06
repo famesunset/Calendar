@@ -30,6 +30,11 @@ var EventForm = {
       s_dropdownTrigger: '#repeat-dropdown-trigger', 
     },
 
+    css: {
+      s_timeStart: 'time-start',
+      s_timeFinish: 'time-finish',
+    },
+
     url: {
       u_formLoad: 'LoadView/CreateEventForm',
       u_optionsLoad: 'LoadView/EventMoreOptions',
@@ -44,9 +49,9 @@ var EventForm = {
     $(s.s_modal).click(() => this.onCloseForm());
     $(s.s_optionsTrigger).click(() => this.onLoadOptionsTrigger());
     $(s.s_saveBtn).click(() => this.onSave());
-    $(s.s_title).focusout((e) => this.onTitleFocusOut(e));
-    $(s.s_timeStart).focusout(() => this.onTimeFocusOut());
-    $(s.s_timeEnd).focusout(() => this.onTimeFocusOut());
+    $(s.s_title).focusout(e => this.onTitleFocusOut(e));
+    $(s.s_timeStart).focusout(e => this.onTimeFocusOut(e));
+    $(s.s_timeEnd).focusout(e => this.onTimeFocusOut(e));
   },
 
   open(date) {
@@ -144,7 +149,7 @@ var EventForm = {
     ViewMode.setEventTitle(title, id);
   },
 
-  onTimeFocusOut() {    
+  onTimeFocusOut(e) {       
     let s = this.data.selectors;
 
     let _start = $(s.s_timeStart).val();
@@ -152,10 +157,43 @@ var EventForm = {
 
     let id = ViewMode.getLastEventId();    
     let title = $(s.s_title).val();
-    let start = TimeParse.parse(_start);
-    let end = TimeParse.parse(_end);
     
-    ViewMode.changeEventPosition(id, title, start, end);
+    let time = this.validateTime(
+      TimeParse.parse(_start),
+      TimeParse.parse(_end),
+      e.target.id
+    );
+  
+    ViewMode.changeEventPosition(id, title, time.start, time.end);
+  },
+
+  validateTime(start, end, target) {      
+    let _start = start.getTime() / 1000;
+    let _end = end.getTime() / 1000;
+
+    if (_start < _end) {
+      return { start, end };
+    }
+    
+    if (target === this.data.css.s_timeStart) {
+      end.setHours(start.getHours() + 1);
+    } else {
+      start.setHours(end.getHours() - 1);
+    }      
+    
+    this.setStartEndTime(
+      new TimeParse(start).getTime(),
+      new TimeParse(end).getTime()
+    );
+
+    return { start, end };
+  },
+
+  setStartEndTime(start, end) {
+    let s = this.data.selectors;   
+
+    $(s.s_timeStart).val(start);
+    $(s.s_timeEnd).val(end);
   },
 
   renderModal() {
