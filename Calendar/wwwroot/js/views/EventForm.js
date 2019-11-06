@@ -54,17 +54,13 @@ var EventForm = {
     $(s.s_timeEnd).focusout(e => this.onTimeFocusOut(e));
   },
 
-  open(date) {
-    let dateParse = new DateParse(date);
+  open(start, end) {    
     let container = this.data.selectors.s_formLoad;
     let url = this.data.url.u_formLoad;
 
     $(container).load(url, () => {
-      let dateStart = new Date(date);
-      let dateEnd = dateParse.hoursOffset(1);
-
-      this.renderDatePickers(dateStart, dateEnd);
-      this.renderTimePickers(dateStart, dateEnd);
+      this.renderDatePickers(start, end);
+      this.renderTimePickers(start, end);
       this.renderModal();
       this.openAnimation();
 

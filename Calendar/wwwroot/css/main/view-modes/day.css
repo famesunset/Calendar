@@ -85,6 +85,8 @@
 }
 
 .daily-event {  
+  user-select: none;
+  -moz-user-select: none;
   z-index: 200;
   position: absolute;
   background-color: #9E69AF;

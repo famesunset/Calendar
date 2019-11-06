@@ -7,7 +7,10 @@ import { EventRepository } from '../../models/mvc/EventRepository.js';
 let Daily = {
   data: {
     cash: {
-      c_lastEventId: ''
+      c_lastEventId: '',
+      c_targetCellShift: {},
+      timeStart: {},
+      timeEnd: {}
     },
 
     selectors: {
@@ -21,7 +24,8 @@ let Daily = {
 
     ux: {
       cellHeight: 50,
-      eventHeight: 46
+      eventHeight: 46,
+      pos_mouseStart: 0    
     },
 
     css: {
@@ -43,7 +47,11 @@ let Daily = {
   setUpListeners() {
     let s = this.data.selectors;
 
-    $(s.s_cell).click(e => this.onCreateEvent(e.target));
+    $(s.s_cell).mousedown(e => {
+      this.onCellMouseDown(e);
+      $(s.s_table).mousemove((e) => this.onTableMouseMove(e));
+      $(s.s_table).mouseup((e) => this.onCellMouseUp(e));      
+    });        
   },
 
   onCreateEvent(container) {    
@@ -57,10 +65,78 @@ let Daily = {
     let end = new Date(start);
         end.setHours(start.getHours() + 1);
 
-    EventForm.open(start);       
+    EventForm.open(start, end);       
 
-    this.initDisplayedEventData(container, guid, id, '(No title)', start, end);
+    this.renderEvent(container, guid, id, '(No title)', start, end);
     this.cashLastEvent(guid);
+  },
+
+  onCellMouseDown(e) {        
+    let container = e.target;
+    let eventWrapperId = GUID();
+    let eventId = GUID();        
+
+    let hour = $(container).find('input').val();
+    let start = new Date(sessionStorage.getItem('currentDate'));
+        start.setHours(hour, 0);
+          
+    let end = new Date(start);
+        end.setHours(start.getHours() + 1);
+
+    this.renderEvent(container, eventWrapperId, eventId, '(No title)', start, end);
+
+    let targetCoords = this.getCoords(container);
+    this.data.cash.c_targetCellShift = Math.abs(e.pageY - targetCoords.y);
+    this.data.ux.pos_mouseStart = e.pageY;
+    this.data.cash.timeStart = start;
+    this.data.cash.timeEnd = end;
+  },
+
+  onCellMouseUp(e) {  
+    let s = this.data.selectors;
+
+    EventForm.open(
+      this.data.cash.timeStart,
+      this.data.cash.timeEnd,      
+    );
+
+    $(s.s_table).unbind('mousemove');
+  },
+  
+  onTableMouseMove(e) {
+    let mouseStart = this.data.ux.pos_mouseStart;
+    let mouseEnd = e.pageY;
+    let mouseOffset = mouseEnd - mouseStart + this.data.cash.c_targetCellShift;
+
+    if (mouseOffset >= 28) {
+      let minutesOffset = (mouseOffset * 60) / this.data.ux.cellHeight;      
+
+      if (minutesOffset % 30 == 0) {        
+        let timeStart = this.data.cash.timeStart;
+        let timeEnd = new Date(timeStart);
+            timeEnd.setMinutes(timeStart.getMinutes() + minutesOffset);
+    
+        this.setEventTime(
+          new TimeParse(timeStart).getTime(),
+          new TimeParse(timeEnd).getTime(),
+          this.data.cash.c_lastEventId
+        );
+        
+        this.calcEventPosition(this.data.cash.c_lastEventId, timeStart, timeEnd); 
+    
+        this.data.cash.timeStart = timeStart;
+        this.data.cash.timeEnd = timeEnd;
+      }
+    }
+  },
+
+  getCoords(elem) {
+    var box = elem.getBoundingClientRect();
+    
+    return {
+      x: box.x,
+      y: box.y     
+    };
   },
 
   renderTable() {  
@@ -97,7 +173,7 @@ let Daily = {
       let guid = GUID();
       
       let container = $(`#cell-${start.getHours()}`);
-      this.initDisplayedEventData(container, guid, event.id, event.title, start, end);
+      this.renderEvent(container, guid, event.id, event.title, start, end);
     });
   },
 
@@ -121,7 +197,7 @@ let Daily = {
     $(s.s_day).text(dateParse.date.getDate());
   },
 
-  initDisplayedEventData(container, guid, id, title, start, end) {
+  renderEvent(container, guid, id, title, start, end) {
     if (!title || title.trim() === '') {
       title = '(No title)';
     }
@@ -141,14 +217,14 @@ let Daily = {
                         '</div>' +
                     '</div>';      
 
-    this.displayEvent(eventEl, container, guid, start, end);    
+    $(container).append(eventEl);
+    this.calcEventPosition(guid, start, end);   
+    this.cashLastEvent(guid); 
   },
 
-  displayEvent(el, container, id, start, end) {
+  calcEventPosition(id, start, end) {
     let s = this.data.selectors;
-    let c = this.data.css;
-
-    $(container).append(el);
+    let c = this.data.css;    
 
     let $event = $(`#${id}`);     
     let $wrapper = $(`#${id} ${s.s_eventContentWrapper}`);  
@@ -164,11 +240,9 @@ let Daily = {
     } else {
       $wrapper.removeClass(c.s_eventWrapperTiny);
     }
-
+    
+    $event.css('top', `${margin}px`);    
     $event.css('height', `${height}px`);   
-    $event.css('top', `${margin}px`);
-
-    this.cashLastEvent(id);
   },
 
   changeEventPosition(guid, title, start, end) {
@@ -182,7 +256,7 @@ let Daily = {
     let container = $(`${cell}[data-time='${dataTime}']`)[0];
     
     $(`#${guid}`).remove();
-    this.initDisplayedEventData(container, guid, id, title, start, end);
+    this.renderEvent(container, guid, id, title, start, end);
   },
 
   setEventTitle(title, guid) {
@@ -207,7 +281,7 @@ let Daily = {
 
   lastEventId() {
     return this.data.cash.c_lastEventId;
-  }
+  }  
 }; 
 
 export { Daily };

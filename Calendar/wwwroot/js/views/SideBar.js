@@ -21,11 +21,14 @@ let SideBar = {
   },
   
   onCreateEvent() {
-    let date = new Date(sessionStorage.getItem('currentDate'));
-    date.setMinutes(0);
+    let start = new Date(sessionStorage.getItem('currentDate'));
+        start.setMinutes(0);
+    
+    let end = new Date(start);
+        end.setHours(start.getHours() + 1);
 
     ViewMode.renderEvent();
-    EventForm.open(date);
+    EventForm.open(start, end);
   }
 };
 
