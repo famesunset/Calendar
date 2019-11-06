@@ -3,6 +3,7 @@ using Business_Layer.Models;
 using Business_Layer.Services;
 using System.Collections.Generic;
 using System;
+using Business_Layer;
 
 namespace Calendar.Controllers
 {
@@ -23,6 +24,8 @@ namespace Calendar.Controllers
         [HttpGet]
         public IActionResult GetEventList([FromServices] IEventService service)
         {
+            // List<Event> events = new List<Event>(service.GetAllEvents(null, DateTime.Now, DateUnit.Month));
+            // модели дата слоя пока не совпадают с бд
             List<Event> events = new List<Event>();
 
             for (int i = 0; i < 1; ++i)

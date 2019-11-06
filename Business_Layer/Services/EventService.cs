@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Business_Layer.Models;
 using Data_Layer.Repository;
 using Data_Layer.Repository.Interfaces;
+using static Business_Layer.Mapper;
 
 namespace Business_Layer.Services
 {
@@ -29,8 +30,19 @@ namespace Business_Layer.Services
 
         public IEnumerable<Event> GetAllEvents(string session, DateTime beginning, DateUnit dateUnit)
         {
-            throw new NotImplementedException();
+            var dateStart = new DateTime(beginning.Year, beginning.Month, 1);
+            var dateEnd = dateStart.AddMonths(1);
+            var repos = new AllDataRepo();
+            var events = repos.GetDataEvents(1, new List<int>(2), dateStart, dateEnd);
+            var eventList = new List<Event>();
 
+            foreach (var allData in events)
+            {
+                var bEvent = Map.Map<Data_Layer.Models.AllData, Event>(allData);
+                eventList.Add(bEvent);
+            }
+
+            return eventList;
         }
     }
 }

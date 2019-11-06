@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business_Layer.Models;
+using Data_Layer.Models;
 
 namespace Business_Layer
 {
@@ -31,6 +32,37 @@ namespace Business_Layer
 
                 //cfg.CreateMap<Data_Layer.Event, Event>()
                 //    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id));
+
+                //cfg.CreateMap<AllData, Business_Layer.Models.Event>()
+                //    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.EventId))
+                //    .ForMember(dest => dest.Title, map => map.MapFrom(src => src.Title))
+                //    .ForMember(dest => dest.Color, map => map.MapFrom(src => "#fff"))
+                //    .ForMember(dest => dest.Description, map => map.MapFrom(src => src.Description))
+                //    .ForMember(dest => dest.Start, map => map.MapFrom(src => src.TimeStart))
+                //    .ForMember(dest => dest.Finish, map => map.MapFrom(src => src.TimeFinish))
+                //    //.ForMember(dest => dest.IsAllDay, map => map.MapFrom(src => src.AllDay));
+                //    ;
+
+                    cfg.CreateMap<Data_Layer.Event, Event>()
+                    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id));
+
+                    cfg.CreateMap<AllData, Business_Layer.Models.Event>()
+                        .ConstructUsing(val => new Event()
+                        {
+                            Color = null,
+                            Description = val.Description,
+                            Start = val.TimeStart,
+                            Finish = val.TimeFinish,
+                            Title = val.Title,
+                            Id = val.EventId,
+                            //IsAllDay = val.AllDay,
+                            Notify = new NotificationSchedule()
+                            {
+                                Id = val.EventScheduledId,
+                                Message = val.Notification,
+                                Time = val.NotificationTime,
+                            },
+                        });
             });
             
             Map = config.CreateMapper();
