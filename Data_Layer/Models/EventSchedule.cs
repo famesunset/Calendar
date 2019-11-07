@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace Business_Layer.Models
+namespace Data_Layer.Models
 {
     public class EventSchedule
     {

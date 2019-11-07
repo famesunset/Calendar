@@ -21,9 +21,8 @@ namespace Business_Layer.Services
         public int AddCalendar(string session, Calendar calendar)
         {
             ICalendar calendarRepos = new CalendarRepo();
-            int userId = 1;
-
-            calendarRepos.AddCalendar(calendar.Name, (int)calendar.Access/*, userId*/);
+            //int userId = 1;
+            //calendarRepos.AddCalendar(calendar.Name, (int)calendar.Access/*, userId*/);
             return -1;
         }
     }

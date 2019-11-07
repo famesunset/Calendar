@@ -42,5 +42,10 @@ namespace Data_Layer
             this.IdCalendarDefault = idCalendarDefault;
             this.IdIdentity = idIdentity;
         }
+
+        public User(int idUser)
+        {
+            this.IdUser = idUser;
+        }
     }
 }

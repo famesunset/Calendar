@@ -4,6 +4,6 @@ namespace Data_Layer.Repository.Interfaces
 {
     public interface IAccess : IRepository<Access>
     {
-        IEnumerable<Access> GetNameById(int id);
+        IEnumerable<Access> GetNameById(Access @access);
     }
 }

@@ -88,6 +88,7 @@
     <Compile Include="Models\AllData.cs" />
     <Compile Include="Models\Calendar.cs" />
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\EventSchedule.cs" />
     <Compile Include="Models\ExtentionsMethods.cs" />
     <Compile Include="Models\IUserCalendarRepository.cs" />
     <Compile Include="Models\UserCalendarRepository.cs" />

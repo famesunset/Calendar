@@ -6,20 +6,20 @@ namespace Data_Layer
 {
     public class Calendar
     {
-        //public int Id { get; set; }
-        //public string Name { get; set; }
-        //public int AccessId { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int AccessId { get; set; }
 
-        //public Calendar(string name, int accessId)
-        //{
-        //    this.Name = name;
-        //    this.AccessId = accessId;
-        //}
-        //public Calendar(int id, string name, int accessId)
-        //{
-        //    this.Id = id;
-        //    this.Name = name;
-        //    this.AccessId = accessId;
-        //}
+        public Calendar(int id, string name, int accessId)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.AccessId = accessId;
+        }
+
+        public Calendar(int id)
+        {
+            this.Id = id;
+        }
     }
 }

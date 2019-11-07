@@ -10,25 +10,24 @@ namespace Data_Layer.Repository
 {
     public class EventRepo : BaseRepository<Event>, IEvent
     {
-        public IEnumerable<Event> AddEvent(int calendarId, string notification, string description, string title)
+        public IEnumerable<Event> CreateScheduledEvent(Event @event)
         {
             using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
             {
-                IEnumerable<Event> s = connection.Query<Event>("uspCreateEvent",
-                    new {calendarId, notification, description, title}, 
+                DataTable schedule = @event.Schedule.ConvertToDatatable();
+                IEnumerable<Event> s = connection.Query<Event>("uspCreateScheduledEvent",
+                    new { @event.CalendarId, @event.Notification, @event.Description, @event.Title, schedule, @event.TimeStart, @event.TimeFinish, @event.AllDay },
                     commandType: CommandType.StoredProcedure);
                 return s;
             }
         }
 
-        public IEnumerable<Event> CreateScheduledEvent(int calendarId, string notification, string description,
-            string title,
-            DateTime timeStart, DateTime timeFinish)
+        public IEnumerable<Event> CreateInfinityEvent(Event @event)
         {
             using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
             {
-                IEnumerable<Event> s = connection.Query<Event>("uspCreateScheduledEvent",
-                    new {calendarId, notification, description, title, timeStart, timeFinish},
+                IEnumerable<Event> s = connection.Query<Event>("uspCreateInfinityEvent",
+                    new { @event.CalendarId, @event.Notification, @event.Description, @event.Title, @event.RepeatId, @event.TimeStart, @event.TimeFinish, @event.AllDay },
                     commandType: CommandType.StoredProcedure);
                 return s;
             }

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calendar", "Calendar\Calend
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business_Layer.Tests", "Business_Layer.Tests\Business_Layer.Tests.csproj", "{38E33902-4F41-4D3D-A53E-560BC3F138BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data_Layer.Tests", "Data_Layer.Tests\Data_Layer.Tests.csproj", "{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{38E33902-4F41-4D3D-A53E-560BC3F138BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38E33902-4F41-4D3D-A53E-560BC3F138BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38E33902-4F41-4D3D-A53E-560BC3F138BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
