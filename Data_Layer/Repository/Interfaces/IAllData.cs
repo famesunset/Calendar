@@ -6,6 +6,6 @@ namespace Data_Layer.Repository.Interfaces
 {
     public interface IAllData : IRepository<AllData>
     {
-        IEnumerable<AllData> GetDataEvents(User @user, List<Calendar> @calendarsList, DateTime dateTimeStart, DateTime dateTimeFinish);
+        IEnumerable<AllData> GetDataEvents(User @user, IEnumerable<Calendar> @calendarsList, DateTime dateTimeStart, DateTime dateTimeFinish);
     }
 }

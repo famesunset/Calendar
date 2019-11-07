@@ -74,6 +74,7 @@
       <HintPath>..\packages\Microsoft.Data.Tools.Msbuild.10.0.61804.210\lib\net46\sqlpackage.exe</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -84,6 +85,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DateUnit.cs" />
+    <Compile Include="Models\BaseEvent.cs" />
+    <Compile Include="Models\Interval.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\IEventService.cs" />
     <Compile Include="Services\ICalendarService.cs" />
@@ -98,14 +101,13 @@
     <Compile Include="Models\User.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Data_Layer\Data_Layer.csproj">
       <Project>{70368386-f971-4152-8420-027bd0ae8e9a}</Project>
       <Name>Data_Layer</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

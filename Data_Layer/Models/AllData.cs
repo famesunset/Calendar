@@ -36,5 +36,10 @@ namespace Data_Layer.Models
             this.TimeFinish = timeFinish;
             this.NotificationTime = notificationTime;
         }
+
+        public AllData()
+        {
+
+        }
     }
 }

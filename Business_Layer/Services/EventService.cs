@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Business_Layer.Models;
 using Data_Layer.Repository;
 using Data_Layer.Repository.Interfaces;
+using System.Linq;
 using static Business_Layer.Mapper;
 
 namespace Business_Layer.Services
@@ -12,8 +13,8 @@ namespace Business_Layer.Services
         public int AddEvent(string session, int calendarId, Event @event)
         {
             IEvent eventRepos = new EventRepo();
-            Data_Layer.Event dataEvent = Mapper.MapBussinesEvent(@event, calendarId);
-            //eventRepos.AddEvent(0, dataEvent.Notification, dataEvent.Description, dataEvent.Title);
+            Data_Layer.Event dataEvent = Map.Map<Event, Data_Layer.Event>(@event);
+            eventRepos.CreateScheduledEvent(dataEvent);
             // FIXME: тут падает
             return -1;
         }
@@ -23,29 +24,64 @@ namespace Business_Layer.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Event> GetEvents(string session, ICollection<int> calendarIds, DateTime beginning, DateUnit dateUnit)
+        public IEnumerable<Calendar> GetEvents(string session, DateTime beginning, DateUnit dateUnit)
         {
-            throw new NotImplementedException();
-        }
 
-        public IEnumerable<Event> GetAllEvents(string session, DateTime beginning, DateUnit dateUnit)
-        {
-            var dateStart = new DateTime(beginning.Year, beginning.Month, 1);
-            var dateEnd = dateStart.AddMonths(1);
-            var repos = new AllDataRepo();
-            List<Data_Layer.Calendar> cals = new List<Data_Layer.Calendar>();
-            cals.Add(new Data_Layer.Calendar(2));
-            Data_Layer.User user = new Data_Layer.User(1);
-            var events = repos.GetDataEvents(user, cals, dateStart, dateEnd);
-            var eventList = new List<Event>();
+
+            var calendarRepos = new CalendarRepo();
+            var userRepos = new UserRepo();
+
+            // получить юзера по сесии
+
+            var userCalendars = calendarRepos.GetUserCalendars(1);
+
+            // GET user by session
+            var user = new Data_Layer.User(1);
+
+            DateTime dateStart = new DateTime();
+            DateTime dateFinish = new DateTime();
+
+            switch (dateUnit)
+            {
+                case DateUnit.Day:
+                {
+                    dateStart = new DateTime(beginning.Year, beginning.Month, beginning.Day);
+                    dateFinish = dateStart.AddDays(1);
+                }
+                break;
+                case DateUnit.Month:
+                {
+                    dateStart = new DateTime(beginning.Year, beginning.Month, 1);
+                    dateFinish = dateStart.AddMonths(1);
+                }
+                break;
+                case DateUnit.Week:
+                {
+                    int startDay = beginning.Day - (int)beginning.DayOfWeek;
+                    dateStart = new DateTime(beginning.Year, beginning.Month, startDay);
+                    dateFinish = dateStart.AddDays(7);
+                }
+                break;
+            }
+
+            var bUserCalendars = new List<Calendar>();
+            foreach (var cal in userCalendars)
+            {
+                bUserCalendars.Add(Map.Map<Data_Layer.Calendar, Calendar>(cal));
+            }
+
+            var eventRepos = new AllDataRepo();
+            var events = eventRepos.GetDataEvents(user, userCalendars, dateStart, dateFinish);
+            var eventList = new List<BaseEvent>();
 
             foreach (var allData in events)
             {
-                var bEvent = Map.Map<Data_Layer.Models.AllData, Event>(allData);
-                eventList.Add(bEvent);
+                var calendar = bUserCalendars.SingleOrDefault(cal => cal.Id.Equals(allData.IdCalendar));
+                var bEvent = Map.Map<Data_Layer.Models.AllData, BaseEvent>(allData);
+                calendar.Events.Add(bEvent);
             }
 
-            return eventList;
+            return bUserCalendars;
         }
 
         public void CreateScheduledEvent(Event @event)
@@ -61,40 +97,40 @@ namespace Business_Layer.Services
                 case Interval.Day:
                     do
                     {
-                        compare = DateTime.Compare(@event.TimeEventStart, @event.DateFinish);
-                        schedule.Add(new EventSchedule(@event.TimeEventStart, @event.TimeEventFinish));
-                        @event.TimeEventStart = @event.TimeEventStart.AddDays(1);
-                        @event.TimeEventFinish = @event.TimeEventFinish.AddDays(1);
+                        compare = DateTime.Compare(@event.Start, @event.Finish);
+                        schedule.Add(new EventSchedule(@event.Start, @event.Finish));
+                        @event.Start = @event.Start.AddDays(1);
+                        @event.Finish = @event.Finish.AddDays(1);
                     }
                     while (compare < 0);
                     break;
                 case Interval.Week:
                     do
                     {
-                        compare = DateTime.Compare(@event.TimeEventStart, @event.DateFinish);
-                        schedule.Add(new EventSchedule(@event.TimeEventStart, @event.TimeEventFinish));
-                        @event.TimeEventStart = @event.TimeEventStart.AddDays(7);
-                        @event.TimeEventFinish = @event.TimeEventFinish.AddDays(7);
+                        compare = DateTime.Compare(@event.Start, @event.Finish);
+                        schedule.Add(new EventSchedule(@event.Start, @event.Finish));
+                        @event.Start = @event.Start.AddDays(7);
+                        @event.Finish = @event.Finish.AddDays(7);
                     }
                     while (compare < 0);
                     break;
                 case Interval.Month:
                     do
                     {
-                        compare = DateTime.Compare(@event.TimeEventStart, @event.DateFinish);
-                        schedule.Add(new EventSchedule(@event.TimeEventStart, @event.TimeEventFinish));
-                        @event.TimeEventStart = @event.TimeEventStart.AddMonths(1);
-                        @event.TimeEventFinish = @event.TimeEventFinish.AddMonths(1);
+                        compare = DateTime.Compare(@event.Start, @event.Finish);
+                        schedule.Add(new EventSchedule(@event.Start, @event.Finish));
+                        @event.Start = @event.Start.AddMonths(1);
+                        @event.Finish = @event.Finish.AddMonths(1);
                     }
                     while (compare < 0);
                     break;
                 case Interval.Year:
                     do
                     {
-                        compare = DateTime.Compare(@event.TimeEventStart, @event.DateFinish);
-                        schedule.Add(new EventSchedule(@event.TimeEventStart, @event.TimeEventFinish));
-                        @event.TimeEventStart = @event.TimeEventStart.AddYears(1);
-                        @event.TimeEventFinish = @event.TimeEventFinish.AddYears(1);
+                        compare = DateTime.Compare(@event.Start, @event.Finish);
+                        schedule.Add(new EventSchedule(@event.Start, @event.Finish));
+                        @event.Start = @event.Start.AddYears(1);
+                        @event.Finish = @event.Finish.AddYears(1);
                     }
                     while (compare < 0);
                     break;

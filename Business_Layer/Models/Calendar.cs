@@ -8,7 +8,7 @@ namespace Business_Layer.Models
         public string Name { get; set; }
         public Access Access { get; set; }
         public List<User> Users { get; set; }
-        public List<Event> Events { get; set; }
+        public List<BaseEvent> Events { get; set; }
         public string Color { get; set; }
         // HEX Color
     }

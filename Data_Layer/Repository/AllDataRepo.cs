@@ -11,12 +11,12 @@ namespace Data_Layer.Repository
 {
     public class AllDataRepo : BaseRepository<AllData>, IAllData
     {
-        public IEnumerable<AllData> GetDataEvents(User @user, List<Calendar> @calendarList, DateTime dateTimeStart, DateTime dateTimeFinish)
+        public IEnumerable<AllData> GetDataEvents(User @user, IEnumerable<Calendar> @calendarList, DateTime dateTimeStart, DateTime dateTimeFinish)
         {
-            DataTable idsCalendars = (@calendarList.Select(x => x.Id).ToList()).ConvertToDatatable();
+            DataTable idsCalendars = (@calendarList.Select(x => x.Id).ToList()).ConvertToDatatable("idsCalendars");
             using (SqlConnection connection = new SqlConnection(Data_Layer.Properties.Settings.Default.Server))
             {
-                IEnumerable<AllData> s = connection.Query<AllData>("uspGetDataEvents", new { @user.IdUser, idsCalendars, dateTimeStart, dateTimeFinish },
+                IEnumerable<AllData> s = connection.Query<AllData>("uspGetDataEvents", new { @user.IdUser, id_Calendar = idsCalendars, dateTimeStart, dateTimeFinish },
                     commandType: CommandType.StoredProcedure);
                 return s;
             }

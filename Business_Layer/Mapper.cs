@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Business_Layer.Models;
 using Data_Layer.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Business_Layer
 {
@@ -26,6 +28,18 @@ namespace Business_Layer
                 //    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id))
                 //    .ForMember(dest => dest.Access, map => map.MapFrom(src => src.AccessId));
 
+                cfg.CreateMap<Data_Layer.Calendar, Calendar>()
+                    .ConstructUsing(val => new Calendar()
+                    {
+                        Access = (Access)Enum.GetValues(typeof(Access)).GetValue(val.AccessId),
+                        Color = null,
+                        // todo
+                        Events = new List<BaseEvent>(),
+                        Id = val.Id,
+                        Name = val.Name,
+                        Users = new List<User>(),
+                    });
+
                 // Event
                 //cfg.CreateMap<Event, Data_Layer.Event>()
                 //    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id));
@@ -43,26 +57,35 @@ namespace Business_Layer
                 //    //.ForMember(dest => dest.IsAllDay, map => map.MapFrom(src => src.AllDay));
                 //    ;
 
-                    cfg.CreateMap<Data_Layer.Event, Event>()
-                    .ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id));
+                //cfg.CreateMap<Data_Layer.Event, BaseEvent>()
+                //.ForMember(dest => dest.Id, map => map.MapFrom(src => src.Id));
 
-                    cfg.CreateMap<AllData, Business_Layer.Models.Event>()
-                        .ConstructUsing(val => new Event()
-                        {
-                            Color = null,
-                            Description = val.Description,
-                            Start = val.TimeStart,
-                            Finish = val.TimeFinish,
-                            Title = val.Title,
-                            Id = val.EventId,
-                            //IsAllDay = val.AllDay,
-                            Notify = new NotificationSchedule()
-                            {
-                                Id = val.EventScheduledId,
-                                Message = val.Notification,
-                                Time = val.NotificationTime,
-                            },
+                cfg.CreateMap<AllData, BaseEvent>()
+                    .ConstructUsing(val => new BaseEvent()
+                    {
+                        Color = null,
+                        Start = val.TimeStart,
+                        Finish = val.TimeFinish,
+                        Title = val.Title,
+                        Id = val.EventId,
+                        IsAllDay = false,
+                            //IsAllDay = val.a
                         });
+
+                cfg.CreateMap<Event, Data_Layer.Event>()
+                    .ConstructUsing(val => new Data_Layer.Event()
+                    {
+                        Id = val.Id,
+                        AllDay = val.IsAllDay,
+                        CalendarId = val.CalendarId,
+                        Description = val.Description,
+                        Title = val.Title,
+                        TimeFinish = val.Finish,
+                        TimeStart = val.Start,
+                        Notification = null,
+                        RepeatId = 0,
+                        Schedule = null,
+                    });
             });
             
             Map = config.CreateMapper();
@@ -70,25 +93,25 @@ namespace Business_Layer
         }
         public static IMapper Map { get; }
 
-        public static Data_Layer.Event MapBussinesEvent(Event source, int calendarId)
-        {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Event, Data_Layer.Event>()
-                    .ConstructUsing(val => new Data_Layer.Event(0, 
-                        calendarId, 
-                        val.Description ?? string.Empty, 
-                        val.Notify != null ? val.Notify.Message ?? string.Empty : string.Empty,
-                        val.Title,
-                        val.Start,
-                        val.Finish));
+        //public static Data_Layer.Event MapBussinesEvent(Event source)
+        //{
+        //    var config = new MapperConfiguration(cfg =>
+        //    {
+        //        cfg.CreateMap<Event, Data_Layer.Event>()
+        //            .ConstructUsing(val => new Data_Layer.Event(0,
+        //                val.CalendarId,
+        //                val.Description ?? string.Empty,
+        //                val.Notify != null ? val.Notify.Message ?? string.Empty : string.Empty,
+        //                val.Title,
+        //                val.Start,
+        //                val.Finish));
 
-            });
+        //    });
+        //    var mapper = config.CreateMapper();
+        //    var result = mapper.Map<Event, Data_Layer.Event>(source);
 
-            var mapper = config.CreateMapper();
-            var result = mapper.Map<Event, Data_Layer.Event>(source);
-
-            return result;
-        }
+        //    // TODO: rework
+        //    return result;
+        //}
     }
 }

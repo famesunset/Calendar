@@ -23,5 +23,15 @@ namespace Data_Layer.Repository
                 return s;
             }
         }
+
+        public IEnumerable<Calendar> GetUserCalendars(int userId)
+        {
+            using (SqlConnection connection = new SqlConnection(Data_Layer.Properties.Settings.Default.Server))
+            {
+                IEnumerable<Calendar> s = connection.Query<Calendar>("uspGetCalendarsByUserId", new { idUser = userId },
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
     }
 }

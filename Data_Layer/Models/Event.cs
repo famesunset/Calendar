@@ -55,5 +55,10 @@ namespace Data_Layer
             this.TimeStart = timeStart;
             this.TimeFinish = timeFinish;
         }
+
+        public Event()
+        {
+
+        }
     }
 }

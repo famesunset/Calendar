@@ -111,7 +111,8 @@ let Daily = {
     if (mouseOffset >= 28) {
       let minutesOffset = (mouseOffset * 60) / this.data.ux.cellHeight;      
 
-      if (minutesOffset % 30 == 0) {        
+      if (minutesOffset % 30 == 0) {
+          console.log("+");
         let timeStart = this.data.cash.timeStart;
         let timeEnd = new Date(timeStart);
             timeEnd.setMinutes(timeStart.getMinutes() + minutesOffset);

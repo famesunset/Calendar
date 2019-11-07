@@ -74,6 +74,7 @@
       <HintPath>..\packages\Microsoft.Data.Tools.Msbuild.10.0.61804.210\lib\net46\sqlpackage.exe</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
