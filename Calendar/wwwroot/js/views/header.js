@@ -1,7 +1,6 @@
 import { Dropdown } from '../models/Dropdown.js';
 import { ViewMode } from './ViewMode.js';
 import { MainCalendar } from './MainCalendar.js';
-import { DateParse } from '../models/share/DateParse.js';
 
 let Header = {
   data: {
@@ -35,17 +34,17 @@ let Header = {
   },
 
   onNext() {
-    let date = new Date(sessionStorage.getItem('currentDate'));
-    date.setDate(date.getDate() + 1);
-
-    MainCalendar.setDate(date);
+    MainCalendar.setDate(
+      moment(new Date(sessionStorage.getItem('currentDate')))
+        .add(1, 'days').toDate()
+    );
   },
 
   onPrev() {
-    let date = new Date(sessionStorage.getItem('currentDate'));
-    date.setDate(date.getDate() - 1);
-
-    MainCalendar.setDate(date);    
+    MainCalendar.setDate(
+      moment(new Date(sessionStorage.getItem('currentDate')))
+      .add(-1, 'days').toDate()
+    );    
   },
 
   onToday() {
@@ -59,12 +58,8 @@ let Header = {
 
   renderDate(date) {
     let s = this.data.selectors;
-    var dateParse = new DateParse(date);
 
-    let year = date.getYear() + 1900;
-    let month = dateParse.getMonthOfYear();
-
-    $(s.s_date).text(`${month} ${year}`);
+    $(s.s_date).text(moment(date).format('MMMM YYYY'));
   },
 
   renderDropdown() {

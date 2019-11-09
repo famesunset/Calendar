@@ -1,13 +1,13 @@
-import { DateParse } from '../models/share/DateParse.js';
 import { DatePicker } from '../models/DatePicker.js';
 import { TimePicker } from '../models/TimePicker.js';
 import { Dropdown } from '../models/Dropdown.js';
 import { Event } from '../models/Event.js';
 import { ViewMode } from './ViewMode.js';
-import { TimeParse } from '../models/share/TimeParse.js';
 
 var EventForm = {
   data: {
+    targetEvent: new Event(),
+
     form: {
       datePickers: [],
       timePickers: [],
@@ -20,7 +20,9 @@ var EventForm = {
       s_form: '.create-event-form', 
       s_title: '.create-event-form #title',
       s_timeStart: '#time-start',
-      s_timeEnd: '#time-finish',
+      s_timeFinish: '#time-finish',
+      s_dateStart: '#date-start',
+      s_dateFinish: '#date-finish',
       s_modal: '#event-form-modal',
       s_optionsLoad: '#more-options',
       s_options: '.options',
@@ -51,16 +53,26 @@ var EventForm = {
     $(s.s_saveBtn).click(() => this.onSave());
     $(s.s_title).focusout(e => this.onTitleFocusOut(e));
     $(s.s_timeStart).focusout(e => this.onTimeFocusOut(e));
-    $(s.s_timeEnd).focusout(e => this.onTimeFocusOut(e));
+    $(s.s_timeFinish).focusout(e => this.onTimeFocusOut(e));
   },
 
-  open(start, end) {    
+  open(start, finish) {    
     let container = this.data.selectors.s_formLoad;
     let url = this.data.url.u_formLoad;
 
+    this.initTargetEvent(new Event(
+      "(No title)",
+      "",
+      start,
+      finish, 
+      "#9E69AF",
+      false,
+      null
+    ));
+
     $(container).load(url, () => {
-      this.renderDatePickers(start, end);
-      this.renderTimePickers(start, end);
+      this.renderDatePickers(start, finish);
+      this.renderTimePickers(start, finish);
       this.renderModal();
       this.openAnimation();
 
@@ -77,6 +89,12 @@ var EventForm = {
     this.closeAnimation();
     $(modal).remove();
     $(el).remove();     
+  },
+
+  initTargetEvent(event) {
+    let data = event.data;
+
+    this.data.targetEvent.data = { ...data };
   },
 
   onCloseForm() {
@@ -148,48 +166,72 @@ var EventForm = {
   onTimeFocusOut(e) {       
     let s = this.data.selectors;
 
-    let _start = $(s.s_timeStart).val();
-    let _end = $(s.s_timeEnd).val();
+    let timeStart = $(s.s_timeStart).val();
+    let timeFinish = $(s.s_timeFinish).val();
 
     let id = ViewMode.getLastEventId();    
     let title = $(s.s_title).val();
     
-    let time = this.validateTime(
-      TimeParse.parse(_start),
-      TimeParse.parse(_end),
+    let time = this.validateTime(      
+      moment(timeStart, ['h:m a', 'H:m']).toDate(),
+      moment(timeFinish, ['h:m a', 'H:m']).toDate(),
       e.target.id
     );
   
-    ViewMode.changeEventPosition(id, title, time.start, time.end);
+    ViewMode.changeEventPosition(id, title, time.start, time.finish);
   },
 
-  validateTime(start, end, target) {      
-    let _start = start.getTime() / 1000;
-    let _end = end.getTime() / 1000;
+  onDateSelect(date) {
+    this.validateDate(
+      this.data.form.datePickers['date-start'].getDate(),
+      this.data.form.datePickers['date-finish'].getDate()      
+    )
+  },
 
-    if (_start < _end) {
-      return { start, end };
+  validateTime(start, finish, target) {      
+    let startDuration = start.getTime() / 1000;
+    let finishDuration = finish.getTime() / 1000;
+
+    if (startDuration < finishDuration) {
+      return { start, finish };
     }
     
     if (target === this.data.css.s_timeStart) {
-      end.setHours(start.getHours() + 1);
+      finish = moment(start).add(1, 'hours').toDate();
     } else {
-      start.setHours(end.getHours() - 1);
-    }      
+      start = moment(finish).add(-1, 'hours').toDate();
+    }       
     
-    this.setStartEndTime(
-      new TimeParse(start).getTime(),
-      new TimeParse(end).getTime()
+    this.setStartFinishTime(
+      moment(start).format('LT'),
+      moment(finish).format('LT')
     );
 
-    return { start, end };
+    return { start, finish };
   },
 
-  setStartEndTime(start, end) {
+  validateDate(start, finish) {
+    let s = this.data.selectors;
+    let m_start = moment(start);
+    let m_finish = moment(finish);
+
+    let min = moment.min(m_start, m_finish);
+
+    if (min != m_start) {
+      let m_dateFinish = moment(start).add(1, 'days');      
+
+      this.data.form.datePickers['date-finish']
+        .setDate(m_dateFinish.toDate());
+      
+      $(s.s_dateFinish).val(m_dateFinish.format('MMM DD, YYYY'));
+    }
+  },
+
+  setStartFinishTime(start, finish) {
     let s = this.data.selectors;   
 
     $(s.s_timeStart).val(start);
-    $(s.s_timeEnd).val(end);
+    $(s.s_timeFinish).val(finish);
   },
 
   renderModal() {
@@ -201,19 +243,24 @@ var EventForm = {
     $('body').prepend(modal);
   },
 
-  renderDatePickers(dateStart, dateEnd) {
+  renderDatePickers(dateStart, dateFinish) {
+    let s = this.data.selectors;
+    let _this = this;
+
     this.data.form.datePickers = {
-      "date-start": new DatePicker('#date-start', {
+      "date-start": new DatePicker({
         setDefaultDate: true, 
         defaultDate: dateStart,
-        firstDay: 1
-      }),
+        firstDay: 1,
+        onSelect: (date) => _this.onDateSelect(date)
+      }, s.s_dateStart),
 
-      "date-finish": new DatePicker('#date-finish', {
+      "date-finish": new DatePicker({
         setDefaultDate: true,
-        defaultDate: dateEnd,
-        firstDay: 1
-      })
+        defaultDate: dateFinish,
+        firstDay: 1,
+        onSelect: (date) => _this.onDateSelect(date)
+      }, s.s_dateFinish)
     };
 
     for (let key in this.data.form.datePickers) {
@@ -221,21 +268,22 @@ var EventForm = {
     }
   },
 
-  renderTimePickers(dateStart, dateEnd) {  
+  renderTimePickers(dateStart, dateFinish) {  
     const HOUR = 1000 * 60 * 60; // hour in ms
+    let s = this.data.selectors;
 
-    let timeStart = `${dateStart.getHours()}:${dateStart.getMinutes()}`;
-    let timeEnd = `${dateEnd.getHours()}:${dateEnd.getMinutes()}`;
+    let timeStart = moment(dateStart).format('h:mm');
+    let timeFinish = moment(dateStart).format('h:mm');
 
     this.data.form.timePickers = {
       'time-start': new TimePicker(dateStart, {            
         defaultTime: timeStart,
-      }, '#time-start'),
+      }, s.s_timeStart),
 
-      'time-finish': new TimePicker(dateEnd, {
-        defaultTime: timeEnd,
+      'time-finish': new TimePicker(dateFinish, {
+        defaultTime: timeFinish,
         fromNow: HOUR
-      }, '#time-finish')
+      }, s.s_timeFinish)
     };
 
     for (let key in this.data.form.timePickers) {

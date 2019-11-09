@@ -1,39 +1,44 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"]</title>
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/materialize/css/materialize.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="~/lib/materialize/css/materialize.min.css" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    </environment>
+  <environment include="Development">
+    <link rel="stylesheet" href="~/lib/materialize/css/materialize.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+  </environment>
+  <environment exclude="Development">
+    <link rel="stylesheet" href="~/lib/materialize/css/materialize.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+  </environment>
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/resources.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="~/css/resources.css">
 
-    @RenderSection("Styles", required: false)
+  @RenderSection("Styles", required: false)
 
 </head>
+
 <body>
-    <partial name="PartialViews/HeaderPartial" />
+  <partial name="PartialViews/HeaderPartial" />
 
-    @RenderBody()
+  @RenderBody()
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/materialize/js/materialize.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/materialize/js/materialize.js"></script>
-    </environment>
+  <environment include="Development">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/materialize/js/materialize.js"></script>
+    <script src="~/lib/moment/moment.js"></script>
+  </environment>
+  <environment exclude="Development">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/materialize/js/materialize.js"></script>
+    <script src="~/lib/moment/moment.js"></script>
+  </environment>
 
-    @RenderSection("Scripts", required: false)
+  @RenderSection("Scripts", required: false)
 </body>
+
 </html>

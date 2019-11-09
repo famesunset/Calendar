@@ -1,62 +1,62 @@
 .options {
-    display: none;
-    opacity: 0;
+  display: none;
+  opacity: 0;
 }
 
 .inline-group {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 13px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 13px;
 }
 
 .options .replay-icon {
-    margin-right: 18px;
+  margin-right: 18px;
 }
 
 .all-day-event span {
-    color:var(--color-main-gray);
+  color: var(--color-main-gray);
 }
 
 .repeat .repeat-dropdown {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px;
-    border-radius: 4px;
-    color: var(--color-main-gray);
-    background-color: var(--color-items-main-gray-bg);
-    margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  color: var(--color-main-gray);
+  background-color: var(--color-items-main-gray-bg);
+  margin-left: 20px;
 }
 
 .repeat-dropdown #repeat-dropdown-trigger {
-    color: var(--color-main-gray);
+  color: var(--color-main-gray);
 }
 
 .repeat-dropdown i {
-    margin-left: 4px;
+  margin-left: 4px;
 }
 
 .repeat .repeat-dropdown:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .repeat .dropdown-content a {
-    color: var(--color-main-gray);
+  color: var(--color-main-gray);
 }
 
 .description {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 25px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 25px;
 }
 
 .description i {
-    margin-right: 18px;
+  margin-right: 18px;
 }
 
 .description textarea {
-    font-family: var(--font-main-family) !important;
-    color: var(--color-main-gray) !important;
+  font-family: var(--font-main-family) !important;
+  color: var(--color-main-gray) !important;
 }

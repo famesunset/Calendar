@@ -1,5 +1,3 @@
-import { DateParse } from '../../models/share/DateParse.js';
-import { TimeParse } from '../../models/share/TimeParse.js';
 import { EventForm } from '../EventForm.js';
 import { GUID } from '../../models/share/GUID.js';
 import { EventRepository } from '../../models/mvc/EventRepository.js';
@@ -10,12 +8,13 @@ let Daily = {
       c_lastEventId: '',
       c_targetCellShift: {},
       timeStart: {},
-      timeEnd: {}
+      timeFinish: {}
     },
 
     selectors: {
       s_table: '#table-events',
       s_dayOfWeek: '.date .day-of-week',
+      s_dailyEvent: '.daily-event',
       s_eventContentWrapper: '.event-content-wrapper',
       s_eventWrapperTiny: '.daily-event-tiny',
       s_day: '.date .day', 
@@ -25,7 +24,8 @@ let Daily = {
     ux: {
       cellHeight: 50,
       eventHeight: 46,
-      pos_mouseStart: 0    
+      pos_mouseStart: 0,
+      animateDuration: 150
     },
 
     css: {
@@ -36,7 +36,7 @@ let Daily = {
 
   async run() {
     let repo = new EventRepository(); 
-    let events = await repo.getList();
+    let events = await repo.getList(new Date());
 
     this.renderDate(new Date(sessionStorage.getItem('currentDate')));
     this.renderTable();
@@ -49,7 +49,7 @@ let Daily = {
 
     $(s.s_cell).mousedown(e => {
       this.onCellMouseDown(e);
-      $(s.s_table).mousemove((e) => this.onTableMouseMove(e));
+      $(s.s_table).mousemove(async (e) => await this.onTableMouseMove(e));
       $(s.s_table).mouseup((e) => this.onCellMouseUp(e));      
     });        
   },
@@ -73,23 +73,25 @@ let Daily = {
 
   onCellMouseDown(e) {        
     let container = e.target;
-    let eventWrapperId = GUID();
+    let selector = GUID();
     let eventId = GUID();        
 
     let hour = $(container).find('input').val();
-    let start = new Date(sessionStorage.getItem('currentDate'));
-        start.setHours(hour, 0);
-          
-    let end = new Date(start);
-        end.setHours(start.getHours() + 1);
 
-    this.renderEvent(container, eventWrapperId, eventId, '(No title)', start, end);
+    let timeStart = moment(new Date(sessionStorage.getItem('currentDate')))
+                    .hour(+hour)
+                    .startOf('hour')
+                    .toDate();
+          
+    let timeFinish = moment(timeStart).add(1, 'hours').toDate();
+
+    this.renderEvent(container, selector, eventId, '(No title)', timeStart, timeFinish);
 
     let targetCoords = this.getCoords(container);
     this.data.cash.c_targetCellShift = Math.abs(e.pageY - targetCoords.y);
     this.data.ux.pos_mouseStart = e.pageY;
-    this.data.cash.timeStart = start;
-    this.data.cash.timeEnd = end;
+    this.data.cash.timeStart = timeStart;
+    this.data.cash.timeFinish = timeFinish;
   },
 
   onCellMouseUp(e) {  
@@ -97,36 +99,35 @@ let Daily = {
 
     EventForm.open(
       this.data.cash.timeStart,
-      this.data.cash.timeEnd,      
+      this.data.cash.timeFinish,      
     );
 
     $(s.s_table).unbind('mousemove');
   },
   
-  onTableMouseMove(e) {
+  async onTableMouseMove(e) {
     let mouseStart = this.data.ux.pos_mouseStart;
     let mouseEnd = e.pageY;
     let mouseOffset = mouseEnd - mouseStart + this.data.cash.c_targetCellShift;
 
     if (mouseOffset >= 28) {
-      let minutesOffset = (mouseOffset * 60) / this.data.ux.cellHeight;      
+      let minutesOffset = Math.trunc((mouseOffset * 60) / this.data.ux.cellHeight);                  
 
-      if (minutesOffset % 30 == 0) {
-          console.log("+");
+      if (minutesOffset % 30 == 0) {          
         let timeStart = this.data.cash.timeStart;
-        let timeEnd = new Date(timeStart);
-            timeEnd.setMinutes(timeStart.getMinutes() + minutesOffset);
+        let timeFinish = new Date(timeStart);
+            timeFinish.setMinutes(timeStart.getMinutes() + minutesOffset);
     
         this.setEventTime(
-          new TimeParse(timeStart).getTime(),
-          new TimeParse(timeEnd).getTime(),
+          moment(timeStart).format('LT'),
+          moment(timeFinish).format('LT'),
           this.data.cash.c_lastEventId
         );
         
-        this.calcEventPosition(this.data.cash.c_lastEventId, timeStart, timeEnd); 
+        await this.calcEventPosition(this.data.cash.c_lastEventId, timeStart, timeFinish); 
     
         this.data.cash.timeStart = timeStart;
-        this.data.cash.timeEnd = timeEnd;
+        this.data.cash.timeFinish = timeFinish;
       }
     }
   },
@@ -148,8 +149,9 @@ let Daily = {
                 `<input type="hidden" value="{{time}}">`
               '</div>';
 
-    let timeZone = new DateParse(new Date()).getTimeZone();
-    this.renderCell(el, time, timeZone, '0 AM');
+    let tz_offset = moment().utcOffset() / 60;
+    let tz_name = `GMT ${tz_offset > 0 ? '+' : '-'}${Math.abs(tz_offset)}`;
+    this.renderCell(el, time, tz_name, '0 AM');
 
     let ampm = 'AM';
     let hour = 0;
@@ -170,11 +172,11 @@ let Daily = {
   renderEvents(events) {    
     events.forEach(event => {      
       let start = new Date(event.start);
-      let end = new Date(event.finish);
-      let guid = GUID();
+      let finish = new Date(event.finish);
+      let selector = GUID();
       
       let container = $(`#cell-${start.getHours()}`);
-      this.renderEvent(container, guid, event.id, event.title, start, end);
+      this.renderEvent(container, selector, event.id, event.title, start, finish);
     });
   },
 
@@ -191,46 +193,44 @@ let Daily = {
   },
 
   renderDate(date) {
-    let s = this.data.selectors;
-    var dateParse = new DateParse(date);
+    let s = this.data.selectors;    
+    let m_date = moment(date);
 
-    $(s.s_dayOfWeek).text(dateParse.getDayOfWeek());
-    $(s.s_day).text(dateParse.date.getDate());
+    $(s.s_dayOfWeek).text(m_date.format('ddd'));
+    $(s.s_day).text(m_date.format('D'));
   },
 
-  renderEvent(container, guid, id, title, start, end) {
+  renderEvent(container, selector, id, title, start, finish) {
     if (!title || title.trim() === '') {
       title = '(No title)';
     }
-
-    var timeStart = new TimeParse(start).getTime();
-    var timeEnd = new TimeParse(end).getTime();
     
-    var eventEl =   `<div class="daily-event" id="${guid}">` +
+    var eventEl =   `<div class="daily-event" id="${selector}">` +
                         `<div class="${this.data.css.s_eventContentWrapper}">` +
                           `<input type="hidden" name="id" value="${id}">` +
                           `<h6 class="title">${title}</h4>` +
                           '<div class="time">' +
-                              `<span class="start">${timeStart}</span>` +
+                              `<span class="start">${moment(start).format('LT')}</span>` +
                               '<span> &mdash; </span>' +
-                              `<span class="end">${timeEnd}</span>` +
+                              `<span class="end">${moment(finish).format('LT')}</span>` +
                           '</div>' +
                         '</div>' +
                     '</div>';      
 
     $(container).append(eventEl);
-    this.calcEventPosition(guid, start, end);   
-    this.cashLastEvent(guid); 
+
+    this.calcEventPosition(selector, start, finish);   
+    this.cashLastEvent(selector); 
   },
 
-  calcEventPosition(id, start, end) {
+  async calcEventPosition(selector, start, finish) {
     let s = this.data.selectors;
     let c = this.data.css;    
 
-    let $event = $(`#${id}`);     
-    let $wrapper = $(`#${id} ${s.s_eventContentWrapper}`);  
+    let $event = $(`#${selector}`);     
+    let $wrapper = $(`#${selector} ${s.s_eventContentWrapper}`);  
 
-    let minutesDiff = Math.abs(start.getTime() - end.getTime()) / 1000.0 / 60.0;
+    let minutesDiff = Math.abs(start.getTime() - finish.getTime()) / 1000.0 / 60.0;
     let factor = (this.data.ux.cellHeight * minutesDiff) / 60.0 - this.data.ux.cellHeight;
     let margin = (this.data.ux.cellHeight * start.getMinutes()) / 60.0;
     
@@ -246,8 +246,8 @@ let Daily = {
     $event.css('height', `${height}px`);   
   },
 
-  changeEventPosition(guid, title, start, end) {
-    let id = $(`#${guid}`).find('input[name="id"]').val();
+  changeEventPosition(selector, title, start, finish) {
+    let id = $(`#${selector}`).find('input[name="id"]').val();
     let cell = this.data.selectors.s_cell;
     let hours = start.getHours();
 
@@ -256,8 +256,8 @@ let Daily = {
 
     let container = $(`${cell}[data-time='${dataTime}']`)[0];
     
-    $(`#${guid}`).remove();
-    this.renderEvent(container, guid, id, title, start, end);
+    $(`#${selector}`).remove();
+    this.renderEvent(container, selector, id, title, start, finish);
   },
 
   setEventTitle(title, guid) {
@@ -268,16 +268,35 @@ let Daily = {
     $(selector).text(title);
   },
 
-  setEventTime(start, end, guid) {
-    let s_start = `#${guid} .start`;
-    let s_end = `#${guid} .end`;
+  tableOpenAnimation() {
+    let s = this.data.selectors;
+    let ux = this.data.ux;
 
-    $(s_start).text(start);
-    $(s_end).text(end);
+    $(s.s_dailyEvent).animate({
+      opacity: 1
+    }, ux.animateDuration);
   },
 
-  cashLastEvent(guid) {
-    this.data.cash.c_lastEventId = guid;
+  tableCloseAnimation() {
+    let s = this.data.selectors;
+    let ux = this.data.ux;
+
+    $(s.s_dailyEvent).animate({
+      opacity: 0
+    }, ux.animateDuration);   
+    $(s.s_dailyEvent).remove();
+  },  
+
+  setEventTime(start, finish, guid) {
+    let s_start = `#${guid} .start`;
+    let s_finish = `#${guid} .end`;
+
+    $(s_start).text(start);
+    $(s_finish).text(finish);
+  },
+  
+  cashLastEvent(selector) {
+    this.data.cash.c_lastEventId = selector;
   },
 
   lastEventId() {

@@ -89,7 +89,7 @@
   -moz-user-select: none;
   z-index: 200;
   position: absolute;
-  background-color: #9E69AF;
+  background-color: var(--displayed-event-bg);
   width: calc(100% - 20px);
   height: 46px;
   min-height: 28px;

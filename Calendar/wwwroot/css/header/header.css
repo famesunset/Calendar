@@ -1,25 +1,25 @@
-header {    
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    height: var(--header-height);
-    width: 100%;
-    border-bottom: 1px solid var(--color-main-border);
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: var(--header-height);
+  width: 100%;
+  border-bottom: 1px solid var(--color-main-border);
 }
 
 header .left-side,
 header .right-side {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .collapse-sidebar-button {
-    padding: 15px;
-    border-radius: 100%;
-    transition-property: all;
-    transition-duration: var(--transition-main-duration);
+  padding: 15px;
+  border-radius: 100%;
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
 .collapse-sidebar-button:hover,
@@ -27,98 +27,98 @@ header .right-side {
 .switch-date .switch-wrapper:hover,
 .view-mode:hover,
 .search:hover {
-    cursor: pointer;
-    background-color: var(--color-items-main-gray-bg);
-    transition-property: all;
-    transition-duration: var(--transition-main-duration);
+  cursor: pointer;
+  background-color: var(--color-items-main-gray-bg);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
 .hamburger {
-    height: 20px;
-    width: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  height: 20px;
+  width: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .hamburger .line {
-    height: 2px;
-    width: inherit;
-    background-color: var(--color-main-gray);   
-    margin-bottom: 3px; 
+  height: 2px;
+  width: inherit;
+  background-color: var(--color-main-gray);
+  margin-bottom: 3px;
 }
 
 .hamburger .line:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .calendar-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .calendar-icon img {
-    height: 40px;
+  height: 40px;
 }
 
 .calendar-icon span {
-    margin-left: 10px;
-    font-size: 18px;
+  margin-left: 10px;
+  font-size: 18px;
 }
 
 .today-button,
 .view-mode {
-    margin-left: 40px;
-    border-radius: 4px;
-    line-height: 20px;
-    font-style: 14px;
-    padding: 8px 20px;
-    border: 1px solid var(--color-main-border);
+  margin-left: 40px;
+  border-radius: 4px;
+  line-height: 20px;
+  font-style: 14px;
+  padding: 8px 20px;
+  border: 1px solid var(--color-main-border);
 }
 
 .switch-date {
-    margin-left: 40px;   
-    display: flex; 
-    justify-content: center;
-    align-items: center;
+  margin-left: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .switch-date .switch-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 100%;
-    padding: 5px;    
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  padding: 5px;
 }
 
 .header-date {
-    margin-left: 40px;
-    font-size: 18px;
+  margin-left: 40px;
+  font-size: 18px;
 }
 
 .search {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 100%;
-    padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  padding: 10px;
 }
 
 .view-mode {
-    color: var(--color-main-gray);
+  color: var(--color-main-gray);
 }
 
 #view-mode a {
-    color: var(--color-main-gray);
+  color: var(--color-main-gray);
 }
 
 .user-menu {
-    margin-left: 40px;
+  margin-left: 40px;
 }
 
 .user-menu img {
-    height: 50px;
+  height: 50px;
 }

@@ -1,24 +1,24 @@
 ﻿body {
-    height: 100vh;
-    width: 100vw;
-    padding: 0;
-    margin: 0;
-    font-family: var(--font-main-family);
-    font-weight: 500;
-    color: var(--color-main-gray);
-    overflow: hidden;
-    background-color: #fff;
+  height: 100vh;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-main-family);
+  font-weight: 500;
+  color: var(--color-main-gray);
+  overflow: hidden;
+  background-color: #fff;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px inherit;    
+  -webkit-box-shadow: inset 0 0 6px inherit;
 }
 
 .scrollbar::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--color-scrollbar);
-    border-radius: 10px;
+  background-color: var(--color-scrollbar);
+  border-radius: 10px;
 }

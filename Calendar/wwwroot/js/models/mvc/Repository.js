@@ -3,11 +3,14 @@ class Repository {
     
   }
 
-  async getList(url) {
+  async getList(url, _data) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: url,
-        type: 'GET',      
+        type: 'GET',     
+        data: _data,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8", 
         success: data => resolve(data),
         error: () => reject('error')
       }); 

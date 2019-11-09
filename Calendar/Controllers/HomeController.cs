@@ -23,24 +23,42 @@ namespace Calendar.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEventList([FromServices] IEventService service)
+        public IActionResult GetEventList([FromServices] IEventService service, DateTime date)
         {
-            var calendars = new List<Business_Layer.Models.Calendar>
-                (service.GetEvents(null, DateTime.Now, DateUnit.Day));
+            //var calendars = new List<Business_Layer.Models.Calendar>
+            //  (service.GetEvents(null, DateTime.Now, DateUnit.Day));
             
-            List<BaseEvent> events = calendars.First(c => c.Id.Equals(2)).Events;
+            //List<BaseEvent> events = calendars.First(c => c.Id.Equals(2)).Events;
 
-            for (int i = 0; i < 1; ++i)
+            List<Event> events = new List<Event>();
+            if (date.Date.Equals(DateTime.Today.Date)) {
+                for (int i = 0; i < 1; ++i)
+                { 
+                    events.Add(new Event()
+                    {
+                      Id = i + 1,
+                      Color = "#fff",
+                      Description = $"Description {i + 1}",
+                      Title = $"Today event",
+                      Start = DateTime.Now.AddHours(-1),
+                      Finish = DateTime.Now
+                    });
+                }
+            }
+            else 
             {
-                //events.Add(new Event()
-                //{
-                //    Id = i + 1,
-                //    Color = "#fff",
-                //    Description = $"Description {i + 1}",
-                //    Title = $"Title {i + 1}",
-                //    TimeStart = DateTime.Now.AddHours(-1),
-                //    TimetFinish = DateTime.Now
-                //});
+                for (int i = 0; i < 1; ++i)
+                { 
+                    events.Add(new Event()
+                    {
+                      Id = i + 1,
+                      Color = "#fff",
+                      Description = $"Description {i + 1}",
+                      Title = $"Not today event",
+                      Start = DateTime.Now,
+                      Finish = DateTime.Now.AddHours(3)
+                    });
+                }
             }
 
             return Json(events);

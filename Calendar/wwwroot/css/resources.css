@@ -1,15 +1,16 @@
 * {
-    --font-main-family: Roboto, sans-serif;
-    --color-main: #00A569;
-    --color-main-hover: #26A69A;
-    --color-main-gray: #5f6368;
-    --color-small-font-size: #70757a;
-    --color-minor-gray: #3c4043;
-    --color-main-border: rgba(199, 199, 199, .6);
-    --color-items-main-gray-bg: #F0F0F0;
-    --color-scrollbar: #dcdcdc;
-    --transition-main-duration: 150ms;
-    --box-shadow-event-form: 0px 0px 40px -5px rgba(50, 50, 50, .4);
-    --header-height: 64px;
-    --side-bar-width: 300px;
+  --font-main-family: Roboto, sans-serif;
+  --color-main: #00A569;
+  --color-main-hover: #26A69A;
+  --color-main-gray: #5f6368;
+  --color-small-font-size: #70757a;
+  --color-minor-gray: #3c4043;
+  --color-main-border: rgba(199, 199, 199, .6);
+  --color-items-main-gray-bg: #F0F0F0;
+  --color-scrollbar: #dcdcdc;
+  --transition-main-duration: 150ms;
+  --box-shadow-event-form: 0px 0px 40px -5px rgba(50, 50, 50, .4);
+  --header-height: 64px;
+  --side-bar-width: 300px;
+  --displayed-event-bg: #9E69AF;
 }

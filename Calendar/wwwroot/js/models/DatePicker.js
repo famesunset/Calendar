@@ -1,9 +1,8 @@
 class DatePicker {
-  constructor(selector, options) {
-    this.selector = selector;
+  constructor(options, selector) {    
     this.options = options;
+    this.selector = selector;
     this.instance = null;
-    this.date = new Date();
   }
 
   runDatePicker() {

@@ -10,6 +10,14 @@ let ViewMode = {
     this.data.current = Daily;
   },
 
+  openAnimation() {
+    this.data.current.tableOpenAnimation();
+  },
+  
+  closeAnimation() {
+    this.data.current.tableCloseAnimation();
+  },
+
   renderDate(date) {    
     this.data.current.renderDate(date);
   },
@@ -20,16 +28,20 @@ let ViewMode = {
     this.data.current.onCreateEvent(container);
   },
 
-  changeEventPosition(guid, title, start, end) {    
-    this.data.current.changeEventPosition(guid, title, start, end);
+  renderEvents(events) {
+    this.data.current.renderEvents(events);
+  },
+
+  changeEventPosition(selector, title, start, finish) {    
+    this.data.current.changeEventPosition(selector, title, start, finish);
   },
 
   setEventTitle(title, id) {
     this.data.current.setEventTitle(title, id);
   },
 
-  setEventTime(start, end, id) {
-    this.data.current.setEventTime(start, end, id);
+  setEventTime(start, finish, id) {
+    this.data.current.setEventTime(start, finish, id);
   },
   
   getLastEventId() {

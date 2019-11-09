@@ -1,6 +1,7 @@
 import { DatePicker } from '../models/DatePicker.js';
 import { ViewMode } from './ViewMode.js';
 import { Header } from './Header.js';
+import { EventRepository } from '../models/mvc/EventRepository.js';
 
 let MainCalendar = {
   data: {
@@ -16,7 +17,9 @@ let MainCalendar = {
     this.render();
   },
 
-  onSelect(date) {
+  async onSelect(date) {
+    ViewMode.closeAnimation();
+
     let currentDate = new Date(sessionStorage.getItem('currentDate'));    
     date.setHours(
       currentDate.getHours(),
@@ -24,8 +27,12 @@ let MainCalendar = {
     );
 
     Header.renderDate(date);
-    ViewMode.renderDate(date);
+    ViewMode.renderDate(date);    
 
+    let events = await  new EventRepository().getList(date);
+    ViewMode.renderEvents(events);
+    
+    ViewMode.openAnimation();
     sessionStorage.setItem('currentDate', date);
   },
 
@@ -34,14 +41,14 @@ let MainCalendar = {
     let container = this.data.selectors.s_calendarWrapper;
     let input = this.data.selectors.s_input;
 
-    this.data.calendar = new DatePicker(input, {
+    this.data.calendar = new DatePicker({
         container: container,
         setDefaultDate: true,
         defaultDate: new Date(),
         firstDay: 1,
         animation: false,
         onSelect: (date) => _this.onSelect(date)
-    });
+    }, input);
     
     this.data.calendar.runDatePicker();  
     this.data.calendar.open();

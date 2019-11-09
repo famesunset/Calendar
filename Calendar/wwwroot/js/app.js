@@ -10,7 +10,7 @@ $(function() {
       
       Header.run();
       SideBar.run();
-      ViewMode.run();
+      ViewMode.run();       
     }
   };
 

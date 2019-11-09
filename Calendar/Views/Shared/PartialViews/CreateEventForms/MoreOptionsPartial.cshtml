@@ -1,36 +1,36 @@
 @model Calendar.Models.ViewModelInitializers.EventScheduleDropdown;
 
 <div id="options" class="options">
-    <div class="inline-group">
-        <div>
-            <i class="replay-icon material-icons">replay</i>
-        </div>
-        <div class="all-day-event">
-            <label>
-                <input id="all-day" type="checkbox" class="filled-in" />
-                <span>All day</span>
-            </label>
-        </div>
-        <div class="repeat">
-            <!-- Dropdown Trigger -->
-            <div class="repeat-dropdown">
-                <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>Don't repeat</a>
-                <i class="material-icons tiny">arrow_drop_down</i>
-            </div>
-
-            <!-- Dropdown Structure -->
-            <ul id='repeat-dropdown-content' class='dropdown-content'>
-                <li><a class="no-repeat">Don't repeat</a></li>
-
-                @foreach (var item in Model.Items)
-                {
-                    <li><a id="@item.Selector" class="no-repeat">@item.Value</a></li>
-                }
-            </ul>
-        </div>
+  <div class="inline-group">
+    <div>
+      <i class="replay-icon material-icons">replay</i>
     </div>
-    <div class="description">
-        <i class="material-icons">format_align_left</i>
-        <textarea rows="2" placeholder="Description" id="description" class="materialize-textarea"></textarea>
+    <div class="all-day-event">
+      <label>
+        <input id="all-day" type="checkbox" class="filled-in" />
+        <span>All day</span>
+      </label>
     </div>
+    <div class="repeat">
+      <!-- Dropdown Trigger -->
+      <div class="repeat-dropdown">
+        <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>Don't repeat</a>
+        <i class="material-icons tiny">arrow_drop_down</i>
+      </div>
+
+      <!-- Dropdown Structure -->
+      <ul id='repeat-dropdown-content' class='dropdown-content'>
+        <li><a class="no-repeat">Don't repeat</a></li>
+
+        @foreach (var item in Model.Items)
+        {
+        <li><a id="@item.Selector" class="no-repeat">@item.Value</a></li>
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="description">
+    <i class="material-icons">format_align_left</i>
+    <textarea rows="2" placeholder="Description" id="description" class="materialize-textarea"></textarea>
+  </div>
 </div>
