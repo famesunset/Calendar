@@ -44,15 +44,20 @@ let ViewMode = {
     this.data.current.setEventTime(start, finish, id);
   },
   
+  cacheLastEvent(selector) {
+    this.data.current.cacheLastEvent(selector);
+  },
+
   getLastEventId() {
     return this.data.current.lastEventId();
   },
 
-  removeLastEvent() {
-    let id = this.data.current.lastEventId();
-    let el = document.getElementById(id);
+  deleteEvent(selector) {    
+    let el = document.getElementById(selector);
 
-    $(el).remove();
+    setTimeout(() => {
+      $(el).remove();
+    }, 150);    
   }
 };
 

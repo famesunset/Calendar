@@ -63,5 +63,14 @@ namespace Calendar.Controllers
 
             return Json(events);
         }
+
+        [HttpGet]
+        public IActionResult DeleteEvent([FromServices] IEventService service, int id)
+        {
+            // TODO
+            ;
+
+            return Json("success");
+        }
     }
 }

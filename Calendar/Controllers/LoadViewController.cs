@@ -17,6 +17,11 @@ namespace Calendar.Controllers
         public IActionResult EventMoreOptions()
         {           
             return PartialView("PartialViews/CreateEventForms/MoreOptionsPartial", new EventScheduleDropdown());
-        }          
+        }    
+        
+        public IActionResult DeleteEventPopUp()
+        {
+            return PartialView("PartialViews/PopUps/DeleteEventPartial");
+        }
     }
 }

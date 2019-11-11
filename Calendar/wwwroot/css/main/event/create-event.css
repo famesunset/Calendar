@@ -6,13 +6,6 @@
   top: 20%;
 }
 
-#event-form-modal {
-  position: absolute;
-  z-index: 99;
-  height: 100%;
-  width: 100%;
-}
-
 .create-event-form {  
   display: none;
   opacity: 0;

@@ -3,7 +3,7 @@ class Repository {
     
   }
 
-  async getList(url, _data) {
+  async getList(_data, url) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: url,
@@ -21,7 +21,19 @@ class Repository {
   
   insert(item, url) {}
   
-  delete(id, url) {}
+  delete(id, url) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        type: 'GET',     
+        data: id,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8", 
+        success: data => resolve(data),
+        error: () => reject('error')
+      }); 
+    }); 
+  }
 }
 
 export { Repository };

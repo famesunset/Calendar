@@ -23,7 +23,7 @@ var EventForm = {
       s_timeFinish: '#time-finish',
       s_dateStart: '#date-start',
       s_dateFinish: '#date-finish',
-      s_modal: '#event-form-modal',
+      s_modal: '#main-modal',
       s_optionsLoad: '#more-options',
       s_options: '.options',
       s_saveBtn: '#btn-save',
@@ -73,7 +73,7 @@ var EventForm = {
     $(container).load(url, () => {
       this.renderDatePickers(start, finish);
       this.renderTimePickers(start, finish);
-      this.renderModal();
+      this.openModal();
       this.openAnimation();
 
       this.setUpListeners();
@@ -99,7 +99,9 @@ var EventForm = {
 
   onCloseForm() {
     this.close();
-    ViewMode.removeLastEvent();
+
+    let selector = ViewMode.getLastEventId();
+    ViewMode.deleteEvent(selector);
   },
 
   onSave() {
@@ -234,12 +236,12 @@ var EventForm = {
     $(s.s_timeFinish).val(finish);
   },
 
-  renderModal() {
+  openModal() {
     let s = this.data.selectors;
     if ($(s.s_modal)[0] != undefined)
       return;
 
-    let modal = `<div id="event-form-modal"></div>`;
+    let modal = `<div id="main-modal"></div>`;
     $('body').prepend(modal);
   },
 
