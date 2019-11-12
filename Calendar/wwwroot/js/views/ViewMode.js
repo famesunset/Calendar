@@ -22,10 +22,10 @@ let ViewMode = {
     this.data.current.renderDate(date);
   },
 
-  renderEvent(hour = new Date().getHours()) {    
+  createEvent(hour = new Date().getHours()) {    
     let container = document.getElementById(`cell-${hour}`);
 
-    this.data.current.onCreateEvent(container);
+    this.data.current.createDefaultEvent(container);
   },
 
   renderEvents(events) {

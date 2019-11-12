@@ -1,3 +1,5 @@
+import { EventRepository } from '../models/mvc/EventRepository.js';
+
 class Event {
   constructor(title, description, start, finish, color, isAllDay, notify) {
     this.data = {
@@ -11,19 +13,8 @@ class Event {
     };
   }
   
-  sendToMVC(action) {
-    var eventJson = JSON.stringify(this.data);
-    
-    $.ajax({
-      type: 'POST',
-      url: action,
-      data: eventJson,
-      dataType: 'json',
-      contentType: "application/json; charset=utf-8",
-      success: function (data) {
-        console.log(data);
-      }
-    });
+  sendToMVC() {
+    new EventRepository().insert(this.data);
   }
 }
 

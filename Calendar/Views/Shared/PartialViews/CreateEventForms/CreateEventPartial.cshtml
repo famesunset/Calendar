@@ -1,24 +1,59 @@
+@model Calendar.Models.DTO.EventAndOptionsDropdownDTO;
+
 <div class="create-event-wrapper">
   <div class="create-event-form">
+    <input type="hidden" name="eventId" value="@Model.Event.Id">
     <i class="waves-effect close material-icons right">close</i>
     <div class="title">
-      <input placeholder="Add title" id="title" type="text">
+      <input placeholder="Add title" id="title" type="text" value="@Model.Event.Title">
     </div>
     <div class="select-date">
       <i class="material-icons">access_time</i>
-      <input id="date-start" type="text">
-      <input id="time-start" type="text">
+      <input id="date-start" type="text" value="@Model.Event.Start">
+      <input id="time-start" type="text" value="@Model.Event.Start">
       <span> &mdash; </span>
-      <input id="time-finish" type="text">
-      <input id="date-finish" type="text">
+      <input id="time-finish" type="text" value="@Model.Event.Finish">
+      <input id="date-finish" type="text" value="@Model.Event.Finish">
     </div>
-    <div id="more-options"></div>
+    <div id="more-options">
+      <div id="options" class="options">
+        <div class="inline-group">
+          <div>
+            <i class="replay-icon material-icons">replay</i>
+          </div>
+          <div class="all-day-event">
+            <label>
+              <input checked="@Model.Event.IsAllDay" id="all-day" type="checkbox" class="filled-in" />
+              <span>All day</span>
+            </label>
+          </div>
+          <div class="repeat">
+            <!-- Dropdown Trigger -->
+            <div class="repeat-dropdown">
+              <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>Don't repeat</a>
+              <i class="material-icons tiny">arrow_drop_down</i>
+            </div>
+
+            <!-- Dropdown Structure -->
+            <ul id='repeat-dropdown-content' class='dropdown-content'>
+              <li><a class="no-repeat">Don't repeat</a></li>
+
+              @foreach (var item in Model.Dropdown.Items)
+              {
+              <li><a id="@item.Selector" class="no-repeat">@item.Value</a></li>
+              }
+            </ul>
+          </div>
+        </div>
+        <div class="description">
+          <i class="material-icons">format_align_left</i>
+          <textarea value="@Model.Event.Description" rows="2" placeholder="Description" id="description" class="materialize-textarea"></textarea>
+        </div>
+      </div>
+    </div>
     <div class="actions">
       <a class="more-options-btn">More options</a>
-      <a id="btn-save" class="waves-effect waves-light btn">Save</a>
+      <a id="event-submit-btn" class="waves-effect waves-light btn">Save</a>
     </div>
   </div>
-
-  <!-- <script type="module" src="~/js/site/initializers/add-event-form.js"></script> -->
-  <!-- <script type="module" src="~/js/site/listeners/add-event-form.js"></script> -->
 </div>

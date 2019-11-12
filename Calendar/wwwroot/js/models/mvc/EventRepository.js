@@ -12,6 +12,16 @@ class EventRepository extends Repository {
     return list;
   }
 
+  insert(item) {
+    let promise = super.insert(item, '/Home/CreateEvent');    
+    promise.then();
+  }
+
+  update(item) {
+    let promise = super.update(item, '/Home/UpdateEvent');    
+    promise.then();
+  }
+
   delete(id) {
     let promise = super.delete({ id }, '/Home/DeleteEvent');    
     promise.then();

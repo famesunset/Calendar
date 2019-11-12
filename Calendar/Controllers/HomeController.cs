@@ -19,7 +19,13 @@ namespace Calendar.Controllers
         public void CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
         {
             @event.CalendarId = 2;
-            service.AddEvent(null, 0, @event);
+            //service.AddEvent(null, 0, @event);
+        }
+
+        [HttpPost]
+        public void UpdateEvent([FromServices] IEventService service, [FromBody] Event @event)
+        {
+            ;
         }
 
         [HttpGet]
@@ -67,7 +73,7 @@ namespace Calendar.Controllers
         [HttpGet]
         public IActionResult DeleteEvent([FromServices] IEventService service, int id)
         {
-            // TODO
+            // TODO: 
             ;
 
             return Json("success");

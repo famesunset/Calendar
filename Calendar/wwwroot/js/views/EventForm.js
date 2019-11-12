@@ -6,12 +6,14 @@ import { ViewMode } from './ViewMode.js';
 
 var EventForm = {
   data: {
-    targetEvent: new Event(),
-
     form: {
       datePickers: [],
       timePickers: [],
-      dropdown: null
+      dropdown: null,
+      modes: {
+        create: 'create',
+        edit: 'edit'
+      }
     },
 
     selectors: {
@@ -26,21 +28,23 @@ var EventForm = {
       s_modal: '#main-modal',
       s_optionsLoad: '#more-options',
       s_options: '.options',
-      s_saveBtn: '#btn-save',
+      s_submitBtn: '#event-submit-btn',
+      s_submitCreate: '.btn-submit-create',
+      s_submitEdit: '.btn-submit-edit',
       s_closeTrigger: '.create-event-form .close',
       s_optionsTrigger: '.more-options-btn',
       s_dropdownTrigger: '#repeat-dropdown-trigger', 
     },
 
     css: {
-      s_timeStart: 'time-start',
-      s_timeFinish: 'time-finish',
+      c_timeStart: 'time-start',
+      c_timeFinish: 'time-finish',
+      c_submitCreate: 'btn-submit-create',
+      c_submitEdit: 'btn-submit-edit',
     },
 
     url: {
       u_formLoad: 'LoadView/CreateEventForm',
-      u_optionsLoad: 'LoadView/EventMoreOptions',
-      u_createEvent: 'Home/CreateEvent'
     } 
   },
 
@@ -49,33 +53,40 @@ var EventForm = {
 
     $(s.s_closeTrigger).click(() => this.onCloseForm());     
     $(s.s_modal).click(() => this.onCloseForm());
-    $(s.s_optionsTrigger).click(() => this.onLoadOptionsTrigger());
-    $(s.s_saveBtn).click(() => this.onSave());
+    $(s.s_optionsTrigger).click(() => this.onOptionsOpen());
+    $(s.s_submitCreate).click(() => this.onCreate());
+    $(s.s_submitEdit).click(() => this.onUpdate());
     $(s.s_title).focusout(e => this.onTitleFocusOut(e));
     $(s.s_timeStart).focusout(e => this.onTimeFocusOut(e));
     $(s.s_timeFinish).focusout(e => this.onTimeFocusOut(e));
   },
 
-  open(start, finish) {    
-    let container = this.data.selectors.s_formLoad;
+  /**
+   * 
+   * @param {string} mode describes what does the form have to do : creating or editing
+   *                      available values: create | edit
+   * @param {Date} start  the Date object with event start date and time
+   *                      can be skipped, if the form is used for editing
+   * @param {Date} finish the Date object with event finish date and time
+   *                      can be skipped, if the form is used for editing
+   */
+  open(mode, start, finish) {    
+    let s = this.data.selectors;
+    let container = s.s_formLoad;
     let url = this.data.url.u_formLoad;
 
-    this.initTargetEvent(new Event(
-      "(No title)",
-      "",
-      start,
-      finish, 
-      "#9E69AF",
-      false,
-      null
-    ));
-
     $(container).load(url, () => {
+      if (start === undefined || finish === undefined) {
+        start = new Date($(s.s_dateStart).val());
+        finish = new Date($(s.s_dateFinish).val());
+      }
+            
       this.renderDatePickers(start, finish);
       this.renderTimePickers(start, finish);
       this.openModal();
       this.openAnimation();
 
+      this.formMode(mode);
       this.setUpListeners();
     });
   },
@@ -91,10 +102,15 @@ var EventForm = {
     $(el).remove();     
   },
 
-  initTargetEvent(event) {
-    let data = event.data;
+  formMode(value) {
+    let s = this.data.selectors;
+    let c = this.data.css;
+    let m = this.data.form.modes;
 
-    this.data.targetEvent.data = { ...data };
+    $(s.s_submitBtn).addClass(
+      value === m.create ?
+      c.c_submitCreate : c.c_submitEdit
+    );
   },
 
   onCloseForm() {
@@ -104,8 +120,7 @@ var EventForm = {
     ViewMode.deleteEvent(selector);
   },
 
-  onSave() {
-    let url = this.data.url.u_createEvent;
+  onCreate() {    
     let datePickers = this.data.form.datePickers;
     let timePickers = this.data.form.timePickers;
 
@@ -131,31 +146,27 @@ var EventForm = {
     null,
     isAllDay,
     null
-    ).sendToMVC(url); 
+    ).sendToMVC(); 
     
     this.close();
   },
 
-  onLoadOptionsTrigger() {    
-    // Options are already open
-    if (document.getElementById("options") != null) 
-      return;     
+  onUpdate() {
+    this.close();
+  },
+
+  onOptionsOpen() {              
+    let s = this.data.selectors;      
+    if ($(s.s_options).hasClass('open'))    
+      return;
+
+    this.data.form.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });
+    this.data.form.dropdown.runDropdown();
+
+    $('#repeat-dropdown-content a').click(event => 
+      this.data.form.dropdown.clickHandler(event));
       
-    let container = this.data.selectors.s_optionsLoad;
-    let url = this.data.url.u_optionsLoad;
-
-    // Load more options to container
-    $(container).load(url, () => {    
-      let s = this.data.selectors;          
-
-      this.data.form.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });
-      this.data.form.dropdown.runDropdown();
-
-      $('#repeat-dropdown-content a').click(event => 
-        this.data.form.dropdown.clickHandler(event));
-      
-      this.openOptionsAnimation();
-    });
+    this.openOptionsAnimation();
   },
 
   onTitleFocusOut(e) {
@@ -198,7 +209,7 @@ var EventForm = {
       return { start, finish };
     }
     
-    if (target === this.data.css.s_timeStart) {
+    if (target === this.data.css.c_timeStart) {
       finish = moment(start).add(1, 'hours').toDate();
     } else {
       start = moment(finish).add(-1, 'hours').toDate();
@@ -325,6 +336,8 @@ var EventForm = {
         opacity: 1
       }, 150);
     });
+
+    $content.addClass('open');
   }
 };
 

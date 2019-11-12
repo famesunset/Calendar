@@ -51,7 +51,7 @@ let Daily = {
   },
 
   setUpListeners() {
-    let s = this.data.selectors;
+    let s = this.data.selectors;    
     
     $(s.s_cell).mousedown(e => {
       this.onCellMouseDown(e);
@@ -60,7 +60,7 @@ let Daily = {
     });        
   },  
 
-  onCreateEvent(container) {    
+  createDefaultEvent(container) {    
     let guid = GUID();
     let id = GUID();
 
@@ -68,13 +68,21 @@ let Daily = {
     let start = new Date(sessionStorage.getItem('currentDate'));
         start.setHours(hour, 0);
           
-    let end = new Date(start);
-        end.setHours(start.getHours() + 1);
+    let finish = new Date(start);
+        finish.setHours(start.getHours() + 1);
 
-    EventForm.open(start, end);       
+    EventForm.open('create', start, finish);       
 
-    this.renderEvent(container, guid, id, '(No title)', start, end);
+    this.renderEvent(container, guid, id, '(No title)', start, finish);
     this.cacheLastEvent(guid);
+  },
+
+  onEditEvent(e) {  
+    e.stopPropagation();
+    if (e.which != this.data.ux.leftMouseBtn)
+      return;
+    
+    console.log(e.currentTarget);
   },
 
   onDeleteEvent(e) {    
@@ -124,6 +132,7 @@ let Daily = {
     let s = this.data.selectors;
 
     EventForm.open(
+      'create',
       this.data.cache.timeStart,
       this.data.cache.timeFinish,      
     );
@@ -234,7 +243,8 @@ let Daily = {
 
     this.calcEventPosition(selector, start, finish);   
     this.cacheLastEvent(selector); 
-    $(`#${selector}`).mouseup(e => this.onDeleteEvent(e));
+    $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
+    $(`#${selector}`).mousedown(e => this.onEditEvent(e));
   },
 
   renderCell(el, time, dataContent, dataTime) {
