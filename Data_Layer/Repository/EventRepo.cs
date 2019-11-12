@@ -32,5 +32,14 @@ namespace Data_Layer.Repository
                 return s;
             }
         }
+
+        public void Delete(int eventId)
+        {
+            using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
+            {
+                connection.Query("uspDeleteEvent", new { eventId },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
     }
 }

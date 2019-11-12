@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Calendar.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Business_Layer.Services;
+using Business_Layer.Services.Calendar;
+using Business_Layer.Services.Event;
 using Newtonsoft.Json;
 
 namespace Calendar

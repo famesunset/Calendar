@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Business_Layer.Models;
-
-namespace Business_Layer.Services
+﻿namespace Business_Layer.Services.Calendar
 {
+    using System.Collections.Generic;
+    using Business_Layer.Models;
     public interface ICalendarService
     {
         /// <summary>

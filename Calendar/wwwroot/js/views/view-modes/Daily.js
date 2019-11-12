@@ -154,23 +154,27 @@ let Daily = {
       let step = this.data.ux.eventDraggableStep;
       let minutesOffset = Math.trunc((mouseOffset * 60) / this.data.ux.cellHeight);                  
 
-      if (minutesOffset % step == 1) {          
+      //if (minutesOffset % step == 1) {          
         let timeStart = cache.timeStart;
         let timeFinish = new Date(timeStart);
-            timeFinish.setMinutes(timeStart.getMinutes() + (minutesOffset + step - 1));
-    
+        //timeFinish.setMinutes(timeStart.getMinutes() + (minutesOffset + step - 1));
+        timeFinish.setMinutes(this.roundUpToAny(minutesOffset, step));
         this.setEventTime(
           moment(timeStart).format('LT'),
           moment(timeFinish).format('LT'),
           cache.c_lastEventId
         );
-        
-        this.calcEventPosition(cache.c_lastEventId, timeStart, timeFinish); 
-    
+
+        this.calcEventPosition(cache.c_lastEventId, timeStart, timeFinish);
+
         this.data.cache.timeStart = timeStart;
         this.data.cache.timeFinish = timeFinish;
-      }
+      //}
     }
+  },
+
+  roundUpToAny(n, x) {
+      return Math.floor((n + x / 2) / x) * x;
   },
 
   getCoords(elem) {

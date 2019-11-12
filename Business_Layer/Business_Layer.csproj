@@ -87,10 +87,10 @@
     <Compile Include="DateUnit.cs" />
     <Compile Include="Models\BaseEvent.cs" />
     <Compile Include="Models\Interval.cs" />
-    <Compile Include="Services\EventService.cs" />
-    <Compile Include="Services\IEventService.cs" />
-    <Compile Include="Services\ICalendarService.cs" />
-    <Compile Include="Services\CalendarService.cs" />
+    <Compile Include="Services\Event\EventService.cs" />
+    <Compile Include="Services\Event\IEventService.cs" />
+    <Compile Include="Services\Calendar\ICalendarService.cs" />
+    <Compile Include="Services\Calendar\CalendarService.cs" />
     <Compile Include="Mapper.cs" />
     <Compile Include="Models\Access.cs" />
     <Compile Include="Models\Calendar.cs" />
