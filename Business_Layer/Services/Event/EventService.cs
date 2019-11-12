@@ -43,18 +43,18 @@
 
             DateTime dateStart = new DateTime();
             DateTime dateFinish = new DateTime();
-            //beginning = beginning.ToUniversalTime();
+            beginning = beginning.ToUniversalTime();
             switch (dateUnit)
             {
                 case DateUnit.Day:
                 {
-                    dateStart = new DateTime(beginning.Year, beginning.Month, beginning.Day);
+                    dateStart = beginning;
                     dateFinish = dateStart.AddDays(1);
                 }
                 break;
                 case DateUnit.Month:
                 {
-                    dateStart = new DateTime(beginning.Year, beginning.Month, 1);
+                    dateStart = new DateTime(beginning.Year, beginning.Month, 1).ToUniversalTime();
                     dateFinish = dateStart.AddMonths(1);
                 }
                 break;

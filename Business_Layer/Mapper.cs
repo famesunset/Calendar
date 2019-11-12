@@ -64,8 +64,8 @@ namespace Business_Layer
                     .ConstructUsing(val => new BaseEvent()
                     {
                         Color = null,
-                        Start = val.TimeStart,
-                        Finish = val.TimeFinish,
+                        Start = val.TimeStart.ToUniversalTime(),
+                        Finish = val.TimeFinish.ToUniversalTime(),
                         Title = val.Title,
                         Id = val.EventId,
                         IsAllDay = false,
@@ -79,8 +79,8 @@ namespace Business_Layer
                        CalendarId = val.IdCalendar,
                        Color = null,
                        Description = val.Description,
-                       Finish = val.TimeFinish,
-                       Start = val.TimeStart,
+                       Finish = val.TimeFinish.ToUniversalTime(),
+                       Start = val.TimeStart.ToUniversalTime(),
                        //IsAllDay = val.IsAllDay,
                        Notify = new NotificationSchedule { Message = val.Notification, Time = val.NotificationTime },
                        // не хватает notificationId, но нужен ли он
@@ -97,8 +97,8 @@ namespace Business_Layer
                         CalendarId = val.CalendarId,
                         Description = val.Description,
                         Title = val.Title,
-                        TimeFinish = val.Finish,
-                        TimeStart = val.Start,
+                        TimeFinish = val.Finish.ToUniversalTime(),
+                        TimeStart = val.Start.ToUniversalTime(),
                         Notification = null,
                         RepeatId = 0,
                         Schedule = null,
