@@ -16,10 +16,12 @@ namespace Calendar.Controllers
         }
 
         [HttpPost]
-        public void CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
+        public IActionResult CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
         {
             @event.CalendarId = 2;
-            //service.AddEvent(null, 0, @event);
+            service.AddEvent(null, 0, @event);
+
+            return Json("success");
         }
 
         [HttpPost]
@@ -32,7 +34,7 @@ namespace Calendar.Controllers
         public IActionResult GetEventList([FromServices] IEventService service, DateTime date)
         {
             var calendars = new List<Business_Layer.Models.Calendar>
-              (service.GetEvents(null, DateTime.Now, DateUnit.Day));
+              (service.GetEvents(null, date.Date, DateUnit.Day));
 
             List<BaseEvent> events = calendars.First(c => c.Id.Equals(2)).Events;
 

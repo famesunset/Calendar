@@ -18,13 +18,7 @@ let MainCalendar = {
   },
 
   async onSelect(date) {
-    ViewMode.closeAnimation();
-
-    let currentDate = new Date(sessionStorage.getItem('currentDate'));    
-    date.setHours(
-      currentDate.getHours(),
-      currentDate.getMinutes()
-    );
+    ViewMode.closeAnimation();     
 
     Header.renderDate(date);
     ViewMode.renderDate(date);    
@@ -33,7 +27,9 @@ let MainCalendar = {
     ViewMode.renderEvents(events);
     
     ViewMode.openAnimation();
-    sessionStorage.setItem('currentDate', date);
+
+    let currentDate = new Date(date);        
+    sessionStorage.setItem('currentDate', currentDate);
   },
 
   render() {

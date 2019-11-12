@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Business_Layer.Models;
-using Business_Layer.Services;
+using Business_Layer.Services.Event;
 using Calendar.Models.ViewModelInitializers;
 using Microsoft.AspNetCore.Mvc;
 using Calendar.Models.DTO;

@@ -43,7 +43,7 @@
 
             DateTime dateStart = new DateTime();
             DateTime dateFinish = new DateTime();
-
+            //beginning = beginning.ToUniversalTime();
             switch (dateUnit)
             {
                 case DateUnit.Day:

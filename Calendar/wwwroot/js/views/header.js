@@ -36,19 +36,29 @@ let Header = {
   onNext() {
     MainCalendar.setDate(
       moment(new Date(sessionStorage.getItem('currentDate')))
-        .add(1, 'days').toDate()
+        .add(1, 'days')
+        .startOf('day')
+        .toDate()
     );
   },
 
   onPrev() {
     MainCalendar.setDate(
       moment(new Date(sessionStorage.getItem('currentDate')))
-      .add(-1, 'days').toDate()
+      .add(-1, 'days')
+      .startOf('day')
+      .toDate()
     );    
   },
 
   onToday() {
-    MainCalendar.setDate(new Date());  
+    MainCalendar.setDate(
+      moment(new Date())
+      .startOf('day')
+      .toDate()
+    );  
+    
+    sessionStorage.setItem('currentDate', new Date());
   },
 
   onDropdownSelect(e) {
