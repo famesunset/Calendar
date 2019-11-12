@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Business_Layer.Models;
-using Data_Layer.Repository;
-using Data_Layer.Repository.Interfaces;
-using System.Linq;
-using static Business_Layer.Mapper;
-
-namespace Business_Layer.Services
+﻿namespace Business_Layer.Services.Event
 {
+    using System;
+    using System.Collections.Generic;
+    using Business_Layer.Models;
+    using Data_Layer.Repository;
+    using Data_Layer.Repository.Interfaces;
+    using System.Linq;
+    using static Business_Layer.Mapper;
+
     public class EventService : IEventService
     {
         public int AddEvent(string session, int calendarId, Event @event)
@@ -15,22 +15,25 @@ namespace Business_Layer.Services
             IEvent eventRepos = new EventRepo();
             Data_Layer.Event dataEvent = Map.Map<Event, Data_Layer.Event>(@event);
             eventRepos.CreateScheduledEvent(dataEvent);
-            // FIXME: тут падает
             return -1;
         }
 
         public Event GetEvent(string session, int id)
         {
-            throw new NotImplementedException();
+            var userRepos = new UserRepo();
+            // получить юзера по сесии
+
+            var dataRepository = new AllDataRepo();
+            var dataEvent = dataRepository.GetEvent(id);
+            var businessEvent = Map.Map<Data_Layer.Models.AllData, Event>(dataEvent);
+            return businessEvent;
         }
 
         public IEnumerable<Calendar> GetEvents(string session, DateTime beginning, DateUnit dateUnit)
         {
-
-
+            var eventRepos = new AllDataRepo();
             var calendarRepos = new CalendarRepo();
             var userRepos = new UserRepo();
-
             // получить юзера по сесии
 
             var userCalendars = calendarRepos.GetUserCalendars(1);
@@ -69,8 +72,7 @@ namespace Business_Layer.Services
             {
                 bUserCalendars.Add(Map.Map<Data_Layer.Calendar, Calendar>(cal));
             }
-
-            var eventRepos = new AllDataRepo();
+            
             var events = eventRepos.GetDataEvents(user, userCalendars, dateStart, dateFinish);
             var eventList = new List<BaseEvent>();
 
@@ -137,6 +139,20 @@ namespace Business_Layer.Services
             }
             @event.Schedule = schedule;
             // eventRepos.CreateScheduledEvent(@event);
+        }
+
+        public void DeleteEvent(string session, int eventId)
+        {
+            var eventRepos = new EventRepo();
+            var userRepos = new UserRepo();
+            // получить юзера по сесии
+
+            eventRepos.Delete(eventId);
+        }
+
+        public void EditEvent(string session, Event @event)
+        {
+            throw new NotImplementedException();
         }
     }
 }

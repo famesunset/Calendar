@@ -21,5 +21,15 @@ namespace Data_Layer.Repository
                 return s;
             }
         }
+
+        public AllData GetEvent(int eventId)
+        {
+            using (SqlConnection connection = new SqlConnection(Data_Layer.Properties.Settings.Default.Server))
+            {
+                AllData s = connection.Query<AllData>("uspGetEventById", new { eventId },
+                    commandType: CommandType.StoredProcedure).First();
+                return s;
+            }
+        }
     }
 }

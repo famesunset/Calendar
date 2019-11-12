@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business_Layer", "Business_Layer\Business_Layer.csproj", "{7FF4227E-EBDA-426C-9422-C3DB93D2B6CC}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business_Layer.Tests", "Business_Layer.Tests\Business_Layer.Tests.csproj", "{38E33902-4F41-4D3D-A53E-560BC3F138BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data_Layer.Tests", "Data_Layer.Tests\Data_Layer.Tests.csproj", "{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{7FF98655-CFB6-4D47-A5AF-5D21646E021E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,12 @@ Global
 		{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA2A0CC4-7C85-47A2-B27D-50DD88352BC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FF98655-CFB6-4D47-A5AF-5D21646E021E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FF98655-CFB6-4D47-A5AF-5D21646E021E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FF98655-CFB6-4D47-A5AF-5D21646E021E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7FF98655-CFB6-4D47-A5AF-5D21646E021E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FF98655-CFB6-4D47-A5AF-5D21646E021E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FF98655-CFB6-4D47-A5AF-5D21646E021E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

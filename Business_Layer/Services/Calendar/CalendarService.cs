@@ -1,11 +1,10 @@
-﻿using System;
-using Business_Layer.Models;
-using System.Collections.Generic;
-using Data_Layer.Repository;
-using Data_Layer.Repository.Interfaces;
-
-namespace Business_Layer.Services
+﻿namespace Business_Layer.Services.Calendar
 {
+    using System;
+    using Business_Layer.Models;
+    using System.Collections.Generic;
+    using Data_Layer.Repository;
+    using Data_Layer.Repository.Interfaces;
     public class CalendarService : ICalendarService
     {
         public IEnumerable<Calendar> GetCalendars(string session)

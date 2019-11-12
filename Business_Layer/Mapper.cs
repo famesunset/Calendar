@@ -72,6 +72,23 @@ namespace Business_Layer
                             //IsAllDay = val.a
                         });
 
+                cfg.CreateMap<AllData, Event>()
+                   .ConstructUsing(val => new Event()
+                   {
+                       Id = val.EventId,
+                       CalendarId = val.IdCalendar,
+                       Color = null,
+                       Description = val.Description,
+                       Finish = val.TimeFinish,
+                       Start = val.TimeStart,
+                       //IsAllDay = val.IsAllDay,
+                       Notify = new NotificationSchedule { Message = val.Notification, Time = val.NotificationTime },
+                       // не хватает notificationId, но нужен ли он
+                       //Repeat = val.Interval,
+                       Schedule = new List<Models.EventSchedule>(),
+                       Title = val.Title,
+                    });
+
                 cfg.CreateMap<Event, Data_Layer.Event>()
                     .ConstructUsing(val => new Data_Layer.Event()
                     {
