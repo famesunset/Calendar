@@ -7,9 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Calendar.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Business_Layer.Services.Calendar;
-using Business_Layer.Services.Event;
-using Newtonsoft.Json;
+using BusinessCore.Services.Calendar;
+using BusinessCore.Services.Event;
 
 namespace Calendar
 {
@@ -43,10 +42,12 @@ namespace Calendar
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddMvcOptions(op => { op.EnableEndpointRouting = false; })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddJsonOptions(options =>  
                 {  
-                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
+                    
+                    //options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
                 }); 
         }
 

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Business_Layer.Models;
-using Business_Layer.Services.Event;
+using BusinessCore.Models;
+using BusinessCore.Services.Event;
 using System.Collections.Generic;
 using System;
-using Business_Layer;
+using BusinessCore;
 using System.Linq;
 
 namespace Calendar.Controllers
@@ -33,7 +33,7 @@ namespace Calendar.Controllers
         [HttpGet]
         public IActionResult GetEventList([FromServices] IEventService service, DateTime date)
         {
-            var calendars = new List<Business_Layer.Models.Calendar>
+            var calendars = new List<BusinessCore.Models.Calendar>
               (service.GetEvents(null, date.Date, DateUnit.Day));
 
             List<BaseEvent> events = calendars.First(c => c.Id.Equals(2)).Events;
