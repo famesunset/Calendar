@@ -19,9 +19,9 @@ namespace Calendar.Controllers
         public IActionResult CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
         {
             @event.CalendarId = 2;
-            service.AddEvent(null, 0, @event);
+            int eventId = service.AddEvent(null, @event);
 
-            return Json("success");
+            return Json(eventId);
         }
 
         [HttpPost]

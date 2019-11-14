@@ -10,12 +10,12 @@
 
     public class EventService : IEventService
     {
-        public int AddEvent(string session, int calendarId, Event @event)
+        public int AddEvent(string session, Event @event)
         {
             IEvent eventRepos = new EventRepo();
             Data_Layer.Event dataEvent = Map.Map<Event, Data_Layer.Event>(@event);
-            eventRepos.CreateScheduledEvent(dataEvent);
-            return -1;
+            int eventId = eventRepos.CreateScheduledEvent(dataEvent);
+            return eventId;
         }
 
         public Event GetEvent(string session, int id)
@@ -86,11 +86,9 @@
             return bUserCalendars;
         }
 
-        public void CreateScheduledEvent(Event @event)
+        public int CreateScheduledEvent(string session, Event @event)
         {
             IEvent eventRepos = new EventRepo();
-
-            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@event);
             List<EventSchedule> schedule = new List<EventSchedule>();
 
             int compare;
@@ -138,7 +136,9 @@
                     break;
             }
             @event.Schedule = schedule;
-            // eventRepos.CreateScheduledEvent(@event);
+            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@event);
+            int eventId = eventRepos.CreateScheduledEvent(dataEvent);
+            return eventId;
         }
 
         public void DeleteEvent(string session, int eventId)
