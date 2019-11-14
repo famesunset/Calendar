@@ -7,7 +7,7 @@ BEGIN
 SELECT uc.CalendarId AS IdCalendar, ca.Name AS CalendarName, a.Name AS AccessName, 
 e.Id AS EventId, e.Description, e.Notification, e.Title,
 es.Id AS EventSchedule_id, e.TimeStart, e.TimeFInish, 
-ns.NotificationTime
+ns.NotificationTime, e.AllDay
 
 FROM Users u
 left join UsersCalendars uc ON u.Id = uc.UserId

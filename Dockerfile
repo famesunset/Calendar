@@ -1,13 +1,13 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.1-stretch-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.1-stretch AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["Calendar/Calendar.csproj", "Calendar/"]
-COPY ["Business_Layer/Business_Layer.csproj", "Business_Layer/"]
-COPY ["Data_Layer/Data_Layer.csproj", "Data_Layer/"]
+COPY ["Business/Business.csproj", "Business/"]
+COPY ["Data/Data.csproj", "Data/"]
 RUN dotnet restore "Calendar/Calendar.csproj"
 COPY . .
 WORKDIR "/src/Calendar"
