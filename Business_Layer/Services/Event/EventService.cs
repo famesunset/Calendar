@@ -89,8 +89,6 @@
         public void CreateScheduledEvent(Event @event)
         {
             IEvent eventRepos = new EventRepo();
-
-            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@event);
             List<EventSchedule> schedule = new List<EventSchedule>();
 
             int compare;
@@ -138,7 +136,8 @@
                     break;
             }
             @event.Schedule = schedule;
-            // eventRepos.CreateScheduledEvent(@event);
+            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@event);
+            eventRepos.CreateScheduledEvent(dataEvent);
         }
 
         public void DeleteEvent(string session, int eventId)
@@ -150,9 +149,18 @@
             eventRepos.Delete(eventId);
         }
 
-        public void EditEvent(string session, Event @event)
+        public void UpdateInfinityEvent(Event @newEvent)
         {
-            throw new NotImplementedException();
+            IEvent eventRepos = new EventRepo();
+            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@newEvent);
+            eventRepos.UpdateInfinityEvent(dataEvent);
+        }
+
+        public void UpdateScheduledEvent(Event @newEvent)
+        {
+            IEvent eventRepos = new EventRepo();
+            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@newEvent);
+            eventRepos.UpdateScheduledEvent(dataEvent);
         }
     }
 }
