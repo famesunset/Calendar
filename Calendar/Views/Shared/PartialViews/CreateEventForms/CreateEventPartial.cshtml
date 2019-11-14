@@ -9,11 +9,11 @@
     </div>
     <div class="select-date">
       <i class="material-icons">access_time</i>
-      <input id="date-start" type="text" value="@Model.Event.Start.ToLocalTime()">
-      <input id="time-start" type="text" value="@Model.Event.Start.ToLocalTime()">
+      <input id="date-start" type="text" value='@Model.Event.Start.ToLocalTime().ToString("o")'>
+      <input id="time-start" type="text" value='@Model.Event.Start.ToLocalTime().ToString("o")'>
       <span> &mdash; </span>
-      <input id="time-finish" type="text" value="@Model.Event.Finish.ToLocalTime()">
-      <input id="date-finish" type="text" value="@Model.Event.Finish.ToLocalTime()">
+      <input id="time-finish" type="text" value='@Model.Event.Finish.ToLocalTime().ToString("o")'>
+      <input id="date-finish" type="text" value='@Model.Event.Start.ToLocalTime().ToString("o")'>
     </div>
     <div id="more-options">
       <div id="options" class="options">
