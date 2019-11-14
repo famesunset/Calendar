@@ -42,24 +42,24 @@ namespace Data_Layer.Repository
             }
         }
 
-        public IEnumerable<Event> UpdateInfinityEvent(Event @oldEvent, Event @newEvent)
+        public IEnumerable<Event> UpdateInfinityEvent(Event @newEvent)
         {
             using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
             {
                 IEnumerable<Event> s = connection.Query<Event>("uspUpdateInfinityEvent",
-                    new { @oldEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, @newEvent.RepeatId, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
+                    new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, @newEvent.RepeatId, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
                     commandType: CommandType.StoredProcedure);
                 return s;
             }
         }
 
-        public IEnumerable<Event> UpdateScheduledEvent(Event @oldEvent, Event @newEvent)
+        public IEnumerable<Event> UpdateScheduledEvent(Event @newEvent)
         {
             DataTable schedule = @newEvent.Schedule.ConvertToDatatable();
             using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
             {
                 IEnumerable<Event> s = connection.Query<Event>("uspUpdateScheduledEvent",
-                    new { @oldEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, schedule, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
+                    new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, schedule, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
                     commandType: CommandType.StoredProcedure);
                 return s;
             }

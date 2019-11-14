@@ -7,7 +7,7 @@ namespace Data_Layer.Repository.Interfaces
     {
         IEnumerable<Event> CreateScheduledEvent(Event @event);
         IEnumerable<Event> CreateInfinityEvent(Event @event);
-        IEnumerable<Event> UpdateInfinityEvent(Event @oldEvent, Event @newEvent);
-        IEnumerable<Event> UpdateScheduledEvent(Event @oldEvent, Event @newEvent);
+        IEnumerable<Event> UpdateInfinityEvent(Event @newEvent);
+        IEnumerable<Event> UpdateScheduledEvent(Event @newEvent);
     }
 }
