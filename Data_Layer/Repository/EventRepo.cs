@@ -59,7 +59,7 @@ namespace Data_Layer.Repository
             using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
             {
                 IEnumerable<Event> s = connection.Query<Event>("uspUpdateScheduledEvent",
-                    new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, schedule, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
+                    new { EventId = @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, Schedule = schedule, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
                     commandType: CommandType.StoredProcedure);
                 return s;
             }
