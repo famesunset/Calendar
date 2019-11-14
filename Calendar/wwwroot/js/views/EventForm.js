@@ -133,6 +133,7 @@ var EventForm = {
     let timePickers = this.data.form.timePickers;
 
     let id = $(this.data.selectors.s_form).find('input[name="eventId"]').val();
+    let calendarId = 2;
     let title = $('#title').val();
     let description = $('#description').val();
     let isAllDay = $('#all-day').is(":checked");
@@ -149,6 +150,7 @@ var EventForm = {
 
     return {
       id,
+      calendarId,
       title,
       description,
       start,
