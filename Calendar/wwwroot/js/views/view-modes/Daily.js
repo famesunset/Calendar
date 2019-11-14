@@ -84,7 +84,9 @@ let Daily = {
     
     let id = $(e.currentTarget).find('input[name="id"]').val();
     
-    EventForm.openEdit(id);    
+    if (id != 0) {
+      EventForm.openEdit(id);    
+    }    
   },
 
   onDeleteEvent(e) {    
