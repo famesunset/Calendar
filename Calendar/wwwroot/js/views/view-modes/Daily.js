@@ -61,8 +61,8 @@ let Daily = {
   },  
 
   createDefaultEvent(container) {    
-    let guid = GUID();
-    let id = GUID();
+    let selector = GUID();
+    let id = 0;
 
     let hour = $(container).find('input').val();
     let start = new Date(sessionStorage.getItem('currentDate'));
@@ -71,10 +71,10 @@ let Daily = {
     let finish = new Date(start);
         finish.setHours(start.getHours() + 1);
 
-    EventForm.open('create', start, finish);       
+    EventForm.openCreate(start, finish);       
 
-    this.renderEvent(container, guid, id, '(No title)', start, finish);
-    this.cacheEvent(guid);
+    this.renderEvent(container, selector, id, '(No title)', start, finish);
+    this.cacheEvent(selector);
   },
 
   async onEditEvent(e) {  
@@ -346,7 +346,7 @@ let Daily = {
     this.data.cache.cachedEvent = selector;
   },
 
-  lastEventId() {
+  getCachedEvent() {
     return this.data.cache.cachedEvent;
   }  
 }; 

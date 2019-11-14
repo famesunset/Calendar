@@ -23,13 +23,19 @@ class EventRepository extends Repository {
     return list;
   }  
 
-  insert(item) {
+  async insert(item) {
+    let id;
+    
     let promise = super.insert(item, '/Home/CreateEvent');    
-    promise.then();
+    await promise.then((data) => {
+      id = data
+    });
+
+    return id;
   }
 
   update(item) {
-    let promise = super.update(item, '/Home/UpdateEvent');    
+    let promise = super.update(item, '/Home/EditEvent');    
     promise.then();
   }
 

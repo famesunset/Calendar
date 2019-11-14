@@ -44,16 +44,16 @@ namespace Calendar.Controllers
         }
 
         [HttpPost]
-        public void EditEvent([FromServices] IEventService service, [FromBody] Event @event)
+        public IActionResult EditEvent([FromServices] IEventService service, [FromBody] Event @event)
         {
-            ;
+            service.UpdateScheduledEvent(@event);
+
+            return Json("success");
         }
 
         [HttpGet]
         public IActionResult DeleteEvent([FromServices] IEventService service, int id)
-        {
-            // TODO: 
-            ;
+        {            
             service.DeleteEvent(null, id);
 
             return Json("success");

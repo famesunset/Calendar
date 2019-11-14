@@ -97,7 +97,7 @@ let DeleteEvent = {
 
   deleteEvent() {
     new EventRepository().delete(this.data.cache.eventId);
-    let selector = ViewMode.getLastEventId();
+    let selector = ViewMode.getCachedEvent();
     ViewMode.deleteEvent(selector);
   }
 }

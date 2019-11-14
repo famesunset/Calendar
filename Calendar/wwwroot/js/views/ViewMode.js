@@ -48,8 +48,8 @@ let ViewMode = {
     this.data.current.cacheEvent(selector);
   },
 
-  getLastEventId() {
-    return this.data.current.lastEventId();
+  getCachedEvent() {
+    return this.data.current.getCachedEvent();
   },
 
   deleteEvent(selector) {    
