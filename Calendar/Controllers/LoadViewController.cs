@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Business.Models;
-using Business.Services.Event;
+using BusinessCore.Models;
+using BusinessCore.Services.Event;
 using Calendar.Models.ViewModelInitializers;
 using Microsoft.AspNetCore.Mvc;
 using Calendar.Models.DTO;
@@ -18,9 +18,19 @@ namespace Calendar.Controllers
                 new EventAndOptionsDropdownDTO(new Event(), new EventScheduleDropdown()));
         }
 
-        public IActionResult EditEventForm([FromServices] IEventService service, int id)
-        {            
-            Event @event = service.GetEvent(null, id);
+        public IActionResult UpdateEventForm([FromServices] IEventService service, int id)
+        {
+            // TODO: Pull the event from database by id
+
+            Event @event = new Event()
+            {
+                Id = id,
+                Description = "Test description",
+                Title = "Test title",
+                Start = DateTime.Now,
+                Finish = DateTime.Now.AddHours(1),
+                IsAllDay = false
+            };
 
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial", 
                                 new EventAndOptionsDropdownDTO(@event, new EventScheduleDropdown()));

@@ -1,7 +1,7 @@
 ﻿--exec [uspCreateScheduledEvent] 2, 'Notification', 'Description', 'Title', '2019-10-28 10:13:34.830', '2019-10-28 10:33:34.830'
 --select * from Events
 --select * from EventSchedule
-CREATE PROCEDURE [dbo].[uspCreateInfinityEvent]
+Create PROCEDURE [dbo].[uspCreateInfinityEvent]
 	@CalendarId int, 
 	@Notification nvarchar(max) null,
 	@Description nvarchar(max) null,

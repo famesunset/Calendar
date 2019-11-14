@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Business.Models;
+using BusinessCore.Models;
 
 namespace Calendar.Models.DTO
 {

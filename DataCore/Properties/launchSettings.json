@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DataCore": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Server": "Data Source=20.188.35.217;Database=Calendar;User Id=sa;Password=Sunsetfame05!"
+      }
+    }
+  }
+}

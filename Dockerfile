@@ -6,8 +6,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["Calendar/Calendar.csproj", "Calendar/"]
-COPY ["Business/Business.csproj", "Business/"]
-COPY ["Data/Data.csproj", "Data/"]
+COPY ["BusinessCore/BusinessCore.csproj", "BusinessCore/"]
+COPY ["DataCore/DataCore.csproj", "DataCore/"]
 RUN dotnet restore "Calendar/Calendar.csproj"
 COPY . .
 WORKDIR "/src/Calendar"

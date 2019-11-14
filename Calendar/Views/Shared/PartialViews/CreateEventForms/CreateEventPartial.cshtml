@@ -9,11 +9,11 @@
     </div>
     <div class="select-date">
       <i class="material-icons">access_time</i>
-      <input id="date-start" type="text" value='@Model.Event.Start.ToLocalTime().ToString("o")'>
-      <input id="time-start" type="text" value='@Model.Event.Start.ToLocalTime().ToString("o")'>
+      <input id="date-start" type="text" value="@Model.Event.Start">
+      <input id="time-start" type="text" value="@Model.Event.Start">
       <span> &mdash; </span>
-      <input id="time-finish" type="text" value='@Model.Event.Finish.ToLocalTime().ToString("o")'>
-      <input id="date-finish" type="text" value='@Model.Event.Start.ToLocalTime().ToString("o")'>
+      <input id="time-finish" type="text" value="@Model.Event.Finish">
+      <input id="date-finish" type="text" value="@Model.Event.Finish">
     </div>
     <div id="more-options">
       <div id="options" class="options">
@@ -47,7 +47,7 @@
         </div>
         <div class="description">
           <i class="material-icons">format_align_left</i>
-          <textarea rows="2" placeholder="Description" id="description" class="materialize-textarea">@Model.Event.Description</textarea>
+          <textarea value="@Model.Event.Description" rows="2" placeholder="Description" id="description" class="materialize-textarea"></textarea>
         </div>
       </div>
     </div>

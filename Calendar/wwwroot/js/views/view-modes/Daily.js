@@ -6,7 +6,7 @@ import { DeleteEvent } from '../pop-ups/DeleteEvent.js';
 let Daily = {
   data: {
     cache: {
-      cachedEvent: '',
+      c_lastEventId: '',
       c_targetCellShift: {},
       timeStart: {},
       timeFinish: {}
@@ -55,14 +55,14 @@ let Daily = {
     
     $(s.s_cell).mousedown(e => {
       this.onCellMouseDown(e);
-      $(s.s_table).mousemove(async (e) => this.onStretchEvent(e));
+      $(s.s_table).mousemove(async (e) => await this.onTableMouseMove(e));
       $(s.s_table).mouseup((e) => this.onCellMouseUp(e));      
     });        
   },  
 
   createDefaultEvent(container) {    
-    let selector = GUID();
-    let id = 0;
+    let guid = GUID();
+    let id = GUID();
 
     let hour = $(container).find('input').val();
     let start = new Date(sessionStorage.getItem('currentDate'));
@@ -71,22 +71,18 @@ let Daily = {
     let finish = new Date(start);
         finish.setHours(start.getHours() + 1);
 
-    EventForm.openCreate(start, finish);       
+    EventForm.open('create', start, finish);       
 
-    this.renderEvent(container, selector, id, '(No title)', start, finish);
-    this.cacheEvent(selector);
+    this.renderEvent(container, guid, id, '(No title)', start, finish);
+    this.cacheLastEvent(guid);
   },
 
-  async onEditEvent(e) {  
+  onEditEvent(e) {  
     e.stopPropagation();
     if (e.which != this.data.ux.leftMouseBtn)
       return;
     
-    let id = $(e.currentTarget).find('input[name="id"]').val();
-    
-    if (id != 0) {
-      EventForm.openEdit(id);    
-    }    
+    console.log(e.currentTarget);
   },
 
   onDeleteEvent(e) {    
@@ -99,7 +95,7 @@ let Daily = {
     let eventId = $target.find('input[name="id"]').val();    
     let pos = { x: e.pageX, y: e.pageY };
 
-    this.cacheEvent(e.currentTarget.id);
+    this.cacheLastEvent(e.currentTarget.id);
     DeleteEvent.open(eventId, pos);
   },
 
@@ -135,7 +131,8 @@ let Daily = {
 
     let s = this.data.selectors;
 
-    EventForm.openCreate(      
+    EventForm.open(
+      'create',
       this.data.cache.timeStart,
       this.data.cache.timeFinish,      
     );
@@ -143,7 +140,7 @@ let Daily = {
     $(s.s_table).unbind('mousemove');
   },
   
-  onStretchEvent(e) {
+  async onTableMouseMove(e) {
     if (e.which != this.data.ux.leftMouseBtn) 
       return;
 
@@ -159,15 +156,14 @@ let Daily = {
            
       let timeStart = cache.timeStart;
       let timeFinish = new Date(timeStart);        
-          timeFinish.setMinutes(this.roundUpToAny(minutesOffset, step));
-
+      timeFinish.setMinutes(this.roundUpToAny(minutesOffset, step));
       this.setEventTime(
         moment(timeStart).format('LT'),
         moment(timeFinish).format('LT'),
-        cache.cachedEvent
+        cache.c_lastEventId
       );
 
-      this.calcEventPosition(cache.cachedEvent, timeStart, timeFinish);
+      this.calcEventPosition(cache.c_lastEventId, timeStart, timeFinish);
 
       this.data.cache.timeStart = timeStart;
       this.data.cache.timeFinish = timeFinish;      
@@ -247,7 +243,7 @@ let Daily = {
     $(container).append(eventEl);
 
     this.calcEventPosition(selector, start, finish);   
-    this.cacheEvent(selector); 
+    this.cacheLastEvent(selector); 
     $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
     $(`#${selector}`).mousedown(e => this.onEditEvent(e));
   },
@@ -344,12 +340,12 @@ let Daily = {
     $(s_finish).text(finish);
   },
   
-  cacheEvent(selector) {
-    this.data.cache.cachedEvent = selector;
+  cacheLastEvent(selector) {
+    this.data.cache.c_lastEventId = selector;
   },
 
-  getCachedEvent() {
-    return this.data.cache.cachedEvent;
+  lastEventId() {
+    return this.data.cache.c_lastEventId;
   }  
 }; 
 
