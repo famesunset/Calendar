@@ -107,7 +107,7 @@ let Daily = {
     
     let container = e.target;
     let selector = GUID();
-    let eventId = GUID();        
+    let eventId = 0;        
 
     let hour = $(container).find('input').val();
 
