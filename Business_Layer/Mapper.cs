@@ -68,8 +68,7 @@ namespace Business_Layer
                         Finish = val.TimeFinish,
                         Title = val.Title,
                         Id = val.EventId,
-                        IsAllDay = false,
-                            //IsAllDay = val.a
+                        IsAllDay = val.AllDay
                         });
 
                 cfg.CreateMap<AllData, Event>()
@@ -81,7 +80,7 @@ namespace Business_Layer
                        Description = val.Description,
                        Finish = val.TimeFinish,
                        Start = val.TimeStart,
-                       //IsAllDay = val.IsAllDay,
+                       IsAllDay = val.AllDay,
                        Notify = new NotificationSchedule { Message = val.Notification, Time = val.NotificationTime },
                        // не хватает notificationId, но нужен ли он
                        //Repeat = val.Interval,

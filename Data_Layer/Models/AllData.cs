@@ -19,6 +19,7 @@ namespace Data_Layer.Models
         public DateTime TimeStart { get; set; }
         public DateTime TimeFinish { get; set; }
         public DateTime NotificationTime { get; set; }
+        public bool AllDay { get; set; }
 
         public AllData(int idCalendar, string name, string accessName, int idevent, string description,
             string notification, string title, int eventScheduleId, DateTime timeStart, DateTime timeFinish,
