@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using Dapper;
+using Data.Models;
+using Data.Repository.Interfaces;
+using Microsoft.Data.SqlClient;
+
+namespace Data.Repository
+{
+    public class AllDataRepo : BaseRepository<AllData>, IAllData
+    {
+        public IEnumerable<AllData> GetDataEvents(User @user, IEnumerable<Calendar> @calendarList, DateTime dateTimeStart, DateTime dateTimeFinish)
+        {
+            DataTable idsCalendars = (@calendarList.Select(x => x.Id).ToList()).ConvertToDatatable("idsCalendars");
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                IEnumerable<AllData> s = connection.Query<AllData>("uspGetDataEvents", new { @user.IdUser, id_Calendar = idsCalendars, dateTimeStart, dateTimeFinish },
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
+
+        public AllData GetEvent(int eventId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                AllData s = connection.Query<AllData>("uspGetEventById", new { eventId },
+                    commandType: CommandType.StoredProcedure).First();
+                return s;
+            }
+        }
+    }
+}

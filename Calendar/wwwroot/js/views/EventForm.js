@@ -3,6 +3,7 @@ import { TimePicker } from '../models/TimePicker.js';
 import { Dropdown } from '../models/Dropdown.js';
 import { Event } from '../models/Event.js';
 import { ViewMode } from './ViewMode.js';
+import { EventRepository } from '../models/mvc/EventRepository.js';
 
 var EventForm = {
   data: {
@@ -10,6 +11,7 @@ var EventForm = {
       datePickers: [],
       timePickers: [],
       dropdown: null,
+      mode: 'create',
       modes: {
         create: 'create',
         edit: 'edit'
@@ -19,7 +21,7 @@ var EventForm = {
     selectors: {
       s_formLoad: '#load-create-event-form',
       s_formWrapper: '.create-event-wrapper',
-      s_form: '.create-event-form', 
+      s_form: '.create-event-form',       
       s_title: '.create-event-form #title',
       s_timeStart: '#time-start',
       s_timeFinish: '#time-finish',
@@ -44,7 +46,8 @@ var EventForm = {
     },
 
     url: {
-      u_formLoad: 'LoadView/CreateEventForm',
+      createEventForm: '/LoadView/CreateEventForm',
+      editEventForm: '/Loadview/EditEventForm'
     } 
   },
 
@@ -55,38 +58,44 @@ var EventForm = {
     $(s.s_modal).click(() => this.onCloseForm());
     $(s.s_optionsTrigger).click(() => this.onOptionsOpen());
     $(s.s_submitCreate).click(() => this.onCreate());
-    $(s.s_submitEdit).click(() => this.onUpdate());
+    $(s.s_submitEdit).click(() => this.onEdit());
     $(s.s_title).focusout(e => this.onTitleFocusOut(e));
     $(s.s_timeStart).focusout(e => this.onTimeFocusOut(e));
     $(s.s_timeFinish).focusout(e => this.onTimeFocusOut(e));
   },
 
-  /**
-   * 
-   * @param {string} mode describes what does the form have to do : creating or editing
-   *                      available values: create | edit
-   * @param {Date} start  the Date object with event start date and time
-   *                      can be skipped, if the form is used for editing
-   * @param {Date} finish the Date object with event finish date and time
-   *                      can be skipped, if the form is used for editing
-   */
-  open(mode, start, finish) {    
+  openCreate(start, finish) {    
     let s = this.data.selectors;
     let container = s.s_formLoad;
-    let url = this.data.url.u_formLoad;
+    let url = this.data.url.createEventForm;    
 
-    $(container).load(url, () => {
-      if (start === undefined || finish === undefined) {
-        start = new Date($(s.s_dateStart).val());
-        finish = new Date($(s.s_dateFinish).val());
-      }
-            
+    $(container).load(url, () => {          
       this.renderDatePickers(start, finish);
       this.renderTimePickers(start, finish);
       this.openModal();
       this.openAnimation();
 
-      this.formMode(mode);
+      this.formMode('create');
+      this.setUpListeners();
+    });
+  },
+
+  openEdit(id) {
+    let s = this.data.selectors;
+    let container = s.s_formLoad;
+    let url = this.data.url.editEventForm + `?id=${id}`;
+
+    $.get(url, (content) => {
+      $(container).html(content);
+
+      let start = new Date($(s.s_dateStart).val());
+      let finish = new Date($(s.s_dateFinish).val());
+
+      this.renderDatePickers(start, finish);
+      this.renderTimePickers(start, finish);
+      this.openModal();
+      this.openAnimation();      
+      this.formMode('edit');
       this.setUpListeners();
     });
   },
@@ -111,19 +120,20 @@ var EventForm = {
       value === m.create ?
       c.c_submitCreate : c.c_submitEdit
     );
+
+    this.data.form.mode = value;
   },
 
-  onCloseForm() {
-    this.close();
-
-    let selector = ViewMode.getLastEventId();
-    ViewMode.deleteEvent(selector);
+  getFormMode() {
+    return this.data.form.mode;
   },
 
-  onCreate() {    
+  getEvent() {
     let datePickers = this.data.form.datePickers;
     let timePickers = this.data.form.timePickers;
 
+    let id = $(this.data.selectors.s_form).find('input[name="eventId"]').val();
+    let calendarId = 2;
     let title = $('#title').val();
     let description = $('#description').val();
     let isAllDay = $('#all-day').is(":checked");
@@ -137,21 +147,41 @@ var EventForm = {
 
     finish.setHours(timeFinish.getHours());
     finish.setMinutes(timeFinish.getMinutes());
-      
-    new Event(
-    title,
-    description,
-    start,
-    finish,
-    null,
-    isAllDay,
-    null
-    ).sendToMVC(); 
+
+    return {
+      id,
+      calendarId,
+      title,
+      description,
+      start,
+      finish,      
+      isAllDay,      
+    };
+  },
+
+  onCloseForm() {
+    this.close();
+    let selector = ViewMode.getCachedEvent();
+
+    if (this.getFormMode() != this.data.form.modes.edit) {
+      ViewMode.deleteEvent(selector);
+    }    
+  },
+
+  async onCreate() {    
+    let event = this.getEvent();
+    let id = await new EventRepository().insert(event);    
     
+    let selector = ViewMode.getCachedEvent();
+    $(`#${selector}`).find('input[name="id"]').val(id);
+
+    console.log($(`#${selector}`).find('input[name="id"]').val());
     this.close();
   },
 
-  onUpdate() {
+  onEdit() {
+    let event = this.getEvent();
+    new EventRepository().update(event);
     this.close();
   },
 
@@ -171,7 +201,7 @@ var EventForm = {
 
   onTitleFocusOut(e) {
     let title = $(e.target).val();
-    let id = ViewMode.getLastEventId();
+    let id = ViewMode.getCachedEvent();
 
     ViewMode.setEventTitle(title, id);
   },
@@ -182,7 +212,7 @@ var EventForm = {
     let timeStart = $(s.s_timeStart).val();
     let timeFinish = $(s.s_timeFinish).val();
 
-    let id = ViewMode.getLastEventId();    
+    let id = ViewMode.getCachedEvent();    
     let title = $(s.s_title).val();
     
     let time = this.validateTime(      

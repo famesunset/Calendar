@@ -8,8 +8,14 @@
 	@allDay bit
 AS
 BEGIN
-	SET NOCOUNT ON;
+	BEGIN TRANSACTION Transact
+  BEGIN TRY
 	insert into Events (CalendarId, Description, Notification, Title, TimeStart, TimeFinish, AllDay)
 	values (@calendarId, @description, @notification, @title, @timeStart, @timeFinish,@allDay)
-	return (SELECT SCOPE_IDENTITY());
+	select top 1 Id from Events order by Id desc
+ COMMIT TRANSACTION Transact
+  END TRY
+  BEGIN CATCH
+      ROLLBACK TRANSACTION Transact
+  END CATCH  
 END

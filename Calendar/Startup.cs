@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Calendar.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using BusinessCore.Services.Calendar;
-using BusinessCore.Services.Event;
+using Business.Services.Calendar;
+using Business.Services.Event;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace Calendar
 {
@@ -24,35 +26,27 @@ namespace Calendar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
             // Dependency Injection
             services.AddSingleton<ICalendarService, CalendarService>();
             services.AddSingleton<IEventService, EventService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
 
             services.AddMvc()
-                .AddMvcOptions(op => { op.EnableEndpointRouting = false; })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddJsonOptions(options =>  
+                .AddNewtonsoftJson(options =>  
                 {  
-                    
-                    //options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
                 }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -67,15 +61,16 @@ namespace Calendar
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();            
-
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
