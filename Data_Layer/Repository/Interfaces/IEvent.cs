@@ -5,7 +5,9 @@ namespace Data_Layer.Repository.Interfaces
 {
     public interface IEvent : IRepository<Event>
     {
-        IEnumerable<Event> CreateScheduledEvent(Event @event);
-        IEnumerable<Event> CreateInfinityEvent(Event @event);
+        int CreateScheduledEvent(Event @event);
+        int CreateInfinityEvent(Event @event);
+        IEnumerable<Event> UpdateInfinityEvent(Event @newEvent);
+        IEnumerable<Event> UpdateScheduledEvent(Event @newEvent);
     }
 }

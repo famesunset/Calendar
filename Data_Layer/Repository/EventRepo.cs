@@ -10,26 +10,26 @@ namespace Data_Layer.Repository
 {
     public class EventRepo : BaseRepository<Event>, IEvent
     {
-        public IEnumerable<Event> CreateScheduledEvent(Event @event)
+        public int CreateScheduledEvent(Event @event)
         {
             using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
             {
                 DataTable schedule = @event.Schedule.ConvertToDatatable();
-                IEnumerable<Event> s = connection.Query<Event>("uspCreateScheduledEvent",
+                int eventId = connection.ExecuteScalar<int>("uspCreateScheduledEvent",
                     new { @event.CalendarId, @event.Notification, @event.Description, @event.Title, schedule, @event.TimeStart, @event.TimeFinish, @event.AllDay },
                     commandType: CommandType.StoredProcedure);
-                return s;
+                return eventId;
             }
         }
 
-        public IEnumerable<Event> CreateInfinityEvent(Event @event)
+        public int CreateInfinityEvent(Event @event)
         {
             using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
             {
-                IEnumerable<Event> s = connection.Query<Event>("uspCreateInfinityEvent",
+                int eventId = connection.ExecuteScalar<int>("uspCreateInfinityEvent",
                     new { @event.CalendarId, @event.Notification, @event.Description, @event.Title, @event.RepeatId, @event.TimeStart, @event.TimeFinish, @event.AllDay },
                     commandType: CommandType.StoredProcedure);
-                return s;
+                return eventId;
             }
         }
 
@@ -39,6 +39,29 @@ namespace Data_Layer.Repository
             {
                 connection.Query("uspDeleteEvent", new { eventId },
                     commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public IEnumerable<Event> UpdateInfinityEvent(Event @newEvent)
+        {
+            using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
+            {
+                IEnumerable<Event> s = connection.Query<Event>("uspUpdateInfinityEvent",
+                    new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, @newEvent.RepeatId, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
+
+        public IEnumerable<Event> UpdateScheduledEvent(Event @newEvent)
+        {
+            DataTable schedule = @newEvent.Schedule.ConvertToDatatable();
+            using (SqlConnection connection = new SqlConnection(Settings.Default.Server))
+            {
+                IEnumerable<Event> s = connection.Query<Event>("uspUpdateScheduledEvent",
+                    new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, schedule, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
+                    commandType: CommandType.StoredProcedure);
+                return s;
             }
         }
     }
