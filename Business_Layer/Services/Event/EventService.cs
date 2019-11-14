@@ -150,9 +150,18 @@
             eventRepos.Delete(eventId);
         }
 
-        public void EditEvent(string session, Event @event)
+        public void UpdateInfinityEvent(Event @newEvent)
         {
-            throw new NotImplementedException();
+            IEvent eventRepos = new EventRepo();
+            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@newEvent);
+            eventRepos.UpdateInfinityEvent(dataEvent);
+        }
+
+        public void UpdateScheduledEvent(Event @newEvent)
+        {
+            IEvent eventRepos = new EventRepo();
+            Data_Layer.Event dataEvent = Mapper.Map.Map<Event, Data_Layer.Event>(@newEvent);
+            eventRepos.UpdateScheduledEvent(dataEvent);
         }
     }
 }
