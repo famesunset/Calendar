@@ -10,6 +10,7 @@ var EventForm = {
       datePickers: [],
       timePickers: [],
       dropdown: null,
+      mode: 'create',
       modes: {
         create: 'create',
         edit: 'edit'
@@ -44,7 +45,8 @@ var EventForm = {
     },
 
     url: {
-      u_formLoad: 'LoadView/CreateEventForm',
+      createEventForm: '/LoadView/CreateEventForm',
+      editEventForm: '/Loadview/EditEventForm'
     } 
   },
 
@@ -61,32 +63,38 @@ var EventForm = {
     $(s.s_timeFinish).focusout(e => this.onTimeFocusOut(e));
   },
 
-  /**
-   * 
-   * @param {string} mode describes what does the form have to do : creating or editing
-   *                      available values: create | edit
-   * @param {Date} start  the Date object with event start date and time
-   *                      can be skipped, if the form is used for editing
-   * @param {Date} finish the Date object with event finish date and time
-   *                      can be skipped, if the form is used for editing
-   */
-  open(mode, start, finish) {    
+  openCreate(start, finish) {    
     let s = this.data.selectors;
     let container = s.s_formLoad;
-    let url = this.data.url.u_formLoad;
+    let url = this.data.url.createEventForm;    
 
-    $(container).load(url, () => {
-      if (start === undefined || finish === undefined) {
-        start = new Date($(s.s_dateStart).val());
-        finish = new Date($(s.s_dateFinish).val());
-      }
-            
+    $(container).load(url, () => {          
       this.renderDatePickers(start, finish);
       this.renderTimePickers(start, finish);
       this.openModal();
       this.openAnimation();
 
-      this.formMode(mode);
+      this.formMode('create');
+      this.setUpListeners();
+    });
+  },
+
+  openEdit(id) {
+    let s = this.data.selectors;
+    let container = s.s_formLoad;
+    let url = this.data.url.editEventForm + `?id=${id}`;
+
+    $.get(url, (content) => {
+      $(container).html(content);
+
+      let start = new Date($(s.s_dateStart).val());
+      let finish = new Date($(s.s_dateFinish).val());
+
+      this.renderDatePickers(start, finish);
+      this.renderTimePickers(start, finish);
+      this.openModal();
+      this.openAnimation();      
+      this.formMode('edit');
       this.setUpListeners();
     });
   },
@@ -111,13 +119,21 @@ var EventForm = {
       value === m.create ?
       c.c_submitCreate : c.c_submitEdit
     );
+
+    this.data.form.mode = value;
+  },
+
+  getFormMode() {
+    return this.data.form.mode;
   },
 
   onCloseForm() {
     this.close();
-
     let selector = ViewMode.getLastEventId();
-    ViewMode.deleteEvent(selector);
+
+    if (this.getFormMode() != this.data.form.modes.edit) {
+      ViewMode.deleteEvent(selector);
+    }    
   },
 
   onCreate() {    

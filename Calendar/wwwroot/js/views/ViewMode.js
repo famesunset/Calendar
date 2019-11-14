@@ -44,8 +44,8 @@ let ViewMode = {
     this.data.current.setEventTime(start, finish, id);
   },
   
-  cacheLastEvent(selector) {
-    this.data.current.cacheLastEvent(selector);
+  cacheEvent(selector) {
+    this.data.current.cacheEvent(selector);
   },
 
   getLastEventId() {

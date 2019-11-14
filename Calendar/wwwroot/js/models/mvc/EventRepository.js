@@ -1,6 +1,17 @@
 import { Repository } from './Repository.js';
 
 class EventRepository extends Repository {
+  async get(id) {
+    let event = {};
+    
+    let promise = super.get({ id }, '/Home/GetEvent');    
+    await promise.then(data => {
+      event = data;
+    });
+
+    return event;
+  }
+  
   async getList(date) {
     let list = [];
 
@@ -10,7 +21,7 @@ class EventRepository extends Repository {
     });
 
     return list;
-  }
+  }  
 
   insert(item) {
     let promise = super.insert(item, '/Home/CreateEvent');    

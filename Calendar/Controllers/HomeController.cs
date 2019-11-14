@@ -15,6 +15,13 @@ namespace Calendar.Controllers
             return View();
         }
 
+        public IActionResult GetEvent([FromServices] IEventService service, int id)
+        {
+            Event @event = service.GetEvent(null, id);
+
+            return Json(@event);
+        }
+
         [HttpPost]
         public IActionResult CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
         {
@@ -24,11 +31,6 @@ namespace Calendar.Controllers
             return Json("success");
         }
 
-        [HttpPost]
-        public void UpdateEvent([FromServices] IEventService service, [FromBody] Event @event)
-        {
-            ;
-        }
 
         [HttpGet]
         public IActionResult GetEventList([FromServices] IEventService service, DateTime date)
@@ -38,38 +40,13 @@ namespace Calendar.Controllers
 
             List<BaseEvent> events = calendars.First(c => c.Id.Equals(2)).Events;
 
-            //List<Event> events = new List<Event>();
-            //if (date.Date.Equals(DateTime.Today.Date)) {
-            //    for (int i = 0; i < 1; ++i)
-            //    { 
-            //        events.Add(new Event()
-            //        {
-            //          Id = i + 1,
-            //          Color = "#fff",
-            //          Description = $"Description {i + 1}",
-            //          Title = $"Today event",
-            //          Start = DateTime.Now.AddHours(-1),
-            //          Finish = DateTime.Now
-            //        });
-            //    }
-            //}
-            //else 
-            //{
-            //    for (int i = 0; i < 1; ++i)
-            //    { 
-            //        events.Add(new Event()
-            //        {
-            //          Id = i + 1,
-            //          Color = "#fff",
-            //          Description = $"Description {i + 1}",
-            //          Title = $"Not today event",
-            //          Start = DateTime.Now,
-            //          Finish = DateTime.Now.AddHours(3)
-            //        });
-            //    }
-            //}
-
             return Json(events);
+        }
+
+        [HttpPost]
+        public void EditEvent([FromServices] IEventService service, [FromBody] Event @event)
+        {
+            ;
         }
 
         [HttpGet]
