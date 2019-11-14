@@ -28,7 +28,7 @@ let SideBar = {
     let finishTime = moment(startTime).add(1, 'hours').toDate();
 
     ViewMode.createEvent();
-    EventForm.open('create', startTime, finishTime);
+    EventForm.openCreate(startTime, finishTime);
   }
 };
 

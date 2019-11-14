@@ -44,12 +44,12 @@ let ViewMode = {
     this.data.current.setEventTime(start, finish, id);
   },
   
-  cacheLastEvent(selector) {
-    this.data.current.cacheLastEvent(selector);
+  cacheEvent(selector) {
+    this.data.current.cacheEvent(selector);
   },
 
-  getLastEventId() {
-    return this.data.current.lastEventId();
+  getCachedEvent() {
+    return this.data.current.getCachedEvent();
   },
 
   deleteEvent(selector) {    
