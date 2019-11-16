@@ -15,8 +15,10 @@ let Daily = {
 
     selectors: {
       s_table: '#table-events',
+      s_allDayEvents: '#all-day-events',
       s_dayOfWeek: '.date .day-of-week',
       s_dailyEvent: '.daily-event',
+      s_allDayEvent: '.all-day-event',
       s_loadDeleteEvent: '.load-delete-event',
       s_eventContentWrapper: '.event-content-wrapper',
       s_eventWrapperTiny: '.daily-event-tiny',
@@ -59,6 +61,13 @@ let Daily = {
       $(s.s_table).mousemove(async (e) => this.onStretchEvent(e));
       $(s.s_table).mouseup((e) => this.onOpenCreateForm(e));      
     });        
+  },  
+
+  close() {
+    let s = this.data.selectors;
+
+    $(s.s_dailyEvent).remove();
+    $(s.s_allDayEvent).remove();
   },  
 
   createDefaultEvent(container) {    
@@ -190,42 +199,52 @@ let Daily = {
     };
   },
 
-  renderTable() {  
-    let time = new Date();
-    time.setHours(0);
+  findCellByTime(date) {
+    return $(`#cell-${date.getHours()}`);
+  },
 
+  getDefaultCell() {
+    let date = new Date();
+
+    return $(`#cell-${date.getHours()}`);
+  },
+
+  renderTable() {  
     let el =  '<div class="cell" id="{{cell-id}}">' +
                 `<input type="hidden" value="{{time}}">`
               '</div>';
 
-    let tz_offset = moment().utcOffset() / 60;
-    let tz_name = `GMT ${tz_offset > 0 ? '+' : '-'}${Math.abs(tz_offset)}`;
-    this.renderCell(el, time, tz_name, '0 AM');
+    let time = new Date();
+    time.setHours(0);
 
     let ampm = 'AM';
     let hour = 0;
-    for (let i = 0; i < 23; ++i) {  
-      time.setHours(time.getHours() + 1);      
-      hour = time.getHours();
-      
+
+    for (let i = 0; i < 24; ++i) {            
       ampm = hour < 12 ? 'AM' : 'PM';
       hour = hour > 12 ? hour - 12 : hour;      
 
       let dataContent = `${hour} ${ampm}`;
       let dataTime = dataContent;
-
       this.renderCell(el, time, dataContent, dataTime);
+
+      time.setHours(time.getHours() + 1);      
+      hour = time.getHours();
     }
   },
 
   renderEvents(events) {    
-    events.forEach(event => {      
+    events.forEach(event => {              
       let start = new Date(event.start);
       let finish = new Date(event.finish);
-      let selector = GUID();
-      
+      let selector = GUID();     
       let container = $(`#cell-${start.getHours()}`);
-      this.renderEvent(container, selector, event.id, event.title, start, finish);
+
+      if (event.isAllDay) {
+        this.renderAllDayEvent(selector, event.id, event.title);
+      } else {
+        this.renderEvent(container, selector, event.id, event.title, start, finish);
+      }      
     });
   },
 
@@ -260,14 +279,36 @@ let Daily = {
     });
   },
 
+  renderAllDayEvent(selector, id, title) {
+    let s = this.data.selectors;    
+    
+    if (!title || title.trim() === '') {
+      title = '(No title)';
+    }
+
+    let el = `<div class="all-day-event" id="${selector}">
+                <input type="hidden" name="id" value="${id}">
+                <span class="title">${title}</span>
+                <div class="${this.data.css.c_loadDeleteEvent}"></div>
+              </div>`;
+
+    $(s.s_allDayEvents).append(el);
+
+    this.cacheEvent(selector); 
+    $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
+    $(`#${selector}`).mouseup(e => this.onEditEvent(e));
+  },
+
   renderCell(el, time, dataContent, dataTime) {
     let s = this.data.selectors;
     let hour = time.getHours();
     
     let html = el.replace('{{time}}', hour);
-    html = html.replace('{{cell-id}}', `cell-${hour}`);
-    html = $(html).attr('data-content', dataContent);
+    html = html.replace('{{cell-id}}', `cell-${hour}`);    
     html = $(html).attr('data-time', dataTime);
+    if (hour != 0) {
+      html = $(html).attr('data-content', dataContent);
+    }    
 
     $(s.s_table).append(html);
   },
@@ -317,32 +358,13 @@ let Daily = {
     this.renderEvent(container, selector, id, title, start, finish);
   },
 
-  setEventTitle(title, guid) {
+  setEventTitle(title, id) {
     if (!title || title.trim() === "") 
       title = "(No title)";
 
-    let selector = `#${guid} .title`;
+    let selector = `#${id} .title`;
     $(selector).text(title);
   },
-
-  tableOpenAnimation() {
-    let s = this.data.selectors;
-    let ux = this.data.ux;
-
-    $(s.s_dailyEvent).animate({
-      opacity: 1
-    }, ux.animateDuration);
-  },
-
-  tableCloseAnimation() {
-    let s = this.data.selectors;
-    let ux = this.data.ux;
-
-    $(s.s_dailyEvent).animate({
-      opacity: 0
-    }, ux.animateDuration);   
-    $(s.s_dailyEvent).remove();
-  },  
 
   setEventTime(start, finish, guid) {
     let s_start = `#${guid} .start`;

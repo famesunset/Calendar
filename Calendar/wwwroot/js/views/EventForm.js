@@ -27,6 +27,7 @@ var EventForm = {
       s_timeFinish: '#time-finish',
       s_dateStart: '#date-start',
       s_dateFinish: '#date-finish',
+      s_isAllDay: '#all-day',
       s_modal: '#main-modal',
       s_optionsLoad: '#more-options',
       s_options: '.options',
@@ -60,6 +61,7 @@ var EventForm = {
     $(s.s_submitCreate).click(() => this.onCreate());
     $(s.s_submitEdit).click(() => this.onEdit());
     $(s.s_title).focusout(e => this.onTitleFocusOut(e));
+    $(s.s_isAllDay).change(e => this.onAllDayChanged(e));
     $(s.s_timeStart).focusout(e => this.onTimeFocusOut(e));
     $(s.s_timeFinish).focusout(e => this.onTimeFocusOut(e));
   },
@@ -144,6 +146,26 @@ var EventForm = {
     this.close();
   },
 
+  onAllDayChanged(e) {
+    let s = this.data.selectors;
+    let checked = e.currentTarget.checked;    
+
+    let selector = ViewMode.getCachedEvent();    
+    let title = $(s.s_title).val();
+    let id = $(s.s_form).find('input[name="eventId"]').val();
+
+    $(`#${selector}`).remove();
+
+    if (checked) {            
+      ViewMode.renderAllDayEvent(selector, id, title);
+    } else {      
+      let start = moment($(s.s_timeStart).val(), ['h:m a', 'H:m']).toDate();
+      let finish = moment($(s.s_timeFinish).val(), ['h:m a', 'H:m']).toDate();
+
+      ViewMode.renderDefaultEvent(selector, id, title, start, finish);
+    }    
+  },
+
   onOptionsOpen() {              
     let s = this.data.selectors;      
     if ($(s.s_options).hasClass('open'))    
@@ -165,7 +187,11 @@ var EventForm = {
     ViewMode.setEventTitle(title, id);
   },
 
-  onTimeFocusOut(e) {       
+  onTimeFocusOut(e) {   
+    let event = ViewMode.getCachedEvent();
+    if ($(`#${event}`).hasClass('all-day-event'))
+      return;
+    
     let s = this.data.selectors;
 
     let timeStart = $(s.s_timeStart).val();

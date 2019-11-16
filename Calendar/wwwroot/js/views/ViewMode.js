@@ -9,17 +9,23 @@ let ViewMode = {
     Daily.run();
     this.data.current = Daily;
   },
-
-  openAnimation() {
-    this.data.current.tableOpenAnimation();
-  },
   
-  closeAnimation() {
-    this.data.current.tableCloseAnimation();
+  close() {
+    this.data.current.close();
   },
 
   renderDate(date) {    
     this.data.current.renderDate(date);
+  },  
+
+  renderAllDayEvent(selector, id, title) {
+    this.data.current.renderAllDayEvent(selector, id, title);
+  },
+
+  renderDefaultEvent(selector, id, title, start, finish) {    
+    let container = this.data.current.findCellByTime(start); 
+
+    this.data.current.renderEvent(container, selector, id, title, start, finish);    
   },
 
   createEvent(hour = new Date().getHours()) {    

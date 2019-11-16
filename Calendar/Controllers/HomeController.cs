@@ -36,6 +36,7 @@ namespace Calendar.Controllers
         {
             var calendars = new List<Business.Models.Calendar>
               (service.GetEvents(null, date.Date, DateUnit.Day));
+
             List<BaseEvent> events = calendars.First(c => c.Id.Equals(2)).Events;
 
             return Json(events);

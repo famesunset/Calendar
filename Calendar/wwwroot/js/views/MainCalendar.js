@@ -18,15 +18,13 @@ let MainCalendar = {
   },
 
   async onSelect(date) {
-    ViewMode.closeAnimation();     
+    ViewMode.close();     
 
     Header.renderDate(date);
     ViewMode.renderDate(date);    
 
     let events = await  new EventRepository().getList(date);
     ViewMode.renderEvents(events);
-    
-    ViewMode.openAnimation();
 
     let currentDate = new Date(date);        
     sessionStorage.setItem('currentDate', currentDate);
