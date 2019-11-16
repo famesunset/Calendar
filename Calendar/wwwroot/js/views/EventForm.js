@@ -1,7 +1,6 @@
 import { DatePicker } from '../models/DatePicker.js';
 import { TimePicker } from '../models/TimePicker.js';
 import { Dropdown } from '../models/Dropdown.js';
-import { Event } from '../models/Event.js';
 import { ViewMode } from './ViewMode.js';
 import { EventRepository } from '../models/mvc/EventRepository.js';
 
@@ -11,10 +10,11 @@ var EventForm = {
       datePickers: [],
       timePickers: [],
       dropdown: null,
-      mode: 'create',
-      modes: {
+      state: 'close',
+      states: {
         create: 'create',
-        edit: 'edit'
+        edit: 'edit',
+        close: 'close'
       }
     },
 
@@ -54,8 +54,8 @@ var EventForm = {
   setUpListeners() {
     let s = this.data.selectors;
 
-    $(s.s_closeTrigger).click(() => this.onCloseForm());     
-    $(s.s_modal).click(() => this.onCloseForm());
+    $(s.s_closeTrigger).click(() => this.onCancelCreation());     
+    $(s.s_modal).click(() => this.onCancelCreation());
     $(s.s_optionsTrigger).click(() => this.onOptionsOpen());
     $(s.s_submitCreate).click(() => this.onCreate());
     $(s.s_submitEdit).click(() => this.onEdit());
@@ -65,6 +65,9 @@ var EventForm = {
   },
 
   openCreate(start, finish) {    
+    if (!this.formCanOpen())
+      return;
+
     let s = this.data.selectors;
     let container = s.s_formLoad;
     let url = this.data.url.createEventForm;    
@@ -75,12 +78,15 @@ var EventForm = {
       this.openModal();
       this.openAnimation();
 
-      this.formMode('create');
+      this.formState('create');
       this.setUpListeners();
     });
   },
 
   openEdit(id) {
+    if (!this.formCanOpen())
+      return;
+
     let s = this.data.selectors;
     let container = s.s_formLoad;
     let url = this.data.url.editEventForm + `?id=${id}`;
@@ -95,7 +101,7 @@ var EventForm = {
       this.renderTimePickers(start, finish);
       this.openModal();
       this.openAnimation();      
-      this.formMode('edit');
+      this.formState('edit');
       this.setUpListeners();
     });
   },
@@ -109,63 +115,17 @@ var EventForm = {
     this.closeAnimation();
     $(modal).remove();
     $(el).remove();     
+    this.formState('close');      
+    ViewMode.cacheEvent('');  
   },
 
-  formMode(value) {
-    let s = this.data.selectors;
-    let c = this.data.css;
-    let m = this.data.form.modes;
-
-    $(s.s_submitBtn).addClass(
-      value === m.create ?
-      c.c_submitCreate : c.c_submitEdit
-    );
-
-    this.data.form.mode = value;
-  },
-
-  getFormMode() {
-    return this.data.form.mode;
-  },
-
-  getEvent() {
-    let datePickers = this.data.form.datePickers;
-    let timePickers = this.data.form.timePickers;
-
-    let id = $(this.data.selectors.s_form).find('input[name="eventId"]').val();
-    let calendarId = 2;
-    let title = $('#title').val();
-    let description = $('#description').val();
-    let isAllDay = $('#all-day').is(":checked");
-    let start = datePickers['date-start'].getDate();
-    let finish = datePickers['date-finish'].getDate();
-    let timeStart = timePickers['time-start'].getDate();
-    let timeFinish = timePickers['time-finish'].getDate();
-
-    start.setHours(timeStart.getHours());
-    start.setMinutes(timeStart.getMinutes());
-
-    finish.setHours(timeFinish.getHours());
-    finish.setMinutes(timeFinish.getMinutes());
-
-    return {
-      id,
-      calendarId,
-      title,
-      description,
-      start,
-      finish,      
-      isAllDay,      
-    };
-  },
-
-  onCloseForm() {
-    this.close();
+  onCancelCreation() {    
     let selector = ViewMode.getCachedEvent();
 
-    if (this.getFormMode() != this.data.form.modes.edit) {
-      ViewMode.deleteEvent(selector);
-    }    
+    if (this.getFormState() == this.data.form.states.create) {
+      ViewMode.deleteEvent(selector);      
+    }        
+    this.close();
   },
 
   async onCreate() {    
@@ -175,7 +135,6 @@ var EventForm = {
     let selector = ViewMode.getCachedEvent();
     $(`#${selector}`).find('input[name="id"]').val(id);
 
-    console.log($(`#${selector}`).find('input[name="id"]').val());
     this.close();
   },
 
@@ -231,6 +190,54 @@ var EventForm = {
     )
   },
 
+  formState(value) {
+    let s = this.data.selectors;
+    let c = this.data.css;
+    let m = this.data.form.states;
+
+    $(s.s_submitBtn).addClass(
+      value === m.create ?
+      c.c_submitCreate : c.c_submitEdit
+    );
+
+    this.data.form.state = value;
+  },
+
+  getFormState() {
+    return this.data.form.state;
+  },
+
+  getEvent() {
+    let datePickers = this.data.form.datePickers;
+    let timePickers = this.data.form.timePickers;
+
+    let id = $(this.data.selectors.s_form).find('input[name="eventId"]').val();
+    let calendarId = 2;
+    let title = $('#title').val();
+    let description = $('#description').val();
+    let isAllDay = $('#all-day').is(":checked");
+    let start = datePickers['date-start'].getDate();
+    let finish = datePickers['date-finish'].getDate();
+    let timeStart = timePickers['time-start'].getDate();
+    let timeFinish = timePickers['time-finish'].getDate();
+
+    start.setHours(timeStart.getHours());
+    start.setMinutes(timeStart.getMinutes());
+
+    finish.setHours(timeFinish.getHours());
+    finish.setMinutes(timeFinish.getMinutes());
+
+    return {
+      id,
+      calendarId,
+      title,
+      description,
+      start,
+      finish,      
+      isAllDay,      
+    };
+  },
+
   validateTime(start, finish, target) {      
     let startDuration = start.getTime() / 1000;
     let finishDuration = finish.getTime() / 1000;
@@ -268,6 +275,10 @@ var EventForm = {
       
       $(s.s_dateFinish).val(m_dateFinish.format('MMM DD, YYYY'));
     }
+  },
+
+  formCanOpen() {
+    return this.getFormState() === this.data.form.states.close;
   },
 
   setStartFinishTime(start, finish) {

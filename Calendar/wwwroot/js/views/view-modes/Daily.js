@@ -9,7 +9,8 @@ let Daily = {
       cachedEvent: '',
       c_targetCellShift: {},
       timeStart: {},
-      timeFinish: {}
+      timeFinish: {},
+      state: ''      
     },
 
     selectors: {
@@ -56,7 +57,7 @@ let Daily = {
     $(s.s_cell).mousedown(e => {
       this.onCellMouseDown(e);
       $(s.s_table).mousemove(async (e) => this.onStretchEvent(e));
-      $(s.s_table).mouseup((e) => this.onCellMouseUp(e));      
+      $(s.s_table).mouseup((e) => this.onOpenCreateForm(e));      
     });        
   },  
 
@@ -77,21 +78,21 @@ let Daily = {
     this.cacheEvent(selector);
   },
 
-  async onEditEvent(e) {  
+  onEditEvent(e) {  
     e.stopPropagation();
     if (e.which != this.data.ux.leftMouseBtn)
       return;
-    
+          
     let id = $(e.currentTarget).find('input[name="id"]').val();
     
-    if (id != 0) {
+    if (id != 0 && EventForm.formCanOpen()) {
       EventForm.openEdit(id);    
-    }    
+      this.cacheEvent(e.currentTarget.id);
+    }        
   },
 
   onDeleteEvent(e) {    
-    e.preventDefault();
-
+    e.stopPropagation();
     if (e.which != this.data.ux.rightMouseBtn)
       return;
     
@@ -99,7 +100,7 @@ let Daily = {
     let eventId = $target.find('input[name="id"]').val();    
     let pos = { x: e.pageX, y: e.pageY };
 
-    this.cacheEvent(e.currentTarget.id);
+    this.cacheEvent(e.currentTarget.id);    
     DeleteEvent.open(eventId, pos);
   },
 
@@ -127,9 +128,10 @@ let Daily = {
     this.data.ux.pos_mouseStart = e.pageY;
     this.data.cache.timeStart = timeStart;
     this.data.cache.timeFinish = timeFinish;
+    this.data.cache.state = 'create';
   },
 
-  onCellMouseUp(e) {  
+  onOpenCreateForm(e) {  
     if (e.which != this.data.ux.leftMouseBtn) 
       return;
 
@@ -141,6 +143,7 @@ let Daily = {
     );
 
     $(s.s_table).unbind('mousemove');
+    this.data.cache.state = '';
   },
   
   onStretchEvent(e) {
@@ -249,7 +252,12 @@ let Daily = {
     this.calcEventPosition(selector, start, finish);   
     this.cacheEvent(selector); 
     $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
-    $(`#${selector}`).mousedown(e => this.onEditEvent(e));
+    $(`#${selector}`).mouseup(e => {
+      if (this.data.cache.state == 'create')
+        this.onOpenCreateForm(e);
+      else 
+        this.onEditEvent(e)
+    });
   },
 
   renderCell(el, time, dataContent, dataTime) {
