@@ -2,8 +2,8 @@ namespace Business.Models
 {
     public enum Access
     {
-        Private = 0,
-        Link,
-        Users
+        Private = 1,
+        //Link = 2,
+        //Users = 3,
     }
 }

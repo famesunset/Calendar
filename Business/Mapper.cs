@@ -11,20 +11,27 @@
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.Models.Calendar, Calendar>()
-                    .ConstructUsing(val => new Calendar()
+                    .ConstructUsing(val => new Calendar
                     {
-                        Access = (Access)Enum.GetValues(typeof(Access)).GetValue(val.AccessId),
+                        Access = (Access)Enum.ToObject(typeof(Access) , val.AccessId),
                         Color = null,
-                        // todo
                         Events = new List<BaseEvent>(),
                         Id = val.Id,
                         Name = val.Name,
                         Users = new List<User>(),
                     });
 
+                cfg.CreateMap<Calendar, Data.Models.Calendar>()
+                    .ConstructUsing(val => new Data.Models.Calendar
+                    {
+                        Id = val.Id,
+                        Name = val.Name,
+                        AccessId = (int)val.Access
+                    });
+
               
                 cfg.CreateMap<Data.Models.AllData, BaseEvent>()
-                    .ConstructUsing(val => new BaseEvent()
+                    .ConstructUsing(val => new BaseEvent
                     {
                         Color = null,
                         Start = val.TimeStart,
@@ -35,7 +42,7 @@
                         });
 
                 cfg.CreateMap<Data.Models.AllData, Event>()
-                   .ConstructUsing(val => new Event()
+                   .ConstructUsing(val => new Event
                    {
                        Id = val.EventId,
                        CalendarId = val.IdCalendar,
@@ -52,7 +59,7 @@
                     });
 
                 cfg.CreateMap<Event, Data.Models.Event>()
-                    .ConstructUsing(val => new Data.Models.Event()
+                    .ConstructUsing(val => new Data.Models.Event
                     {
                         Id = val.Id,
                         AllDay = val.IsAllDay,

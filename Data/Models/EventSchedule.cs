@@ -12,5 +12,10 @@ namespace Data.Models
             this.TimeStart = timeStart;
             this.TimeFinish = timeFinish;
         }
+
+        public EventSchedule()
+        {
+                
+        }
     }
 }

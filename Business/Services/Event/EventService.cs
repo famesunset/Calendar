@@ -33,13 +33,8 @@
         {
             var eventRepos = new AllDataRepo();
             var calendarRepos = new CalendarRepo();
-            var userRepos = new UserRepo();
-            // получить юзера по сесии
-
-            var userCalendars = calendarRepos.GetUserCalendars(1);
-
-            // GET user by session
-            var user = new Data.Models.User(1);
+            // var userRepos = new UserRepo();
+            var userId = 1; // получить юзера по сесии
 
             DateTime dateStart = new DateTime();
             DateTime dateFinish = new DateTime();
@@ -67,23 +62,19 @@
                 break;
             }
 
-            var bUserCalendars = new List<Calendar>();
-            foreach (var cal in userCalendars)
-            {
-                bUserCalendars.Add(Map.Map<Data.Models.Calendar, Calendar>(cal));
-            }
-            
-            var events = eventRepos.GetDataEvents(user, userCalendars, dateStart, dateFinish);
-            var eventList = new List<BaseEvent>();
+            var userCalendars = calendarRepos.GetUserCalendars(userId);
+            var events = eventRepos.GetDataEvents(userId, userCalendars, dateStart, dateFinish);
+            var bUserCalendars = userCalendars
+                .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
+                .ToDictionary(c => c.Id);
 
-            foreach (var allData in events)
+            foreach (var e in events)
             {
-                var calendar = bUserCalendars.SingleOrDefault(cal => cal.Id.Equals(allData.IdCalendar));
-                var bEvent = Map.Map<Data.Models.AllData, BaseEvent>(allData);
-                calendar.Events.Add(bEvent);
+                var bEvent = Map.Map<Data.Models.AllData, BaseEvent>(e);
+                bUserCalendars[e.IdCalendar].Events.Add(bEvent);
             }
 
-            return bUserCalendars;
+            return bUserCalendars.Values;
         }
 
         public int CreateScheduledEvent(string session, Event @event)

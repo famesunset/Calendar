@@ -19,5 +19,10 @@ namespace Data.Models
             this.EventScheduleId = eventScheduleId;
             this.NotificationTime = notificationTime;
         }
+
+        public Notification()
+        {
+            
+        }
     }
 }

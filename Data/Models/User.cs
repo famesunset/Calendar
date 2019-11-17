@@ -38,5 +38,10 @@
         {
             this.IdUser = idUser;
         }
+
+        public User()
+        {
+            
+        }
     }
 }

@@ -6,7 +6,6 @@
     {
         IEnumerable<Calendar> GetCalendars(string session);
         Calendar GetCalendar(string session, int calendarId);
-        int AddCalendar(string session, Calendar calendar);
-        
+        int CreateCalendar(string session, Calendar calendar);
     }
 }

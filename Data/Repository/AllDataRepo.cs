@@ -11,12 +11,12 @@ namespace Data.Repository
 {
     public class AllDataRepo : BaseRepository<AllData>, IAllData
     {
-        public IEnumerable<AllData> GetDataEvents(User @user, IEnumerable<Calendar> @calendarList, DateTime dateTimeStart, DateTime dateTimeFinish)
+        public IEnumerable<AllData> GetDataEvents(int userId, IEnumerable<Calendar> @calendarList, DateTime dateTimeStart, DateTime dateTimeFinish)
         {
             DataTable idsCalendars = (@calendarList.Select(x => x.Id).ToList()).ConvertToDatatable("idsCalendars");
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                IEnumerable<AllData> s = connection.Query<AllData>("uspGetDataEvents", new { @user.IdUser, id_Calendar = idsCalendars, dateTimeStart, dateTimeFinish },
+                IEnumerable<AllData> s = connection.Query<AllData>("uspGetDataEvents", new { IdUser = userId, id_Calendar = idsCalendars, dateTimeStart, dateTimeFinish },
                     commandType: CommandType.StoredProcedure);
                 return s;
             }

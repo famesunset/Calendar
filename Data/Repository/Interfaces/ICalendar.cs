@@ -5,6 +5,9 @@ namespace Data.Repository.Interfaces
 {
     public interface ICalendar : IRepository<Calendar>
     {
-        IEnumerable<Calendar> AddCalendar(User @user, Calendar @calendar);
+        int CreateCalendar(int userId, Calendar @calendar);
+        Calendar GetCalendarById(int calendarId);
+        IEnumerable<Calendar> GetUserCalendars(int userId);
+        IEnumerable<User> GetUsersByCalendarId(int calendarId);
     }
 }

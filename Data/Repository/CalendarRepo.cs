@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Dapper;
 using Data.Models;
 using Data.Repository.Interfaces;
@@ -9,13 +10,13 @@ namespace Data.Repository
 {
     public class CalendarRepo : BaseRepository<Calendar>, ICalendar
     {
-        public IEnumerable<Calendar> AddCalendar(User user, Calendar calendar)
+        public int CreateCalendar(int userId, Calendar calendar)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                IEnumerable<Calendar> s = connection.Query<Calendar>("uspCreateCalendar", new { user.IdUser, calendar.Name, calendar.AccessId },
+                int calendarId = connection.ExecuteScalar<int>("uspCreateCalendar", new { IdUser = userId, calendar.Name, calendar.AccessId },
                     commandType: CommandType.StoredProcedure);
-                return s;
+                return calendarId;
             }
         }
 
@@ -23,9 +24,29 @@ namespace Data.Repository
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                IEnumerable<Calendar> s = connection.Query<Calendar>("uspGetCalendarsByUserId", new { idUser = userId },
+                IEnumerable<Calendar> calendars = connection.Query<Calendar>("uspGetCalendarsByUserId", new { idUser = userId },
                     commandType: CommandType.StoredProcedure);
-                return s;
+                return calendars;
+            }
+        }
+
+        public Calendar GetCalendarById(int calendarId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                IEnumerable<Calendar> calendars = connection.Query<Calendar>("uspGetCalendarById", new { calendarId },
+                    commandType: CommandType.StoredProcedure);
+                return calendars.FirstOrDefault();
+            }
+        }
+
+        public IEnumerable<User> GetUsersByCalendarId(int calendarId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                IEnumerable<User> users = connection.Query<User>("uspGetUsersByCalendarId", new { calendarId },
+                    commandType: CommandType.StoredProcedure);
+                return users;
             }
         }
     }

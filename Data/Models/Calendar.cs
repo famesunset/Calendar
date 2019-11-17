@@ -1,4 +1,6 @@
-﻿namespace Data.Models
+﻿using System.Drawing;
+
+namespace Data.Models
 {
     public class Calendar
     {
@@ -16,6 +18,11 @@
         public Calendar(int id)
         {
             this.Id = id;
+        }
+
+        public Calendar()
+        {
+            
         }
     }
 }

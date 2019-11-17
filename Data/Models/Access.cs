@@ -15,6 +15,11 @@
             this.Id = id;
             this.Name = name;
         }
+
+        public Access()
+        {
+            
+        }
     }
 
 }
