@@ -8,7 +8,8 @@
         public string Email { get; set; }
         //Get new id default calendar during creating a new user through stored procedure
         public int IdCalendarDefault { get; set; }
-        public int IdIdentity { get; set; }
+        public string IdIdentity { get; set; }
+        public string Picture { get; set; }
 
         public User(int idUser, int idCalendarDefault)
         {
@@ -16,7 +17,7 @@
             this.IdCalendarDefault = idCalendarDefault;
         }
 
-        public User(string name, string mobile, string email, int idIdentity)
+        public User(string name, string mobile, string email, string idIdentity)
         {
             this.Name = name;
             this.Mobile = mobile;
@@ -24,7 +25,7 @@
             this.IdIdentity = idIdentity;
         }
 
-        public User(int idUser, string name, string mobile, string email, int idCalendarDefault, int idIdentity)
+        public User(int idUser, string name, string mobile, string email, int idCalendarDefault, string idIdentity)
         {
             this.IdUser = idUser;
             this.Name = name;

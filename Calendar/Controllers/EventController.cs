@@ -1,62 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Business.Models;
 using Business.Services.Event;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Calendar.Controllers
 {
     public class EventController : Controller
     {
+        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly IEventService eventService;
 
-        public IActionResult GetEvent([FromServices] IEventService service, int id)
+        public EventController(
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            [FromServices] IEventService eventService)
         {
-            Event @event = service.GetEvent(null, id);
+            this.signInManager = signInManager;
+            this.userManager = userManager;
+            this.eventService = eventService;
+        }
 
+        [Authorize]
+        public IActionResult GetEvent(int id)
+        {
+            Event @event = eventService.GetEvent(userManager.GetUserId(User), id);
             return Json(@event);
         }
 
         [HttpGet]
-        public IActionResult GetEventList([FromServices] IEventService service, DateTime date)
+        [Authorize]
+        public IActionResult GetEventList(DateTime date)
         {
             var calendars = new List<Business.Models.Calendar>
-              (service.GetEvents(null, date.Date, DateUnit.Day));
+              (eventService.GetEvents(userManager.GetUserId(User), date.Date, DateUnit.Day));
 
             List<BaseEvent> events = calendars.First(c => c.Id.Equals(2)).Events;
-
             return Json(events);
         }
 
         [HttpGet]
-        public IActionResult GetEventListByCalendarId([FromServices] IEventService service, int calendarId)
+        [Authorize]
+        public IActionResult GetEventListByCalendarId(int calendarId)
         {
             return Json("success");
         }
 
         [HttpPost]
-        public IActionResult CreateEvent([FromServices] IEventService service, [FromBody] Event @event)
+        [Authorize]
+        public IActionResult CreateEvent([FromBody] Event @event)
         {
             @event.CalendarId = 2;
-            int eventId = service.AddEvent(null, @event);
+            int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event);
 
             return Json(eventId);
         }
 
         [HttpPost]
-        public IActionResult EditEvent([FromServices] IEventService service, [FromBody] Event @event)
+        [Authorize]
+        public IActionResult EditEvent([FromBody] Event @event)
         {
-            service.UpdateScheduledEvent(@event);
-
+            eventService.UpdateScheduledEvent(userManager.GetUserId(User), @event);
             return Json("success");
         }
 
         [HttpGet]
-        public IActionResult DeleteEvent([FromServices] IEventService service, int id)
+        [Authorize]
+        public IActionResult DeleteEvent(int id)
         {
-            service.DeleteEvent(null, id);
-
+            eventService.DeleteEvent(userManager.GetUserId(User), id);
             return Json("success");
         }
     }

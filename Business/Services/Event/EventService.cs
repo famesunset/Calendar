@@ -8,151 +8,188 @@
     using System.Linq;
     using static Mapper;
 
-    public class EventService : IEventService
+    public partial class EventService : IEventService
     {
-        public int AddEvent(string session, Event @event)
+        private readonly IEvent eventRepos;
+        private readonly IUser userRepos;
+        private readonly ICalendar calendarRepos;
+        private readonly IAccess accessRepos;
+        private readonly INotification notificationRepos;
+        private readonly IAllData bigEventRepos;
+
+        public EventService()
         {
-            IEvent eventRepos = new EventRepo();
-            Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
-            int eventId = eventRepos.CreateScheduledEvent(dataEvent);
-            return eventId;
+            eventRepos = new EventRepo();
+            userRepos = new UserRepo();
+            calendarRepos = new CalendarRepo();
+            accessRepos = new AccessRepo();
+            notificationRepos = new NotificationRepo();
+            bigEventRepos = new AllDataRepo();
         }
 
-        public Event GetEvent(string session, int id)
+        public int CreateEvent(string loginedUserId, Event @event)
         {
-            var userRepos = new UserRepo();
-            // получить юзера по сесии
-
-            var dataRepository = new AllDataRepo();
-            var dataEvent = dataRepository.GetEvent(id);
-            var businessEvent = Map.Map<Data.Models.AllData, Event>(dataEvent);
-            return businessEvent;
-        }
-
-        public IEnumerable<Calendar> GetEvents(string session, DateTime beginning, DateUnit dateUnit)
-        {
-            var eventRepos = new AllDataRepo();
-            var calendarRepos = new CalendarRepo();
-            // var userRepos = new UserRepo();
-            var userId = 1; // получить юзера по сесии
-
-            DateTime dateStart = new DateTime();
-            DateTime dateFinish = new DateTime();
-            beginning = beginning.ToUniversalTime();
-            switch (dateUnit)
+            if (IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId))
             {
-                case DateUnit.Day:
+                Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
+                int eventId = eventRepos.CreateScheduledEvent(dataEvent);
+                return eventId;
+            }
+            return -1;
+        }
+
+        public Event GetEvent(string loginedUserId, int eventId)
+        {
+            var dataBigEvent = IsUserHasAccessToEvent(loginedUserId, eventId);
+            if (dataBigEvent != null)
+            {
+                var businessEvent = Map.Map<Data.Models.AllData, Event>(dataBigEvent);
+                return businessEvent;
+            }
+            return null;
+        }
+
+        public IEnumerable<Calendar> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit)
+        {
+            var dataUser = IsUserLoggined(loginedUserId);
+            if (dataUser != null)
+            {
+                DateTime dateStart = new DateTime();
+                DateTime dateFinish = new DateTime();
+                beginning = beginning.ToUniversalTime();
+                switch (dateUnit)
                 {
-                    dateStart = beginning;
-                    dateFinish = dateStart.AddDays(1);
+                    case DateUnit.Day:
+                        {
+                            dateStart = beginning;
+                            dateFinish = dateStart.AddDays(1);
+                        }
+                        break;
+                    case DateUnit.Week:
+                        {
+                            int startDay = beginning.Day - (int)beginning.DayOfWeek;
+                            dateStart = new DateTime(beginning.Year, beginning.Month, startDay);
+                            dateFinish = dateStart.AddDays(7);
+                        }
+                        break;
+                    case DateUnit.Month:
+                        {
+                            dateStart = new DateTime(beginning.Year, beginning.Month, 1);
+                            dateFinish = dateStart.AddMonths(1);
+                        }
+                        break;
                 }
-                break;
-                case DateUnit.Month:
+
+                var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
+                if (userCalendars.Count() > 0)
                 {
-                    dateStart = new DateTime(beginning.Year, beginning.Month, 1).ToUniversalTime();
-                    dateFinish = dateStart.AddMonths(1);
+                    var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
+                    var bUserCalendars = userCalendars
+                      .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
+                      .ToDictionary(c => c.Id);
+
+                    foreach (var e in events)
+                    {
+                        var bEvent = Map.Map<Data.Models.AllData, BaseEvent>(e);
+                        bUserCalendars[e.IdCalendar].Events.Add(bEvent);
+                    }
+
+                    return bUserCalendars.Values;
                 }
-                break;
-                case DateUnit.Week:
-                {
-                    int startDay = beginning.Day - (int)beginning.DayOfWeek;
-                    dateStart = new DateTime(beginning.Year, beginning.Month, startDay);
-                    dateFinish = dateStart.AddDays(7);
-                }
-                break;
+                return new List<Calendar>();
+
             }
 
-            var userCalendars = calendarRepos.GetUserCalendars(userId);
-            var events = eventRepos.GetDataEvents(userId, userCalendars, dateStart, dateFinish);
-            var bUserCalendars = userCalendars
-                .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
-                .ToDictionary(c => c.Id);
+            return null;
+        }
 
-            foreach (var e in events)
+        public int CreateScheduledEvent(string loginedUserId, Event @event)
+        {
+            if (IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId))
             {
-                var bEvent = Map.Map<Data.Models.AllData, BaseEvent>(e);
-                bUserCalendars[e.IdCalendar].Events.Add(bEvent);
+                List<EventSchedule> schedule = new List<EventSchedule>();
+                int compare;
+                switch (@event.Repeat)
+                {
+                    case Interval.Day:
+                        do
+                        {
+                            compare = DateTime.Compare(@event.Start, @event.Finish);
+                            schedule.Add(new EventSchedule(@event.Start, @event.Finish));
+                            @event.Start = @event.Start.AddDays(1);
+                            @event.Finish = @event.Finish.AddDays(1);
+                        } while (compare < 0);
+
+                        break;
+                    case Interval.Week:
+                        do
+                        {
+                            compare = DateTime.Compare(@event.Start, @event.Finish);
+                            schedule.Add(new EventSchedule(@event.Start, @event.Finish));
+                            @event.Start = @event.Start.AddDays(7);
+                            @event.Finish = @event.Finish.AddDays(7);
+                        } while (compare < 0);
+
+                        break;
+                    case Interval.Month:
+                        do
+                        {
+                            compare = DateTime.Compare(@event.Start, @event.Finish);
+                            schedule.Add(new EventSchedule(@event.Start, @event.Finish));
+                            @event.Start = @event.Start.AddMonths(1);
+                            @event.Finish = @event.Finish.AddMonths(1);
+                        } while (compare < 0);
+
+                        break;
+                    case Interval.Year:
+                        do
+                        {
+                            compare = DateTime.Compare(@event.Start, @event.Finish);
+                            schedule.Add(new EventSchedule(@event.Start, @event.Finish));
+                            @event.Start = @event.Start.AddYears(1);
+                            @event.Finish = @event.Finish.AddYears(1);
+                        } while (compare < 0);
+
+                        break;
+                }
+
+                @event.Schedule = schedule;
+                Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
+                int eventId = eventRepos.CreateScheduledEvent(dataEvent);
+                return eventId;
             }
 
-            return bUserCalendars.Values;
+            return -1;
         }
 
-        public int CreateScheduledEvent(string session, Event @event)
+        public void DeleteEvent(string loginedUserId, int eventId)
         {
-            IEvent eventRepos = new EventRepo();
-            List<EventSchedule> schedule = new List<EventSchedule>();
-
-            int compare;
-            switch (@event.Repeat)
+            var dataBigEvent = IsUserHasAccessToEvent(loginedUserId, eventId);
+            if (dataBigEvent != null)
             {
-                case Interval.Day:
-                    do
-                    {
-                        compare = DateTime.Compare(@event.Start, @event.Finish);
-                        schedule.Add(new EventSchedule(@event.Start, @event.Finish));
-                        @event.Start = @event.Start.AddDays(1);
-                        @event.Finish = @event.Finish.AddDays(1);
-                    }
-                    while (compare < 0);
-                    break;
-                case Interval.Week:
-                    do
-                    {
-                        compare = DateTime.Compare(@event.Start, @event.Finish);
-                        schedule.Add(new EventSchedule(@event.Start, @event.Finish));
-                        @event.Start = @event.Start.AddDays(7);
-                        @event.Finish = @event.Finish.AddDays(7);
-                    }
-                    while (compare < 0);
-                    break;
-                case Interval.Month:
-                    do
-                    {
-                        compare = DateTime.Compare(@event.Start, @event.Finish);
-                        schedule.Add(new EventSchedule(@event.Start, @event.Finish));
-                        @event.Start = @event.Start.AddMonths(1);
-                        @event.Finish = @event.Finish.AddMonths(1);
-                    }
-                    while (compare < 0);
-                    break;
-                case Interval.Year:
-                    do
-                    {
-                        compare = DateTime.Compare(@event.Start, @event.Finish);
-                        schedule.Add(new EventSchedule(@event.Start, @event.Finish));
-                        @event.Start = @event.Start.AddYears(1);
-                        @event.Finish = @event.Finish.AddYears(1);
-                    }
-                    while (compare < 0);
-                    break;
+                eventRepos.Delete(dataBigEvent.EventId);
             }
-            @event.Schedule = schedule;
-            Data.Models.Event dataEvent = Mapper.Map.Map<Event, Data.Models.Event>(@event);
-            int eventId = eventRepos.CreateScheduledEvent(dataEvent);
-            return eventId;
+
         }
 
-        public void DeleteEvent(string session, int eventId)
+        public void UpdateInfinityEvent(string loginedUserId, Event newEvent)
         {
-            var eventRepos = new EventRepo();
-            var userRepos = new UserRepo();
-            // получить юзера по сесии
-
-            eventRepos.Delete(eventId);
+            var dataBigEvent = IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
+            if (dataBigEvent != null)
+            {
+                Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);
+                eventRepos.UpdateInfinityEvent(dataEvent);
+            }
         }
 
-        public void UpdateInfinityEvent(Event @newEvent)
+        public void UpdateScheduledEvent(string loginedUserId, Event newEvent)
         {
-            IEvent eventRepos = new EventRepo();
-            Data.Models.Event dataEvent = Mapper.Map.Map<Event, Data.Models.Event>(@newEvent);
-            eventRepos.UpdateInfinityEvent(dataEvent);
-        }
-
-        public void UpdateScheduledEvent(Event @newEvent)
-        {
-            IEvent eventRepos = new EventRepo();
-            Data.Models.Event dataEvent = Mapper.Map.Map<Event, Data.Models.Event>(@newEvent);
-            eventRepos.UpdateScheduledEvent(dataEvent);
+            var dataBigEvent = IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
+            if (dataBigEvent != null)
+            {
+                Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);
+                eventRepos.UpdateScheduledEvent(dataEvent);
+            }
         }
     }
 }

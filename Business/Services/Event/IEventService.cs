@@ -5,12 +5,12 @@
     using Models;
     public interface IEventService
     {
-        int AddEvent(string session, Event @event);
-        int CreateScheduledEvent(string session, Event @event);
-        Event GetEvent(string session, int id);
-        IEnumerable<Calendar> GetEvents(string session, DateTime beginning, DateUnit dateUnit);
-        void DeleteEvent(string session, int eventId);
-        void UpdateInfinityEvent(Event @newEvent);
-        void UpdateScheduledEvent(Event @newEvent);
+        int CreateEvent(string loginedUserId, Event @event);
+        int CreateScheduledEvent(string loginedUserId, Event @event);
+        Event GetEvent(string loginedUserId, int id);
+        IEnumerable<Calendar> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit);
+        void DeleteEvent(string loginedUserId, int eventId);
+        void UpdateInfinityEvent(string loginedUserId, Event @newEvent);
+        void UpdateScheduledEvent(string loginedUserId, Event @newEvent);
     }
 }

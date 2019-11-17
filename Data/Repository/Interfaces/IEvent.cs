@@ -9,5 +9,6 @@ namespace Data.Repository.Interfaces
         int CreateInfinityEvent(Event @event);
         IEnumerable<Event> UpdateInfinityEvent(Event @newEvent);
         IEnumerable<Event> UpdateScheduledEvent(Event @newEvent);
+        void Delete(int eventId);
     }
 }

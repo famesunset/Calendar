@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Dapper;
 using Data.Models;
 using Data.Repository.Interfaces;
@@ -9,13 +10,22 @@ namespace Data.Repository
 {
     public class UserRepo : BaseRepository<User>, IUser
     {
-        public IEnumerable<User> CreateUser(string name, string mobile, string email, int idIdentity)
+        public void CreateUser(User user)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                IEnumerable<User> s = connection.Query<User>("uspCreateUser", new { name, mobile, email, idIdentity },
+                connection.Query("uspCreateUser", new { name = user.Name, mobile = user.Mobile, email = user.Email, identityId = user.IdIdentity, picture = user.Picture },
                     commandType: CommandType.StoredProcedure);
-                return s;
+            }
+        }
+
+        public User GetUserByIdentityId(string id)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                IEnumerable<User> s = connection.Query<User>("uspGetUserByIdentityId", new { identityId = id },
+                    commandType: CommandType.StoredProcedure);
+                return s.SingleOrDefault();
             }
         }
     }

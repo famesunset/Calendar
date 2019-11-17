@@ -46,8 +46,10 @@
       <li><a>Year</a></li>
     </ul>
 
-    <div class="user-menu">
-      <img src="~/images/user.png" alt="user-icon" />
-    </div>
+      <partial name="_LoginPartial" />
+
+      <div class="user-menu">
+          <img src="@(ViewBag.Avatar ?? "/images/user.png")" alt="user-icon" />
+      </div>
   </div>
 </header>
