@@ -1,4 +1,4 @@
-class Repository {
+export class Repository {
   get(id, url) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -73,5 +73,3 @@ class Repository {
     }); 
   }
 }
-
-export { Repository };

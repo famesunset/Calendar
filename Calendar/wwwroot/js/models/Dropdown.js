@@ -1,4 +1,4 @@
-class Dropdown {
+export class Dropdown {
   constructor(trigger, options) {
     this.trigger = trigger;
     this.options = options;
@@ -16,5 +16,3 @@ class Dropdown {
     $trigger.text($option.text());
   }
 }
-
-export { Dropdown };

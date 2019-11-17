@@ -1,6 +1,6 @@
 import { Daily } from './view-modes/Daily.js';
 
-let ViewMode = {
+export let ViewMode = {
   data: {
     current: null,
   },
@@ -26,6 +26,14 @@ let ViewMode = {
     let container = this.data.current.findCellByTime(start); 
 
     this.data.current.renderEvent(container, selector, id, title, start, finish);    
+  },
+
+  showEventsByCalendarId(calendarId) {
+    this.data.current.showEventsByCalendarId(calendarId);
+  },
+
+  hideEventsByCalendarId(calendarId) {
+    this.data.current.hideEventsByCalendarId(calendarId);
   },
 
   createEvent(hour = new Date().getHours()) {    
@@ -66,5 +74,3 @@ let ViewMode = {
     }, 150);    
   }
 };
-
-export { ViewMode };

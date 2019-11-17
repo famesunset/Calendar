@@ -1,7 +1,7 @@
 import { EventRepository } from '../../models/mvc/EventRepository.js';
 import { ViewMode } from '../ViewMode.js';
 
-let DeleteEvent = {
+export let DeleteEvent = {
   data: {
     cache: {
       eventId: 0
@@ -19,7 +19,7 @@ let DeleteEvent = {
     },
 
     url: {
-      u_windowLoad: '/LoadView/DeleteEventPopUp'
+      u_windowLoad: '/EventView/DeleteEventPopUp'
     }
   },
 
@@ -100,6 +100,4 @@ let DeleteEvent = {
     let selector = ViewMode.getCachedEvent();
     ViewMode.deleteEvent(selector);
   }
-}
-
-export { DeleteEvent };
+};

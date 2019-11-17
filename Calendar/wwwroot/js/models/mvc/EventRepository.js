@@ -1,10 +1,10 @@
 import { Repository } from './Repository.js';
 
-class EventRepository extends Repository {
+export class EventRepository extends Repository {
   async get(id) {
     let event = {};
     
-    let promise = super.get({ id }, '/Home/GetEvent');    
+    let promise = super.get({ id }, '/Event/GetEvent');    
     await promise.then(data => {
       event = data;
     });
@@ -15,7 +15,7 @@ class EventRepository extends Repository {
   async getList(date) {
     let list = [];
 
-    let promise = super.getList({ date: date.toISOString() }, '/Home/GetEventList');    
+    let promise = super.getList({ date: date.toISOString() }, '/Event/GetEventList');    
     await promise.then(data => {
       list = data;
     });
@@ -23,10 +23,21 @@ class EventRepository extends Repository {
     return list;
   }  
 
+  async getListByCalendarId(calendarId) {
+    let list = [];
+
+    let promise = super.getList({ calendarId }, '/Event/GetEventListByCalendarId');    
+    await promise.then(data => {
+      list = data;
+    });
+
+    return list;
+  }
+
   async insert(item) {
     let id;
     
-    let promise = super.insert(item, '/Home/CreateEvent');    
+    let promise = super.insert(item, '/Event/CreateEvent');    
     await promise.then((data) => {
       id = data
     });
@@ -35,14 +46,12 @@ class EventRepository extends Repository {
   }
 
   update(item) {
-    let promise = super.update(item, '/Home/EditEvent');    
+    let promise = super.update(item, '/Event/EditEvent');    
     promise.then();
   }
 
   delete(id) {
-    let promise = super.delete({ id }, '/Home/DeleteEvent');    
+    let promise = super.delete({ id }, '/Event/DeleteEvent');    
     promise.then();
   }
 }
-
-export { EventRepository };

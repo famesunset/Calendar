@@ -2,7 +2,7 @@ import { Dropdown } from '../models/Dropdown.js';
 import { ViewMode } from './ViewMode.js';
 import { MainCalendar } from './MainCalendar.js';
 
-let Header = {
+export let Header = {
   data: {
     dropdown: null,
 
@@ -79,5 +79,3 @@ let Header = {
     this.data.dropdown.runDropdown();
   }
 };
-
-export { Header };

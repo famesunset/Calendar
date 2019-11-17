@@ -3,7 +3,7 @@ import { ViewMode } from './ViewMode.js';
 import { Header } from './Header.js';
 import { EventRepository } from '../models/mvc/EventRepository.js';
 
-let MainCalendar = {
+export let MainCalendar = {
   data: {
     calendar: null,
 
@@ -52,5 +52,3 @@ let MainCalendar = {
     this.data.calendar.setDate(date);
   }
 };
-
-export { MainCalendar };

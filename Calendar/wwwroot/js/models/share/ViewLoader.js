@@ -1,4 +1,4 @@
-class ViewLoader {
+export class ViewLoader {
   static load(id, container, url, callback) {
     let el = `<div id="${id}"></div>`;
     $(container).append(el);
@@ -6,5 +6,3 @@ class ViewLoader {
     $(`#${id}`).load(url, () => callback());
   }
 }
-
-export { ViewLoader };

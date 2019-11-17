@@ -3,7 +3,7 @@ import { GUID } from '../../models/share/GUID.js';
 import { EventRepository } from '../../models/mvc/EventRepository.js';
 import { DeleteEvent } from '../pop-ups/DeleteEvent.js';
 
-let Daily = {
+export let Daily = {
   data: {
     cache: {
       cachedEvent: '',
@@ -50,7 +50,7 @@ let Daily = {
     this.renderDate(new Date(sessionStorage.getItem('currentDate')));
     this.renderTable();
     this.renderEvents(events);
-    this.setUpListeners();
+    this.setUpListeners();    
   },
 
   setUpListeners() {
@@ -233,6 +233,28 @@ let Daily = {
     }
   },
 
+  renderCell(el, time, dataContent, dataTime) {
+    let s = this.data.selectors;
+    let hour = time.getHours();
+    
+    let html = el.replace('{{time}}', hour);
+    html = html.replace('{{cell-id}}', `cell-${hour}`);    
+    html = $(html).attr('data-time', dataTime);
+    if (hour != 0) {
+      html = $(html).attr('data-content', dataContent);
+    }    
+
+    $(s.s_table).append(html);
+  },
+
+  renderDate(date) {
+    let s = this.data.selectors;    
+    let m_date = moment(date);
+
+    $(s.s_dayOfWeek).text(m_date.format('ddd'));
+    $(s.s_day).text(m_date.format('D'));
+  },
+
   renderEvents(events) {    
     events.forEach(event => {              
       let start = new Date(event.start);
@@ -299,26 +321,36 @@ let Daily = {
     $(`#${selector}`).mouseup(e => this.onEditEvent(e));
   },
 
-  renderCell(el, time, dataContent, dataTime) {
-    let s = this.data.selectors;
-    let hour = time.getHours();
-    
-    let html = el.replace('{{time}}', hour);
-    html = html.replace('{{cell-id}}', `cell-${hour}`);    
-    html = $(html).attr('data-time', dataTime);
-    if (hour != 0) {
-      html = $(html).attr('data-content', dataContent);
-    }    
+  hideEventsByCalendarId(calendarId) {
+    // TODO: get events by calendarId
 
-    $(s.s_table).append(html);
+    // There will be an events array    
+    let calendar = null;
+
+    calendar.events.forEach(event => {                    
+      let root = this.findRootByEventId(event.id);
+
+      $(root).remove();
+    });
   },
 
-  renderDate(date) {
-    let s = this.data.selectors;    
-    let m_date = moment(date);
+  showEventsByCalendarId(calendarId) {    
+    let events = new EventRepository().getListByCalendarId(calendarId);;
+    this.renderEvents(events);
+  },
 
-    $(s.s_dayOfWeek).text(m_date.format('ddd'));
-    $(s.s_day).text(m_date.format('D'));
+  findRootByEventId(id) {
+    let daily = this.data.selectors.s_dailyEvent;
+    let events = $(daily);
+
+    if (events.length != 0) {
+      for(let event of events) {
+        let _id = $(event).find('input[name="id"]').val();
+        if (_id == id) return event;
+      }
+    }
+
+    return null;
   },
 
   async calcEventPosition(selector, start, finish) {
@@ -382,5 +414,3 @@ let Daily = {
     return this.data.cache.cachedEvent;
   }  
 }; 
-
-export { Daily };

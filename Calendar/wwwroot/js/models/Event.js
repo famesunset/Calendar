@@ -1,6 +1,6 @@
 import { EventRepository } from '../models/mvc/EventRepository.js';
 
-class Event {
+export class Event {
   constructor(title, description, start, finish, color, isAllDay, notify) {
     this.data = {
       Title: title,
@@ -17,6 +17,3 @@ class Event {
     new EventRepository().insert(this.data);
   }
 }
-
-export { Event };
-

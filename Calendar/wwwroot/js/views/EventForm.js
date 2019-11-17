@@ -4,7 +4,7 @@ import { Dropdown } from '../models/Dropdown.js';
 import { ViewMode } from './ViewMode.js';
 import { EventRepository } from '../models/mvc/EventRepository.js';
 
-var EventForm = {
+export let EventForm = {
   data: {
     form: {
       datePickers: [],
@@ -47,8 +47,8 @@ var EventForm = {
     },
 
     url: {
-      createEventForm: '/LoadView/CreateEventForm',
-      editEventForm: '/Loadview/EditEventForm'
+      createEventForm: '/EventView/CreateEventForm',
+      editEventForm: '/EventView/EditEventForm'
     } 
   },
 
@@ -376,7 +376,7 @@ var EventForm = {
     var s = this.data.selectors;
     var $content = $(s.s_form);
         
-    $content.css('display', 'block');
+    $content.css('display', 'block');    
     $content.animate({
         opacity: 1
     }, 50);
@@ -407,5 +407,3 @@ var EventForm = {
     $content.addClass('open');
   }
 };
-
-export { EventForm };

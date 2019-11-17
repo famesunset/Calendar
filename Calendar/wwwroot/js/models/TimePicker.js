@@ -1,4 +1,4 @@
-class TimePicker {
+export class TimePicker {
   constructor(date, options, selector) {    
     this.moment = moment(date),
     this.selector = selector;
@@ -29,5 +29,3 @@ class TimePicker {
     return moment(time, ['h:m a', 'H:m']).toDate();
   }
 }
-
-export { TimePicker };

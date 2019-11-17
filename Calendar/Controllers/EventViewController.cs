@@ -10,7 +10,7 @@ using Calendar.Models.DTO;
 
 namespace Calendar.Controllers
 {
-    public class LoadViewController : Controller
+    public class EventViewController : Controller
     {
         public IActionResult CreateEventForm()
         {
@@ -25,11 +25,6 @@ namespace Calendar.Controllers
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial", 
                                 new EventAndOptionsDropdownDTO(@event, new EventScheduleDropdown()));
         }
-
-        public IActionResult EventMoreOptions()
-        {           
-            return PartialView("PartialViews/CreateEventForms/MoreOptionsPartial", new EventScheduleDropdown());
-        }    
         
         public IActionResult DeleteEventPopUp()
         {

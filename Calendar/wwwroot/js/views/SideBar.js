@@ -2,7 +2,7 @@ import { MainCalendar } from './MainCalendar.js';
 import { EventForm } from './EventForm.js';
 import { ViewMode } from './ViewMode.js';
 
-let SideBar = {
+export let SideBar = {
   data: {
     selectors: {
       s_createEventBtn: '.create-event-btn'      
@@ -31,5 +31,3 @@ let SideBar = {
     EventForm.openCreate(startTime, finishTime);
   }
 };
-
-export { SideBar };

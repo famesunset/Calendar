@@ -150,6 +150,7 @@
   z-index: 10;
   background-color: var(--displayed-event-bg);  
   height: 24px;
+  width: calc(100% - 12px);
   border-radius: 4px;
   left: 10px;
   margin-bottom: 2px;

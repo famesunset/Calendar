@@ -1,4 +1,4 @@
-class DatePicker {
+export class DatePicker {
   constructor(options, selector) {    
     this.options = options;
     this.selector = selector;
@@ -26,5 +26,3 @@ class DatePicker {
     return this.instance.date;
   }
 }
-
-export { DatePicker }
