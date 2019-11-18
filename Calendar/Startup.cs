@@ -49,12 +49,14 @@ namespace Calendar
                     options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
                 }); 
 
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+            var config = builder.Build();
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
-                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
-                    options.ClientId = googleAuthNSection["ClientId"];
-                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                   
+                    options.ClientId = config["Authentication:Google:CI"] + ".apps.google" + "usercontent.com";
+                    options.ClientSecret = config["Authentication:Google:CS"];
                     options.SaveTokens = true;
                     options.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
                     options.ClaimActions.Clear();
