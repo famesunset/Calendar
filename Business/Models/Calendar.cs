@@ -10,6 +10,7 @@ namespace Business.Models
         public List<User> Users { get; set; }
         public List<BaseEvent> Events { get; set; }
         public string Color { get; set; }
+        public int UserOwnerId { get; set; }
         // HEX Color
     }
 }

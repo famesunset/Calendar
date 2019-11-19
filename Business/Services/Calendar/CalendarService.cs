@@ -43,5 +43,14 @@ namespace Business.Services.Calendar
             var calendarId = calendarRepository.CreateCalendar(userId, dCalendar);
             return calendarId;
         }
+
+        public void RemoveCalendar(User user, Calendar calendar)
+        {
+            if (user.Id == calendar.UserOwnerId)
+            {
+                ICalendar calendarRepository = new CalendarRepo();
+                calendarRepository.RemoveCalendar(calendar.Id);
+            }
+        }
     }
 }

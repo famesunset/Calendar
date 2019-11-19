@@ -7,7 +7,8 @@ namespace Business.Tests
     [TestClass]
     public class UnitTest1
     {
-        private readonly CalendarService calendarService  = new CalendarService();
+        private readonly CalendarService calendarService = new CalendarService();
+
         [TestMethod]
         public void TestCreateCalendar()
         {
@@ -36,6 +37,17 @@ namespace Business.Tests
             {
                 Assert.Fail();
             }
+        }
+
+        [TestMethod]
+        public void TestRemoveCalendar()
+        {
+            User user = new User();
+            user.Id = 2;
+            Calendar calendar = new Calendar();
+            calendar.Id = 50;
+            calendar.UserOwnerId = 2;
+            calendarService.RemoveCalendar(user, calendar);
         }
     }
 }
