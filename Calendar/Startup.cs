@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Data.Repository;
 
 namespace Calendar
 {
@@ -31,9 +32,25 @@ namespace Calendar
         public void ConfigureServices(IServiceCollection services)
         {
             // Dependency Injection
-            services.AddSingleton<ICalendarService, CalendarService>();
-            services.AddSingleton<IEventService, EventService>();
-            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<ICalendarService>(provider => 
+                new CalendarService(
+                    new CalendarRepo(),
+                    new UserRepo(),
+                    new AllDataRepo()
+                    )
+                );
+
+            services.AddSingleton<IEventService>(provider => 
+                new EventService(
+                    new EventRepo(),
+                    new CalendarRepo(),
+                    new AllDataRepo(),
+                    new UserRepo()
+                    )
+                );
+
+            services.AddSingleton<IUserService>(provider => 
+                new UserService(new UserRepo()));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

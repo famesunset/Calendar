@@ -1,28 +1,20 @@
 ﻿namespace Business.Services
 {
-    using Data.Repository;
     using Data.Repository.Interfaces;
     using System.Linq;
 
-    public class ServiceHelper
+    internal class ServiceHelper
     {
-        private readonly IEvent eventRepos;
         private readonly IUser userRepos;
         private readonly ICalendar calendarRepos;
-        private readonly IAccess accessRepos;
-        private readonly INotification notificationRepos;
         private readonly IAllData bigEventRepos;
 
-        public ServiceHelper()
+        public ServiceHelper(IUser userRepository, ICalendar calendarRepository, IAllData bigEventRepository)
         {
-            eventRepos = new EventRepo();
-            userRepos = new UserRepo();
-            calendarRepos = new CalendarRepo();
-            accessRepos = new AccessRepo();
-            notificationRepos = new NotificationRepo();
-            bigEventRepos = new AllDataRepo();
+            userRepos = userRepository;
+            calendarRepos = calendarRepository;
+            bigEventRepos = bigEventRepository;
         }
-
 
         public Data.Models.User GetUserByIdentityId(string loginedUserId)
         {

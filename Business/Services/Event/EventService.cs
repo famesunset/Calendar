@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using Models;
-    using Data.Repository;
     using Data.Repository.Interfaces;
     using System.Linq;
     using static Mapper;
@@ -11,22 +10,18 @@
     public class EventService : IEventService
     {
         private readonly IEvent eventRepos;
-        private readonly IUser userRepos;
         private readonly ICalendar calendarRepos;
-        private readonly IAccess accessRepos;
-        private readonly INotification notificationRepos;
         private readonly IAllData bigEventRepos;
+
         private readonly ServiceHelper serviceHelper;
 
-        public EventService()
+        public EventService(IEvent eventRepository, ICalendar calendarRepository, IAllData bigEventRepository, IUser userRepository)
         {
-            eventRepos = new EventRepo();
-            userRepos = new UserRepo();
-            calendarRepos = new CalendarRepo();
-            accessRepos = new AccessRepo();
-            notificationRepos = new NotificationRepo();
-            bigEventRepos = new AllDataRepo();
-            serviceHelper = new ServiceHelper();
+            eventRepos = eventRepository;
+            calendarRepos = calendarRepository;
+            bigEventRepos = bigEventRepository;
+
+            serviceHelper = new ServiceHelper(userRepository, calendarRepository, bigEventRepository);
         }
 
         public int CreateEvent(string loginedUserId, Event @event)
@@ -84,7 +79,7 @@
                 }
 
                 var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
-                if(calendarIds != null)
+                if (calendarIds != null)
                 {
                     userCalendars = userCalendars.Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id)));
                 }

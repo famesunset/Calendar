@@ -4,18 +4,19 @@ namespace Business.Services.Calendar
 {
     using Models;
     using System.Collections.Generic;
-    using Data.Repository;
     using Data.Repository.Interfaces;
     using static Mapper;
 
     public class CalendarService : ICalendarService
     {
         private readonly ServiceHelper serviceHelper;
+
         private readonly ICalendar calendarRepos;
-        public CalendarService()
+        public CalendarService(ICalendar calendarRepository, IUser userRepository, IAllData bigEventRepository)
         {
-            serviceHelper = new ServiceHelper();
-            calendarRepos = new CalendarRepo();
+            calendarRepos = calendarRepository;
+
+            serviceHelper = new ServiceHelper(userRepository, calendarRepository, bigEventRepository);
         }
         public IEnumerable<Calendar> GetCalendars(string loginedUserId)
         {
@@ -54,11 +55,7 @@ namespace Business.Services.Calendar
         {
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendaId);
             int? deleted = calendarRepos.RemoveCalendar(dataCalendar.Id);
-            if ((dataCalendar != null) && (deleted == null))
-            {
-                return true;
-            }
-            return false;
+            return dataCalendar != null && deleted == null;
         }
     }
 }

@@ -1,16 +1,16 @@
-﻿using Data.Repository;
-using static Business.Mapper;
+﻿using static Business.Mapper;
 
 namespace Business.Services.User
 {
+    using Data.Repository.Interfaces;
     using Models;
     public class UserService : IUserService
     {
-        private UserRepo userRepos;
+        private IUser userRepos;
 
-        public UserService()
+        public UserService(IUser userRepository)
         {
-            userRepos = new UserRepo();
+            userRepos = userRepository;
         }
 
         public void CreateUser(User user)
