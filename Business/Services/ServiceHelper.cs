@@ -43,7 +43,7 @@
             if (dataUser != null)
             {
                 var dataCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
-                return dataCalendars.SingleOrDefault(c => c.Id.Equals(calendarId));
+                return dataCalendars.Where(c => c.Id == calendarId).FirstOrDefault();
             }
             return null;
         }

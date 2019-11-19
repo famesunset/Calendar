@@ -43,11 +43,11 @@ namespace Business.Tests
         public void TestRemoveCalendar()
         {
             User user = new User();
-            user.Id = 2;
+            user.IdentityId = "a1d4e615-1b09-49af-b30f-5314f4652513";
             Calendar calendar = new Calendar();
-            calendar.Id = 50;
-            calendar.UserOwnerId = 2;
-            calendarService.RemoveCalendar(user, calendar);
+            calendar.Id = 61;
+            calendar.UserOwnerId = 4;
+            calendarService.DeleteCalendar(user.IdentityId, calendar.Id);
         }
     }
 }

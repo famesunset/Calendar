@@ -25,7 +25,7 @@ namespace Data.Repository
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 IEnumerable<Calendar> calendars = connection.Query<Calendar>("uspGetCalendarsByUserId", new { idUser = userId },
-                    commandType: CommandType.StoredProcedure);
+                    commandType: CommandType.StoredProcedure).ToList();
                 return calendars;
             }
         }
@@ -50,12 +50,14 @@ namespace Data.Repository
             }
         }
 
-        public void RemoveCalendar(int calendarId)
+        public int? RemoveCalendar(int calendarId)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 var removeCalendar = connection.Query("uspRemoveCalendar", new { calendarId },
                     commandType: CommandType.StoredProcedure);
+                string idCheck = "SELECT Id from Calendars where Id = " + calendarId;
+                return connection.Query(idCheck).FirstOrDefault();
             }
         }
     }

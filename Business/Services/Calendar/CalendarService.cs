@@ -53,21 +53,12 @@ namespace Business.Services.Calendar
         public bool DeleteCalendar(string loginedUserId, int calendaId)
         {
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendaId);
-            if(dataCalendar != null)
+            int? deleted = calendarRepos.RemoveCalendar(dataCalendar.Id);
+            if ((dataCalendar != null) && (deleted == null))
             {
-                calendarRepos.DeleteCalendar(dataCalendar.Id);
                 return true;
             }
             return false;
-        }
-
-        public void RemoveCalendar(User user, Calendar calendar)
-        {
-            if (user.Id == calendar.UserOwnerId)
-            {
-                ICalendar calendarRepository = new CalendarRepo();
-                calendarRepository.RemoveCalendar(calendar.Id);
-            }
         }
     }
 }
