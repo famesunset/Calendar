@@ -5,16 +5,20 @@
     using System;
     using System.Collections.Generic;
     using System.Text.Encodings.Web;
+    using System.Text.Unicode;
 
     public static class Mapper
     {
+        private static HtmlEncoder htmlEncoder;
         private static string Encode(string html)
         {
-            return HtmlEncoder.Default.Encode(html ?? string.Empty);;
+            return htmlEncoder.Encode(html ?? string.Empty);
         }
 
         static Mapper()
         {
+            htmlEncoder = HtmlEncoder.Create(UnicodeRanges.Cyrillic, UnicodeRanges.BasicLatin);
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.Models.Calendar, Calendar>()
@@ -25,9 +29,9 @@
                         Id = val.Id,
                         Users = new List<User>(),
                     })
-                    .ForMember(dest => dest.Color, 
+                    .ForMember(dest => dest.Color,
                         expression => expression.MapFrom(src => Encode(null)))
-                    .ForMember(dest => dest.Name, 
+                    .ForMember(dest => dest.Name,
                         expression => expression.MapFrom(src => Encode(src.Name)));
 
                 cfg.CreateMap<Calendar, Data.Models.Calendar>()
@@ -47,9 +51,9 @@
                         Id = val.EventId,
                         IsAllDay = val.AllDay
                     })
-                    .ForMember(baseEvent => baseEvent.Title, 
+                    .ForMember(baseEvent => baseEvent.Title,
                         expression => expression.MapFrom(data => Encode(data.Title)))
-                    .ForMember(baseEvent => baseEvent.Color, 
+                    .ForMember(baseEvent => baseEvent.Color,
                         expression => expression.MapFrom(data => Encode(null)));
 
                 cfg.CreateMap<Data.Models.AllData, Event>()
@@ -57,7 +61,6 @@
                    {
                        Id = val.EventId,
                        CalendarId = val.IdCalendar,
-                       Description = val.Description,
                        Finish = val.TimeFinish,
                        Start = val.TimeStart,
                        IsAllDay = val.AllDay,
@@ -65,11 +68,13 @@
                        //Repeat = val.Interval,
                        Schedule = new List<EventSchedule>(),
                    })
-                   .ForMember(dest => dest.Title, 
+                   .ForMember(dest => dest.Title,
                        expression => expression.MapFrom(src => Encode(src.Title)))
-                   .ForMember(dest => dest.Color, 
+                   .ForMember(dest => dest.Color,
                        expression => expression.MapFrom(src => Encode(null)))
-                   .ForPath(dest => dest.Notify.Message, 
+                   .ForMember(dest => dest.Description,
+                       expression => expression.MapFrom(src => Encode(src.Description)))
+                   .ForPath(dest => dest.Notify.Message,
                        expression => expression.MapFrom(src => Encode(src.Notification)));
 
                 cfg.CreateMap<Event, Data.Models.Event>()
@@ -102,13 +107,17 @@
                     .ConstructUsing(val => new User()
                     {
                         Id = val.IdUser,
-                        Email = val.Email,
-                        Mobile = val.Mobile,
-                        Name = val.Name,
-                        Picture = val.Picture,
                         IdentityId = val.IdIdentity,
                         SelectedCalendars = new List<int>()
-                    });
+                    })
+                    .ForMember(dest => dest.Name,
+                       expression => expression.MapFrom(src => Encode(src.Name)))
+                    .ForMember(dest => dest.Mobile,
+                       expression => expression.MapFrom(src => Encode(src.Mobile)))
+                    .ForMember(dest => dest.Email,
+                       expression => expression.MapFrom(src => Encode(src.Email)))
+                    .ForMember(dest => dest.Picture,
+                       expression => expression.MapFrom(src => Encode(src.Picture)));
             });
 
             Map = config.CreateMapper();

@@ -1,3 +1,5 @@
+const UNAUTHORIZED = 401;
+
 export class Repository {
   get(id, url) {
     return new Promise((resolve, reject) => {
@@ -47,14 +49,19 @@ export class Repository {
     let _data = JSON.stringify(item);
 
     return new Promise((resolve, reject) => {
-      $.ajax({
-        url: url,
-        type: 'POST',     
-        data: _data,
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8", 
-        success: data => resolve(data),
-        error: () => reject('error')
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: _data,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: data => resolve(data),
+            error: (resp) => {
+                if (resp.status === UNAUTHORIZED) {
+                    reject('Login first.');
+                }
+                
+            }
       }); 
     }); 
   }

@@ -33,14 +33,17 @@ namespace Calendar.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult GetEventList(DateTime date)
         {
-            var calendars = new List<Business.Models.Calendar>
-              (eventService.GetEvents(userManager.GetUserId(User), date.Date, DateUnit.Day));
+            if (signInManager.IsSignedIn(User))
+            {
+                var calendars = new List<Business.Models.Calendar>
+                              (eventService.GetEvents(userManager.GetUserId(User), date.Date, DateUnit.Day));
 
-            List<BaseEvent> events = calendars.First(c => c.Id.Equals(2)).Events;
-            return Json(events);
+                var events = calendars.SelectMany(c => c.Events).ToList();
+                return Json(events);
+            }
+            return Json(new BaseEvent[0]);
         }
 
         [HttpGet]

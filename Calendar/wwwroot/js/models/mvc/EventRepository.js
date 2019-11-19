@@ -39,7 +39,9 @@ export class EventRepository extends Repository {
     
     let promise = super.insert(item, '/Event/CreateEvent');    
     await promise.then((data) => {
-      id = data
+        id = data
+    }).catch(err => {
+        alert(err);
     });
 
     return id;
