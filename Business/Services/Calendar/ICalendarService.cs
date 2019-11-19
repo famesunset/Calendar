@@ -4,9 +4,9 @@
     using Models;
     public interface ICalendarService
     {
-        IEnumerable<Calendar> GetCalendars(string session);
-        Calendar GetCalendar(string session, int calendarId);
-        int CreateCalendar(string session, Calendar calendar);
-        void RemoveCalendar(User user, Calendar calendar);
+        IEnumerable<Calendar> GetCalendars(string loginedUserId);
+        Calendar GetCalendar(string loginedUserId, int calendarId);
+        int CreateCalendar(string loginedUserId, Calendar calendar);
+        bool DeleteCalendar(string loginedUserId, int calendaId);
     }
 }
