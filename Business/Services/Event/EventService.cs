@@ -8,7 +8,7 @@
     using System.Linq;
     using static Mapper;
 
-    public partial class EventService : IEventService
+    public class EventService : IEventService
     {
         private readonly IEvent eventRepos;
         private readonly IUser userRepos;
@@ -16,6 +16,7 @@
         private readonly IAccess accessRepos;
         private readonly INotification notificationRepos;
         private readonly IAllData bigEventRepos;
+        private readonly ServiceHelper serviceHelper;
 
         public EventService()
         {
@@ -25,11 +26,13 @@
             accessRepos = new AccessRepo();
             notificationRepos = new NotificationRepo();
             bigEventRepos = new AllDataRepo();
+            serviceHelper = new ServiceHelper();
         }
 
         public int CreateEvent(string loginedUserId, Event @event)
         {
-            if (IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId))
+            var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
+            if (dataCalendar != null)
             {
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
                 int eventId = eventRepos.CreateScheduledEvent(dataEvent);
@@ -40,7 +43,7 @@
 
         public Event GetEvent(string loginedUserId, int eventId)
         {
-            var dataBigEvent = IsUserHasAccessToEvent(loginedUserId, eventId);
+            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
             if (dataBigEvent != null)
             {
                 var businessEvent = Map.Map<Data.Models.AllData, Event>(dataBigEvent);
@@ -49,9 +52,9 @@
             return null;
         }
 
-        public IEnumerable<Calendar> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit)
+        public IEnumerable<Calendar> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit, int[] calendarIds = null)
         {
-            var dataUser = IsUserLoggined(loginedUserId);
+            var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
                 DateTime dateStart = new DateTime();
@@ -81,6 +84,11 @@
                 }
 
                 var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
+                if(calendarIds != null)
+                {
+                    userCalendars = userCalendars.Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id)));
+                }
+
                 if (userCalendars.Count() > 0)
                 {
                     var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
@@ -97,15 +105,14 @@
                     return bUserCalendars.Values;
                 }
                 return new List<Calendar>();
-
             }
-
             return null;
         }
 
         public int CreateScheduledEvent(string loginedUserId, Event @event)
         {
-            if (IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId))
+            var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
+            if (dataCalendar != null)
             {
                 List<EventSchedule> schedule = new List<EventSchedule>();
                 int compare;
@@ -164,7 +171,7 @@
 
         public void DeleteEvent(string loginedUserId, int eventId)
         {
-            var dataBigEvent = IsUserHasAccessToEvent(loginedUserId, eventId);
+            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
             if (dataBigEvent != null)
             {
                 eventRepos.Delete(dataBigEvent.EventId);
@@ -174,7 +181,7 @@
 
         public void UpdateInfinityEvent(string loginedUserId, Event newEvent)
         {
-            var dataBigEvent = IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
+            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
             if (dataBigEvent != null)
             {
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);
@@ -184,7 +191,7 @@
 
         public void UpdateScheduledEvent(string loginedUserId, Event newEvent)
         {
-            var dataBigEvent = IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
+            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
             if (dataBigEvent != null)
             {
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);

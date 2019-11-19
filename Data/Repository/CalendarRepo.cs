@@ -49,5 +49,14 @@ namespace Data.Repository
                 return users;
             }
         }
+
+        public void DeleteCalendar(int calendarId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Query("uspDeleteCalendar", new { calendarId },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
     }
 }

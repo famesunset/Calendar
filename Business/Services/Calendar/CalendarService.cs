@@ -10,38 +10,55 @@ namespace Business.Services.Calendar
 
     public class CalendarService : ICalendarService
     {
-        public IEnumerable<Calendar> GetCalendars(string session)
+        private readonly ServiceHelper serviceHelper;
+        private readonly ICalendar calendarRepos;
+        public CalendarService()
         {
-            ICalendar calendarRepository = new CalendarRepo();
-            // var userRepo = new UserRepo();
-            var userId = 1; // userRepo.GetUser(session);
-            var userCalendars = calendarRepository.GetUserCalendars(userId);
-            return userCalendars.Select(c => Map.Map<Data.Models.Calendar, Calendar>(c));
+            serviceHelper = new ServiceHelper();
+            calendarRepos = new CalendarRepo();
         }
-
-        public Calendar GetCalendar(string session, int calendarId)
+        public IEnumerable<Calendar> GetCalendars(string loginedUserId)
         {
-            ICalendar calendarRepository = new CalendarRepo();
-            // var userRepo = new UserRepo();
-            var userId = 1; // userRepo.GetUser(session);
-            var calendar = calendarRepository.GetCalendarById(calendarId);
-            var userCalendars = calendarRepository.GetUserCalendars(userId);
-            if (userCalendars.Any(c => c.Id.Equals(calendar.Id)))
+            var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
+            if (dataUser != null)
             {
-                var bCalendar = Map.Map<Data.Models.Calendar, Calendar>(calendar);
-                return bCalendar;
+                var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
+                return userCalendars.Select(c => Map.Map<Data.Models.Calendar, Calendar>(c));
             }
             return null;
         }
 
-        public int CreateCalendar(string session, Calendar calendar)
+        public Calendar GetCalendar(string loginedUserId, int calendarId)
         {
-            ICalendar calendarRepository = new CalendarRepo();
-            // var userRepo = new UserRepo();
-            var userId = 1; // userRepo.GetUser(session);
-            var dCalendar = Map.Map<Calendar, Data.Models.Calendar>(calendar);
-            var calendarId = calendarRepository.CreateCalendar(userId, dCalendar);
-            return calendarId;
+            var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendarId);
+            if (dataCalendar != null)
+            {
+                return Map.Map<Data.Models.Calendar, Calendar>(dataCalendar);
+            }
+            return null;
+        }
+
+        public int CreateCalendar(string loginedUserId, Calendar calendar)
+        {
+            var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
+            if(dataUser != null)
+            {
+                var dCalendar = Map.Map<Calendar, Data.Models.Calendar>(calendar);
+                var calendarId = calendarRepos.CreateCalendar(dataUser.IdUser, dCalendar);
+                return calendarId;
+            }
+            return -1;
+        }
+
+        public bool DeleteCalendar(string loginedUserId, int calendaId)
+        {
+            var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendaId);
+            if(dataCalendar != null)
+            {
+                calendarRepos.DeleteCalendar(dataCalendar.Id);
+                return true;
+            }
+            return false;
         }
     }
 }

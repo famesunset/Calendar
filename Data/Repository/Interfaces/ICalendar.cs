@@ -9,5 +9,6 @@ namespace Data.Repository.Interfaces
         Calendar GetCalendarById(int calendarId);
         IEnumerable<Calendar> GetUserCalendars(int userId);
         IEnumerable<User> GetUsersByCalendarId(int calendarId);
+        void DeleteCalendar(int calendarId);
     }
 }
