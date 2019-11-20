@@ -69,6 +69,10 @@ namespace Calendar
             var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
             var config = builder.Build();
             services.AddAuthentication()
+                .AddCookie(options => {
+                    options.SlidingExpiration = true;
+                    options.ExpireTimeSpan = new System.TimeSpan(30,0,0,0,0);
+                })
                 .AddGoogle(options =>
                 {
                    
