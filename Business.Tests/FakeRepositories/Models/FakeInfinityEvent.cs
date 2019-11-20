@@ -2,7 +2,7 @@
 
 namespace Business.Tests.FakeRepositories.Models
 {
-  public class FakeInfinityEvent : Event
+  public class FakeInfinityEvent : FakeEvent
   {
     public FakeRepeat Repeat { get; set; }
   }

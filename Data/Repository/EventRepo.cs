@@ -41,26 +41,24 @@ namespace Data.Repository
             }
         }
 
-        public IEnumerable<Event> UpdateInfinityEvent(Event @newEvent)
+        public void UpdateInfinityEvent(Event @newEvent)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                IEnumerable<Event> s = connection.Query<Event>("uspUpdateInfinityEvent",
+                connection.Query<Event>("uspUpdateInfinityEvent",
                     new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, @newEvent.RepeatId, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
                     commandType: CommandType.StoredProcedure);
-                return s;
             }
         }
 
-        public IEnumerable<Event> UpdateScheduledEvent(Event @newEvent)
+        public void UpdateScheduledEvent(Event @newEvent)
         {
             DataTable schedule = @newEvent.Schedule.ConvertToDatatable();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                IEnumerable<Event> s = connection.Query<Event>("uspUpdateScheduledEvent",
+                connection.Query<Event>("uspUpdateScheduledEvent",
                     new { EventId = @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, Schedule = schedule, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
                     commandType: CommandType.StoredProcedure);
-                return s;
             }
         }
     }

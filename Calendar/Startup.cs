@@ -71,7 +71,7 @@ namespace Calendar
             services.AddAuthentication()
                 .AddCookie(options => {
                     options.SlidingExpiration = true;
-                    options.ExpireTimeSpan = new System.TimeSpan(30,0,0,0,0);
+                    options.ExpireTimeSpan = System.TimeSpan.FromDays(14);
                 })
                 .AddGoogle(options =>
                 {
