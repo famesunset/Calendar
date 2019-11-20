@@ -1,11 +1,22 @@
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  height: var(--header-height);
   width: 100%;
   border-bottom: 1px solid var(--color-main-border);
+  height: var(--header-height);  
+  padding: 10px 50px;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.close {
+  display: none;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  width: 100%; 
 }
 
 header .left-side,
@@ -116,63 +127,147 @@ header .right-side {
 }
 
 .user-menu {
+  text-align: center;
   margin-left: 40px;
+  position: relative;
+  border-radius: 50%;
 }
 
-.user-menu img {
+.user-menu .avatar-small {
   height: 50px;
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;  
+  padding: 5px;
+}
+
+.user-menu .avatar-small:hover {
+  cursor: pointer;
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;
+  box-shadow: 0 1px 3px 0 rgba(26, 26, 26, 0.2);
+}
+
+.avatar {
+  height: 40px;
   border-radius: 50%;
 }
 
 .authButtonContents {
-    margin-left: 6px;
-    margin-right: 6px;
-    color: var(--color-main-gray);
-    font-weight: 500;
+  margin-left: 6px;
+  margin-right: 6px;
+  color: var(--color-main-gray);
+  font-weight: 500;
 }
 
 
 .authButtonWrapper {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
 }
 
 .authButton {
-    -webkit-user-select: none;
-    -webkit-appearance: none;
-    transition: background-color color: var(--color-main-gray);
-    cursor: pointer;
-    outline: none;
-    overflow: hidden;
-    position: relative;
-    text-align: center;
-    white-space: nowrap;
-    border-radius: 4px;
-    line-height: 20px;
-    padding: 8px 20px;
-    border: 1px solid var(--color-main-border);
+  -webkit-user-select: none;
+  -webkit-appearance: none;
+  transition: background-color var(--color-main-gray);
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 4px;
+  line-height: 20px;
+  padding: 8px 20px;
+  border: 1px solid var(--color-main-border);
 }
 
-    .authButton:hover {
-        background-color: var(--color-items-main-gray-bg);
-        transition-property: all;
-        transition-duration: var(--transition-main-duration);
-    }
+.authButton:hover {
+  background-color: var(--color-items-main-gray-bg);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
+}
 
 form button {
-    border: 0;
-    background: 0;
-    padding: 0;
-    margin: 0 5px;
+  border: 0;
+  background: 0;
+  padding: 0;
+  margin: 0 5px;
 }
 
-    form button:focus {
-        background: transparent;
-    }
+form button:focus {
+  background: transparent;
+}
 
-.account {
-    margin: 0 5px;
+.account-wrapper {
+  z-index: 10005;
+  position: absolute;  
+  right: 0;
+  box-shadow: 0 7px 20px 0 rgba(0,0,0,.15);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 30px;
+  background-color: #fff;
+}
+
+.avatar-large {
+  height: 70px;
+  margin-right: 20px;
+}
+
+.user-info {
+  margin-left: 20px;
+}
+
+.user-name {
+  white-space: nowrap;
+  font-size: 18px;
+}
+
+.user-email {
+  display: none;
+  font-size: 12px;
+  color: var(--color-small-font-size);
+}
+
+.user-info a {
+  color: var(--color-small-font-size);
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;
+}
+
+.user-info a {
+  cursor: pointer;
+  color: var(--color-main-gray);
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;
+  font-size: 14px;
+}
+
+.logout {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;  
+  margin-top: 20px;
+  opacity: .9;
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;
+}
+
+.logout:hover {  
+  opacity: 1;
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;
+}
+
+.logout i {
+  margin-right: 10px;
+}
+
+.state-close {
+  display: none;
 }

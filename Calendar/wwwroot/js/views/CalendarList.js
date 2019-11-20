@@ -8,11 +8,15 @@ export let CalendarList = {
       s_calendar: '.calendar',
       s_displayCalendar: '.display-calendar',
       s_deleteCalendar: '.delete-calendar'
+    },
+
+    url: {
+      u_loadList: '/CalendarView/GetList'
     }
   },
 
   run() {
-    this.setUpListeners();
+    this.renderCalendarList();
   },
 
   setUpListeners() {
@@ -24,17 +28,26 @@ export let CalendarList = {
     $(s.s_calendar).mouseleave(e => this.onHideDeleteBtn(e));
   },
 
+  renderCalendarList() {
+    let url = this.data.url.u_loadList;
+    let container = this.data.selectors.s_calendarList;
+
+    $(container).load(url, () => {
+      this.setUpListeners();
+    });
+  },
+
   onShowCalendarEvents(e) {
     let target = e.currentTarget;
     let checked = target.checked;
     let root = target.parentElement.parentElement;
     let id = $(root).find('input[name="calendarId"]').val();
 
-    // if (checked) {
-    //   ViewMode.showEventsByCalendarId(id);
-    // } else {
-    //   ViewMode.hideEventsByCalendarId(id);
-    // }
+    if (checked) {      
+      ViewMode.showEventsByCalendarId(id);
+    } else {
+      ViewMode.hideEventsByCalendarId(id);
+    }
   },
 
   onDeleteCalendar(e) {

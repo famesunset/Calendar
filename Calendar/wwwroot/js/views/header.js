@@ -6,13 +6,23 @@ export let Header = {
   data: {
     dropdown: null,
 
+    cache: {
+      userMenu: null
+    },
+
     selectors: {
+      s_avatar: '.avatar-small',
       s_date: '.header-date',
       s_next: '.switch-date #next',
       s_prev: '.switch-date #prev',
-      s_today: '#today',
+      s_today: '#today',      
       s_dropdownTrigger: '.view-mode',
-      s_dropdownItem: '#view-mode a'
+      s_dropdownItem: '#view-mode a',
+      s_modal: '#main-modal',
+    },
+
+    css: {
+      stateClose: 'state-close'
     }
   },
 
@@ -27,10 +37,30 @@ export let Header = {
   setUpListeners() {
     let s = this.data.selectors;
 
+    $(s.s_avatar).click(e => this.onOpenUserMenu(e));
     $(s.s_dropdownItem).click((e) => this.onDropdownSelect(e));
     $(s.s_next).click(() => this.onNext());
     $(s.s_prev).click(() => this.onPrev());
-    $(s.s_today).click(() => this.onToday());
+    $(s.s_today).click(() => this.onToday());        
+  },
+
+  onOpenUserMenu(e) {
+    this.openModal();
+
+    let close = this.data.css.stateClose;
+    let menu = e.currentTarget.nextElementSibling;    
+    $(menu).removeClass(close);    
+    
+    this.data.cache.userMenu = menu;
+  },
+
+  onCloseUserMenu() {    
+    let close = this.data.css.stateClose;
+    let menu = this.data.cache.userMenu;
+    
+    console.log(menu);
+    $(menu).addClass(close)
+    this.closeModal();
   },
 
   onNext() {
@@ -77,5 +107,22 @@ export let Header = {
 
     this.data.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });
     this.data.dropdown.runDropdown();
+  },
+
+  openModal() {
+    let s = this.data.selectors;
+    if ($(s.s_modal)[0] != undefined)
+      return;
+
+    let modal = `<div id="main-modal"></div>`;
+    $('body').prepend(modal);
+
+    $(s.s_modal).click(() => this.onCloseUserMenu());
+  },
+
+  closeModal() {
+    let modal = this.data.selectors.s_modal;
+
+    $(modal).remove();
   }
 };

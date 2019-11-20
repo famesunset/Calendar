@@ -1,0 +1,34 @@
+@{
+  ViewData["Title"] = "Calendar";
+}
+
+@section Styles{
+<link rel="stylesheet" href="~/css/preview/preview.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+}
+
+@section Scripts{
+<script src="~/lib/particles/particles.min.js"></script>
+<script src="~/js/preview/particles-settings.js"></script>
+}
+
+<div id="particles-js">
+  <div class="preview-container">
+    <div class="content">
+      <h3 class="title">Web Calendar</h3>
+      <a href="https://github.com/famesunset/Calendar" target="_blank">
+        <div class="flex github">
+          <img class="logo" src="~/images/github.png" alt="git">
+          <span>View on GitHub</span>
+        </div>
+      </a>
+      <a class="account" asp-action="GoogleLogin" asp-controller="Authentication" asp-route-provider="Google"
+        asp-route-returnUrl='@Url.Action("Index", "Home" , new { area="" })'>
+        <div class="flex login">
+          <img src="~/images/google-logo.png" alt="logo" class="google-logo logo">
+          <span class="text-loign">Sing in with Google</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

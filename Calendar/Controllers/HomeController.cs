@@ -25,10 +25,20 @@ namespace Calendar.Controllers
         {
             if (signInManager.IsSignedIn(User))
             {
-                var user = userService.GetUserByIdentityId(userManager.GetUserId(User));
+                var user = userService.GetUserByIdentityId(userManager.GetUserId(User));       
+                
                 ViewBag.Avatar = user?.Picture;
-            }
+                ViewBag.UserName = user?.Name;
+                ViewBag.Email = user?.Email;
 
+                return View();
+            }
+            else
+                return RedirectToAction("PreviewPage");
+        }
+
+        public IActionResult PreviewPage()
+        {
             return View();
         }
     }

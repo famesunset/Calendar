@@ -2,6 +2,7 @@ import { EventForm } from '../EventForm.js';
 import { GUID } from '../../models/share/GUID.js';
 import { EventRepository } from '../../models/mvc/EventRepository.js';
 import { DeleteEvent } from '../pop-ups/DeleteEvent.js';
+import { CalendarRepository } from '../../models/mvc/CalendarRepository.js';
 
 export let Daily = {
   data: {
@@ -325,7 +326,7 @@ export let Daily = {
     // TODO: get events by calendarId
 
     // There will be an events array    
-    let calendar = null;
+    
 
     calendar.events.forEach(event => {                    
       let root = this.findRootByEventId(event.id);

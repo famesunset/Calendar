@@ -43,7 +43,7 @@ namespace Calendar.Controllers
             return Redirect(returnUrl);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult GoogleLogin(string provider, string returnUrl = null)
         {
             var redirectUrl = Url.Action("GetCallback", "Authentication", values: new { returnUrl });
