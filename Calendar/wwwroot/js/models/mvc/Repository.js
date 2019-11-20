@@ -23,6 +23,7 @@ export class Repository {
         data: _data,
         dataType: 'json',
         contentType: "application/json; charset=utf-8", 
+        traditional: true,
         success: data => resolve(data),
         error: () => reject('error')
       }); 

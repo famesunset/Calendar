@@ -15,8 +15,8 @@ export let CalendarList = {
     }
   },
 
-  run() {
-    this.renderCalendarList();
+  run(callback) {
+    this.renderCalendarList(callback);
   },
 
   setUpListeners() {
@@ -28,12 +28,13 @@ export let CalendarList = {
     $(s.s_calendar).mouseleave(e => this.onHideDeleteBtn(e));
   },
 
-  renderCalendarList() {
+  renderCalendarList(callback) {
     let url = this.data.url.u_loadList;
     let container = this.data.selectors.s_calendarList;
 
     $(container).load(url, () => {
       this.setUpListeners();
+      callback();
     });
   },
 
@@ -71,5 +72,22 @@ export let CalendarList = {
     let deleteBtn = $(target).find(s.s_deleteCalendar);
     
     $(deleteBtn).css('display', 'none');
-  }  
+  },
+
+  getSelectedCalendars() {
+    let calendars = $(this.data.selectors.s_calendar);
+    let checkedArray = [];
+
+    if (calendars.length != 0) {
+      for(let calendar of calendars) {      
+        let checked = $(calendar).find('input[type="checkbox"]')[0].checked;
+        if (checked) {
+          let id = $(calendar).find('input[name="calendarId"]').val();
+          checkedArray.push(+id);
+        }        
+      }
+    }
+
+    return checkedArray;
+  },
 };

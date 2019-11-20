@@ -2,6 +2,7 @@ import { DatePicker } from '../models/DatePicker.js';
 import { ViewMode } from './ViewMode.js';
 import { Header } from './Header.js';
 import { EventRepository } from '../models/mvc/EventRepository.js';
+import { CalendarList } from './CalendarList.js';
 
 export let MainCalendar = {
   data: {
@@ -23,7 +24,8 @@ export let MainCalendar = {
     Header.renderDate(date);
     ViewMode.renderDate(date);    
 
-    let events = await  new EventRepository().getList(date);
+    let calendars = CalendarList.getSelectedCalendars();
+    let events = await  new EventRepository().getList(date, calendars);
     ViewMode.renderEvents(events);
 
     let currentDate = new Date(date);        

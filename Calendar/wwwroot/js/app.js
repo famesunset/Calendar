@@ -10,11 +10,12 @@ $(function() {
       let date = new Date();
       sessionStorage.setItem('currentDate', 
         moment(date).startOf('day').toDate());
-      
+            
       Header.run();
       SideBar.run();
-      ViewMode.run();   
-      CalendarList.run();
+      CalendarList.run(() => {
+        ViewMode.run();         
+      });      
     }
   };
 

@@ -3,6 +3,7 @@ import { GUID } from '../../models/share/GUID.js';
 import { EventRepository } from '../../models/mvc/EventRepository.js';
 import { DeleteEvent } from '../pop-ups/DeleteEvent.js';
 import { CalendarRepository } from '../../models/mvc/CalendarRepository.js';
+import { CalendarList } from '../CalendarList.js';
 
 export let Daily = {
   data: {
@@ -44,11 +45,13 @@ export let Daily = {
     }
   },
 
-  async run() {
+  async run() {    
+    console.log("Daily");
+    let calendars = CalendarList.getSelectedCalendars();
     let repo = new EventRepository(); 
     let events = await repo.getList(moment(new Date())
-        .startOf('day')
-        .toDate());
+                                    .startOf('day')
+                                    .toDate(), calendars);
 
     this.renderDate(new Date(sessionStorage.getItem('currentDate')));
     this.renderTable();
@@ -326,7 +329,7 @@ export let Daily = {
 
   async hideEventsByCalendarId(calendarId) {
     let date = new Date(sessionStorage.getItem('currentDate'));
-    let events = await new EventRepository().getListByCalendarId(date, calendarId);    
+    let events = await new EventRepository().getList(date, [calendarId]);    
 
     console.log(events);
 
@@ -338,7 +341,7 @@ export let Daily = {
 
   async showEventsByCalendarId(calendarId) {    
     let date = new Date(sessionStorage.getItem('currentDate'));
-    let events = await new EventRepository().getListByCalendarId(date, calendarId); 
+    let events = await new EventRepository().getList(date, [calendarId]); 
 
     console.log(events);
 

@@ -80,10 +80,7 @@
                 }
 
                 var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
-                if (calendarIds != null)
-                {
-                    userCalendars = userCalendars.Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id))).ToList();
-                }
+                userCalendars = userCalendars.Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id))).ToList();
 
                 if (userCalendars.Count() > 0)
                 {

@@ -34,23 +34,12 @@ namespace Calendar.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetEventList(DateTime date)
+        public IActionResult GetEventList(DateTime date, int[] calendars)
         {
-            var calendars = new List<Business.Models.Calendar>
-                              (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day));
+            var _calendars = new List<Business.Models.Calendar>
+                  (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars));
 
-            var events = calendars.SelectMany(c => c.Events).ToList();
-            return Json(events);
-        }
-
-        [HttpGet]
-        [Authorize]
-        public IActionResult GetEventListByCalendarId(DateTime date, int calendarId)
-        {
-            var calendars = new List<Business.Models.Calendar>
-                              (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, new int[] { calendarId }));
-
-            var events = calendars.SelectMany(c => c.Events).ToList();
+            var events = _calendars.SelectMany(c => c.Events).ToList();
             return Json(events);
         }
 
