@@ -9,6 +9,7 @@ COPY ["Calendar/Calendar.csproj", "Calendar/"]
 COPY ["Business/Business.csproj", "Business/"]
 COPY ["Data/Data.csproj", "Data/"]
 RUN dotnet restore "Calendar/Calendar.csproj"
+RUN apt-get update && apt-get install vim -y
 COPY . .
 WORKDIR "/src/Calendar"
 RUN dotnet build "Calendar.csproj" -c Release -o /app/build

@@ -9,7 +9,7 @@ BEGIN
 	
 select uc.CalendarId as IdCalendar, ca.Name as CalendarName, a.Name as AccessName, 
 e.Id as EventId, e.Description, e.Notification, e.Title,
-es.Id as EventSchedule_id, e.TimeStart, e.TimeFInish, 
+es.Id as EventSchedule_id, e.TimeStart, e.TimeFInish, e.AllDay,
 ns.NotificationTime
 
 from Users u

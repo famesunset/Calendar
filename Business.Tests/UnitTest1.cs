@@ -1,5 +1,6 @@
 using Business.Models;
 using Business.Services.Calendar;
+using Data.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Business.Tests
@@ -7,7 +8,7 @@ namespace Business.Tests
     [TestClass]
     public class UnitTest1
     {
-        private readonly CalendarService calendarService = new CalendarService();
+        private readonly CalendarService calendarService = new CalendarService(new CalendarRepo(), new UserRepo(), new AllDataRepo());
 
         [TestMethod]
         public void TestCreateCalendar()

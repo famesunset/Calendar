@@ -52,12 +52,13 @@
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
-                DateTime dateStart = new DateTime();
-                DateTime dateFinish = new DateTime();
+                DateTime dateStart;
+                DateTime dateFinish;
                 beginning = beginning.ToUniversalTime();
                 switch (dateUnit)
                 {
                     case DateUnit.Day:
+                    default:
                         {
                             dateStart = beginning;
                             dateFinish = dateStart.AddDays(1);

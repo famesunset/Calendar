@@ -3,7 +3,7 @@ using Data.Models;
 
 namespace Data.Repository.Interfaces
 {
-    public interface ICalendar : IRepository<Calendar>
+    public interface ICalendar
     {
         int CreateCalendar(int userId, Calendar @calendar);
         Calendar GetCalendarById(int calendarId);
