@@ -332,7 +332,7 @@ export let Daily = {
 
     events.forEach(event => {                    
       let root = this.findRootByEventId(event.id);
-      $(root).remove();
+      if (root != null) $(root).remove();      
     });
   },
 
@@ -347,7 +347,9 @@ export let Daily = {
 
   findRootByEventId(id) {
     let daily = this.data.selectors.s_dailyEvent;
-    let events = $(daily);
+    let allDay = this.data.selectors.s_allDayEvent;
+
+    let events = [...$(daily), ...$(allDay)];
 
     if (events.length != 0) {
       for(let event of events) {

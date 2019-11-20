@@ -7,7 +7,9 @@ import { CalendarList } from './views/CalendarList.js';
 $(function() {
   let app = {
     async run() {      
-      sessionStorage.setItem('currentDate', new Date());
+      let date = new Date();
+      sessionStorage.setItem('currentDate', 
+        moment(date).startOf('day').toDate());
       
       Header.run();
       SideBar.run();
