@@ -9,7 +9,7 @@ namespace Calendar.Controllers
 {
     public class CalendarController : Controller
     {
-        public IActionResult GetList([FromServices] ICalendarService service)
+        public IActionResult GetCalendarList([FromServices] ICalendarService service)
         {
             var calendars = service.GetCalendars(null);
 

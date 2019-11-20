@@ -23,10 +23,10 @@ export class EventRepository extends Repository {
     return list;
   }  
 
-  async getListByCalendarId(calendarId) {
+  async getListByCalendarId(date, calendarId) {
     let list = [];
 
-    let promise = super.getList({ calendarId }, '/Event/GetEventListByCalendarId');    
+    let promise = super.getList({date: date.toISOString(), calendarId }, '/Event/GetEventListByCalendarId');    
     await promise.then(data => {
       list = data;
     });

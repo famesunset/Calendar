@@ -324,21 +324,24 @@ export let Daily = {
     $(`#${selector}`).mouseup(e => this.onEditEvent(e));
   },
 
-  hideEventsByCalendarId(calendarId) {
-    // TODO: get events by calendarId
+  async hideEventsByCalendarId(calendarId) {
+    let date = new Date(sessionStorage.getItem('currentDate'));
+    let events = await new EventRepository().getListByCalendarId(date, calendarId);    
 
-    // There will be an events array    
-    
+    console.log(events);
 
-    calendar.events.forEach(event => {                    
+    events.forEach(event => {                    
       let root = this.findRootByEventId(event.id);
-
       $(root).remove();
     });
   },
 
-  showEventsByCalendarId(calendarId) {    
-    let events = new EventRepository().getListByCalendarId(calendarId);;
+  async showEventsByCalendarId(calendarId) {    
+    let date = new Date(sessionStorage.getItem('currentDate'));
+    let events = await new EventRepository().getListByCalendarId(date, calendarId); 
+
+    console.log(events);
+
     this.renderEvents(events);
   },
 

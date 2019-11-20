@@ -59,8 +59,7 @@ export class Repository {
             error: (resp) => {
                 if (resp.status === UNAUTHORIZED) {
                     reject('Login first.');
-                }
-                
+                }                
             }
       }); 
     }); 

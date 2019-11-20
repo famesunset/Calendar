@@ -32,25 +32,26 @@ namespace Calendar.Controllers
             return Json(@event);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult GetEventList(DateTime date)
         {
-            if (signInManager.IsSignedIn(User))
-            {
-                var calendars = new List<Business.Models.Calendar>
+            var calendars = new List<Business.Models.Calendar>
                               (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day));
 
-                var events = calendars.SelectMany(c => c.Events).ToList();
-                return Json(events);
-            }
-            return Json(new BaseEvent[0]);
+            var events = calendars.SelectMany(c => c.Events).ToList();
+            return Json(events);
         }
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetEventListByCalendarId(int calendarId)
+        public IActionResult GetEventListByCalendarId(DateTime date, int calendarId)
         {
-            return Json("success");
+            var calendars = new List<Business.Models.Calendar>
+                              (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, new int[] { calendarId }));
+
+            var events = calendars.SelectMany(c => c.Events).ToList();
+            return Json(events);
         }
 
         [HttpPost]

@@ -9,7 +9,7 @@ export class CalendarRepository extends Repository {
   async getList() {
     let list = [];
 
-    let promise = super.getList({ date: date.toISOString() }, '/Calendar/GetList');    
+    let promise = super.getList({ date: date.toISOString() }, '/Calendar/GetCalendarList');    
     await promise.then(data => {
       list = data;
     });
