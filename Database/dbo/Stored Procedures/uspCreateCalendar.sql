@@ -10,8 +10,8 @@ declare @CalendarsUsers calendarsUsers
 BEGIN TRANSACTION Transact
   BEGIN TRY
 
-	insert into Calendars (Name, AccessId)
-	values (@Name, @AccessId)
+	insert into Calendars (Name, AccessId, UserOwnerId)
+	values (@Name, @AccessId, @idUser)
 
 	insert into @CalendarsUsers (id_User, id_Calendar)
 	values(

@@ -38,7 +38,7 @@ namespace Calendar.Controllers
             if (signInManager.IsSignedIn(User))
             {
                 var calendars = new List<Business.Models.Calendar>
-                              (eventService.GetEvents(userManager.GetUserId(User), date.Date, DateUnit.Day));
+                              (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day));
 
                 var events = calendars.SelectMany(c => c.Events).ToList();
                 return Json(events);

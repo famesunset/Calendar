@@ -4,7 +4,7 @@ using Data.Models;
 
 namespace Data.Repository.Interfaces
 {
-    public interface INotification : IRepository<Notification>
+    public interface INotification
     {
         IEnumerable<Notification> CreateNotification(int eventScheduleId, DateTime notificationTime);
     }

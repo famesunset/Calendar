@@ -46,7 +46,9 @@ export let Daily = {
 
   async run() {
     let repo = new EventRepository(); 
-    let events = await repo.getList(new Date());
+    let events = await repo.getList(moment(new Date())
+        .startOf('hour')
+        .toDate());
 
     this.renderDate(new Date(sessionStorage.getItem('currentDate')));
     this.renderTable();

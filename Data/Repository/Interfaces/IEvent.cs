@@ -3,7 +3,7 @@ using Data.Models;
 
 namespace Data.Repository.Interfaces
 {
-    public interface IEvent : IRepository<Event>
+    public interface IEvent
     {
         int CreateScheduledEvent(Event @event);
         int CreateInfinityEvent(Event @event);
