@@ -40,7 +40,7 @@ namespace Business.Tests.FakeRepositories
       return new AllData
       {
         EventId = _event.Id, 
-        IdCalendar = _event.Calendar.Id,
+        CalendarId = _event.Calendar.Id,
         Description = _event.Description,
         Title = _event.Title,
         Notification = _event.Notification.Text,
@@ -49,7 +49,7 @@ namespace Business.Tests.FakeRepositories
         NotificationTime = _event.Notification.Time,
         TimeStart = _event.Start,
         TimeFinish = _event.Finish,
-        Name = _event.Calendar.Name,
+        CalendarName = _event.Calendar.Name,
         EventScheduledId = 0,
       }; 
     }

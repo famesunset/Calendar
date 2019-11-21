@@ -28,9 +28,9 @@
                         Events = new List<BaseEvent>(),
                         Id = val.Id,
                         Users = new List<User>(),
+                        ColorId = val.ColorId,
+                        UserOwnerId = val.UserOwnerId
                     })
-                    .ForMember(dest => dest.Color,
-                        expression => expression.MapFrom(src => Encode(null)))
                     .ForMember(dest => dest.Name,
                         expression => expression.MapFrom(src => Encode(src.Name)));
 
@@ -39,7 +39,9 @@
                     {
                         Id = val.Id,
                         Name = val.Name,
-                        AccessId = (int)val.Access
+                        AccessId = (int)val.Access,
+                        ColorId = val.ColorId,
+                        UserOwnerId = val.UserOwnerId
                     });
 
 
@@ -61,11 +63,10 @@
                    .ConstructUsing(val => new Event
                    {
                        Id = val.EventId,
-                       CalendarId = val.IdCalendar,
+                       CalendarId = val.CalendarId,
                        Finish = val.TimeFinish,
                        Start = val.TimeStart,
                        IsAllDay = val.AllDay,
-                       Notify = new NotificationSchedule { Time = val.NotificationTime },
                        // Repeat = val
                    })
                    .ForMember(dest => dest.Title,

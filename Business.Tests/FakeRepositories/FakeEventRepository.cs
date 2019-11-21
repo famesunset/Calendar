@@ -4,14 +4,13 @@ using Business.Tests.FakeRepositories.Models;
 namespace Business.Tests.FakeRepositories
 {
   using System;
-  using System.Collections.Generic;
   using Data.Models;
   using Data.Repository.Interfaces;
   
   public class FakeEventRepository : IEvent
   {
     private static int eventId;
-    public int CreateScheduledEvent(Event _event)
+    public int CreateEvent(Event _event)
     {
       var fakeCalendar = FakeRepository.Get.Calendars.SingleOrDefault(c => c.Id.Equals(_event.CalendarId));
       if (fakeCalendar != null)
@@ -43,7 +42,7 @@ namespace Business.Tests.FakeRepositories
       throw new NotImplementedException();
     }
 
-    public void UpdateScheduledEvent(Event newEvent)
+    public void UpdateEvent(Event newEvent)
     {
       throw new NotImplementedException();
     }
@@ -62,10 +61,6 @@ namespace Business.Tests.FakeRepositories
         Description = _event.Description,
         Start = _event.TimeStart,
         Finish = _event.TimeFinish,
-        Notification = new FakeNotification
-        {
-          Text = _event.Notification
-        },
         Title = _event.Title,
         IsAllDay = _event.AllDay,
       };
@@ -80,10 +75,6 @@ namespace Business.Tests.FakeRepositories
         Description = _event.Description,
         Start = _event.TimeStart,
         Finish = _event.TimeFinish,
-        Notification = new FakeNotification
-        {
-          Text = _event.Notification
-        },
         Title = _event.Title,
         IsAllDay = _event.AllDay,
         Repeat = (FakeRepeat) Enum.ToObject(typeof(FakeRepeat), _event.RepeatId)

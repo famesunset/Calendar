@@ -17,7 +17,7 @@ namespace Data.Tests
             List<EventSchedule> eventSchedule = new List<EventSchedule>();
             eventSchedule.Add(new EventSchedule(DateTime.Now, DateTime.Now));
             Event even = new Event(2, "Description2", "Notification2", "Title2", eventSchedule, DateTime.Now, DateTime.Now, true);
-            eventRepo.CreateScheduledEvent(even);
+            eventRepo.CreateEvent(even);
         }
 
         [TestMethod]

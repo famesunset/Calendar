@@ -37,7 +37,7 @@ namespace Calendar.Controllers
         public IActionResult GetEventList(DateTime date, int[] calendars)
         {
             var _calendars = new List<Business.Models.Calendar>
-                  (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars));
+                 (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars));
 
             var events = _calendars.SelectMany(c => c.Events).ToList();
             return Json(events);

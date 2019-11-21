@@ -47,7 +47,7 @@
             {
                 var dataCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
                 var dataBigEvent = bigEventRepos.GetEvent(eventId);
-                if (dataCalendars.Any(c => c.Id.Equals(dataBigEvent.IdCalendar)))
+                if (dataCalendars.Any(c => c.Id.Equals(dataBigEvent.CalendarId)))
                 {
                     return dataBigEvent;
                 }

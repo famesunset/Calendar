@@ -30,7 +30,7 @@
             if (dataCalendar != null)
             {
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
-                int eventId = eventRepos.CreateScheduledEvent(dataEvent);
+                int eventId = eventRepos.CreateEvent(dataEvent);
                 return eventId;
             }
             return -1;
@@ -92,7 +92,7 @@
                     foreach (var e in events)
                     {
                         var bEvent = Map.Map<Data.Models.AllData, BaseEvent>(e);
-                        bUserCalendars[e.IdCalendar].Events.Add(bEvent);
+                        bUserCalendars[e.CalendarId].Events.Add(bEvent);
                     }
 
                     return bUserCalendars.Values;
@@ -156,7 +156,7 @@
 
                 // @event.Schedule = schedule;
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
-                int eventId = eventRepos.CreateScheduledEvent(dataEvent);
+                int eventId = eventRepos.CreateEvent(dataEvent);
                 return eventId;
             }
 
@@ -179,7 +179,7 @@
             if (dataBigEvent != null)
             {
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);
-                eventRepos.UpdateInfinityEvent(dataEvent);
+                eventRepos.UpdateEvent(dataEvent);
             }
         }
 
@@ -189,7 +189,7 @@
             if (dataBigEvent != null)
             {
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);
-                eventRepos.UpdateScheduledEvent(dataEvent);
+                eventRepos.UpdateEvent(dataEvent);
             }
         }
     }

@@ -9,28 +9,16 @@ namespace Data.Repository
 {
     public class EventRepo : BaseRepository<Event>, IEvent
     {
-        //public int CreateScheduledEvent(Event @event)
-        //{
-        //    using (SqlConnection connection = new SqlConnection(ConnectionString))
-        //    {
-        //        DataTable schedule = @event.Schedule.ConvertToDatatable();
-        //        int eventId = connection.ExecuteScalar<int>("uspCreateScheduledEvent",
-        //            new { @event.CalendarId, @event.Notification, @event.Description, @event.Title, schedule, @event.TimeStart, @event.TimeFinish, @event.AllDay },
-        //            commandType: CommandType.StoredProcedure);
-        //        return eventId;
-        //    }
-
-        //}
-
-        public int CreateInfinityEvent(Event @event)
+        public int CreateEvent(Event @event)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                int eventId = connection.ExecuteScalar<int>("uspCreateInfinityEvent",
+                int eventId = connection.ExecuteScalar<int>("uspCreateEvent",
                     new { @event.CalendarId, @event.Description, @event.Title, @event.RepeatId, @event.TimeStart, @event.TimeFinish, @event.AllDay },
                     commandType: CommandType.StoredProcedure);
                 return eventId;
             }
+
         }
 
         public void Delete(int eventId)
@@ -42,25 +30,14 @@ namespace Data.Repository
             }
         }
 
-        public void UpdateInfinityEvent(Event @newEvent)
+        public void UpdateEvent(Event @newEvent)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                connection.Query<Event>("uspUpdateInfinityEvent",
-                    new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Description, @newEvent.Title, @newEvent.RepeatId, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
+                connection.Query<Event>("uspUpdateScheduledEvent",
+                    new { EventId = @newEvent.Id, @newEvent.CalendarId, @newEvent.Description, @newEvent.Title, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
                     commandType: CommandType.StoredProcedure);
             }
         }
-
-        //public void UpdateScheduledEvent(Event @newEvent)
-        //{
-        //    DataTable schedule = @newEvent.Schedule.ConvertToDatatable();
-        //    using (SqlConnection connection = new SqlConnection(ConnectionString))
-        //    {
-        //        connection.Query<Event>("uspUpdateScheduledEvent",
-        //            new { EventId = @newEvent.Id, @newEvent.CalendarId, @newEvent.Notification, @newEvent.Description, @newEvent.Title, Schedule = schedule, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
-        //            commandType: CommandType.StoredProcedure);
-        //    }
-        //}
     }
 }
