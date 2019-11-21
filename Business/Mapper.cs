@@ -66,17 +66,14 @@
                        Start = val.TimeStart,
                        IsAllDay = val.AllDay,
                        Notify = new NotificationSchedule { Time = val.NotificationTime },
-                       //Repeat = val.Interval,
-                       Schedule = new List<EventSchedule>(),
+                       // Repeat = val
                    })
                    .ForMember(dest => dest.Title,
                        expression => expression.MapFrom(src => Encode(src.Title)))
                    .ForMember(dest => dest.Color,
                        expression => expression.MapFrom(src => Encode(null)))
                    .ForMember(dest => dest.Description,
-                       expression => expression.MapFrom(src => Encode(src.Description)))
-                   .ForPath(dest => dest.Notify.Message,
-                       expression => expression.MapFrom(src => Encode(src.Notification)));
+                       expression => expression.MapFrom(src => Encode(src.Description)));
 
                 cfg.CreateMap<Event, Data.Models.Event>()
                     .ConstructUsing(val => new Data.Models.Event

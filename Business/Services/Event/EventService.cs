@@ -102,6 +102,7 @@
             return null;
         }
 
+        // unused
         public int CreateScheduledEvent(string loginedUserId, Event @event)
         {
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
@@ -153,7 +154,7 @@
                         break;
                 }
 
-                @event.Schedule = schedule;
+                // @event.Schedule = schedule;
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
                 int eventId = eventRepos.CreateScheduledEvent(dataEvent);
                 return eventId;
