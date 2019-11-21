@@ -34,8 +34,8 @@ namespace Data.Repository
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                connection.Query<Event>("uspUpdateScheduledEvent",
-                    new { EventId = @newEvent.Id, @newEvent.CalendarId, @newEvent.Description, @newEvent.Title, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
+                connection.Query<Event>("uspUpdateEvent",
+                    new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Description, @newEvent.Title, @newEvent.RepeatId, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
                     commandType: CommandType.StoredProcedure);
             }
         }

@@ -102,67 +102,6 @@
             return null;
         }
 
-        // unused
-        public int CreateScheduledEvent(string loginedUserId, Event @event)
-        {
-            var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
-            if (dataCalendar != null)
-            {
-                List<EventSchedule> schedule = new List<EventSchedule>();
-                int compare;
-                switch (@event.Repeat)
-                {
-                    case Interval.Day:
-                        do
-                        {
-                            compare = DateTime.Compare(@event.Start, @event.Finish);
-                            schedule.Add(new EventSchedule(@event.Start, @event.Finish));
-                            @event.Start = @event.Start.AddDays(1);
-                            @event.Finish = @event.Finish.AddDays(1);
-                        } while (compare < 0);
-
-                        break;
-                    case Interval.Week:
-                        do
-                        {
-                            compare = DateTime.Compare(@event.Start, @event.Finish);
-                            schedule.Add(new EventSchedule(@event.Start, @event.Finish));
-                            @event.Start = @event.Start.AddDays(7);
-                            @event.Finish = @event.Finish.AddDays(7);
-                        } while (compare < 0);
-
-                        break;
-                    case Interval.Month:
-                        do
-                        {
-                            compare = DateTime.Compare(@event.Start, @event.Finish);
-                            schedule.Add(new EventSchedule(@event.Start, @event.Finish));
-                            @event.Start = @event.Start.AddMonths(1);
-                            @event.Finish = @event.Finish.AddMonths(1);
-                        } while (compare < 0);
-
-                        break;
-                    case Interval.Year:
-                        do
-                        {
-                            compare = DateTime.Compare(@event.Start, @event.Finish);
-                            schedule.Add(new EventSchedule(@event.Start, @event.Finish));
-                            @event.Start = @event.Start.AddYears(1);
-                            @event.Finish = @event.Finish.AddYears(1);
-                        } while (compare < 0);
-
-                        break;
-                }
-
-                // @event.Schedule = schedule;
-                Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
-                int eventId = eventRepos.CreateEvent(dataEvent);
-                return eventId;
-            }
-
-            return -1;
-        }
-
         public void DeleteEvent(string loginedUserId, int eventId)
         {
             var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
@@ -173,17 +112,7 @@
 
         }
 
-        public void UpdateInfinityEvent(string loginedUserId, Event newEvent)
-        {
-            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
-            if (dataBigEvent != null)
-            {
-                Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);
-                eventRepos.UpdateEvent(dataEvent);
-            }
-        }
-
-        public void UpdateScheduledEvent(string loginedUserId, Event newEvent)
+        public void UpdateEvent(string loginedUserId, Event newEvent)
         {
             var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
             if (dataBigEvent != null)

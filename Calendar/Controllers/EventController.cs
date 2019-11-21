@@ -57,7 +57,7 @@ namespace Calendar.Controllers
         [Authorize]
         public IActionResult EditEvent([FromBody] Event @event)
         {
-            eventService.UpdateScheduledEvent(userManager.GetUserId(User), @event);
+            eventService.UpdateEvent(userManager.GetUserId(User), @event);
             return Json("success");
         }
 
