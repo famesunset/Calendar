@@ -8,11 +8,9 @@ namespace Data.Models
         public int Id { get; set; }
         public int CalendarId { get; set; }
         public string Description { get; set; }
-        public string Notification { get; set; }
         public string Title { get; set; }
         public DateTime TimeStart { get; set; }
         public DateTime TimeFinish { get; set; }
-        public List<EventSchedule> Schedule { get; set; }
         public bool AllDay { get; set; }
         public int RepeatId { get; set; }
 
@@ -21,9 +19,7 @@ namespace Data.Models
         {
             this.CalendarId = calendarId;
             this.Description = description;
-            this.Notification = notification;
             this.Title = title;
-            this.Schedule = eventSchedule;
             this.TimeStart = timeStart;
             this.TimeFinish = timeFinish;
             this.AllDay = allDay;
@@ -34,7 +30,6 @@ namespace Data.Models
         {
             this.CalendarId = calendarId;
             this.Description = description;
-            this.Notification = notification;
             this.Title = title;
             this.RepeatId = repeatId;
             this.TimeStart = timeStart;
@@ -47,7 +42,6 @@ namespace Data.Models
             this.Id = id;
             this.CalendarId = calendarId;
             this.Description = description;
-            this.Notification = notification;
             this.Title = title;
             this.TimeStart = timeStart;
             this.TimeFinish = timeFinish;

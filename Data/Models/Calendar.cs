@@ -7,6 +7,8 @@ namespace Data.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int AccessId { get; set; }
+        public int UserOwnerId { get; set; }
+        public int ColorId { get; set; }
 
         public Calendar(int id, string name, int accessId)
         {

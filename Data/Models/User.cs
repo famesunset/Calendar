@@ -10,6 +10,7 @@
         public int IdCalendarDefault { get; set; }
         public string IdIdentity { get; set; }
         public string Picture { get; set; }
+        public string BrowserId { get; set; }
 
         public User(int idUser, int idCalendarDefault)
         {

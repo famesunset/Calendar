@@ -85,9 +85,7 @@
                         Title = val.Title,
                         TimeFinish = val.Finish.ToUniversalTime(),
                         TimeStart = val.Start.ToUniversalTime(),
-                        Notification = null,
                         RepeatId = 0,
-                        Schedule = null,
                     });
 
                 // User
