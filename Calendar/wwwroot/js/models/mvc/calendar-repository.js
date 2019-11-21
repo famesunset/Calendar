@@ -1,4 +1,4 @@
-import { Repository } from "./Repository.js";
+import { Repository } from "./repository.js";
 
 export class CalendarRepository extends Repository {
   delete(id) {
@@ -10,6 +10,17 @@ export class CalendarRepository extends Repository {
     let list = [];
 
     let promise = super.getList({ date: date.toISOString() }, '/Calendar/GetCalendarList');    
+    await promise.then(data => {
+      list = data;
+    });
+
+    return list;
+  }
+
+  async getColorList() {
+    let list = [];
+
+    let promise = super.getList(null, '/Calendar/GetCalendarColorsList');    
     await promise.then(data => {
       list = data;
     });

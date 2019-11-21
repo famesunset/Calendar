@@ -1,6 +1,7 @@
-import { Dropdown } from '../models/Dropdown.js';
-import { ViewMode } from './ViewMode.js';
-import { MainCalendar } from './MainCalendar.js';
+import { Dropdown } from '../models/dropdown.js';
+import { ViewMode } from './view-mode.js';
+import { MainCalendar } from './main-calendar.js';
+import { Modal } from '../views/pop-ups/modal.js';
 
 export let Header = {
   data: {
@@ -17,8 +18,7 @@ export let Header = {
       s_prev: '.switch-date #prev',
       s_today: '#today',      
       s_dropdownTrigger: '.view-mode',
-      s_dropdownItem: '#view-mode a',
-      s_modal: '#main-modal',
+      s_dropdownItem: '#view-mode a'
     },
 
     css: {
@@ -45,7 +45,7 @@ export let Header = {
   },
 
   onOpenUserMenu(e) {
-    this.openModal();
+    Modal.open(this.onCloseUserMenu);
 
     let close = this.data.css.stateClose;
     let menu = e.currentTarget.nextElementSibling;    
@@ -54,13 +54,14 @@ export let Header = {
     this.data.cache.userMenu = menu;
   },
 
-  onCloseUserMenu() {    
-    let close = this.data.css.stateClose;
-    let menu = this.data.cache.userMenu;
+  onCloseUserMenu() {   
+    let _this = Header;
     
-    console.log(menu);
+    let close = _this.data.css.stateClose;
+    let menu = _this.data.cache.userMenu;
+    
     $(menu).addClass(close)
-    this.closeModal();
+    Modal.close();
   },
 
   onNext() {
@@ -107,22 +108,5 @@ export let Header = {
 
     this.data.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });
     this.data.dropdown.runDropdown();
-  },
-
-  openModal() {
-    let s = this.data.selectors;
-    if ($(s.s_modal)[0] != undefined)
-      return;
-
-    let modal = `<div id="main-modal"></div>`;
-    $('body').prepend(modal);
-
-    $(s.s_modal).click(() => this.onCloseUserMenu());
-  },
-
-  closeModal() {
-    let modal = this.data.selectors.s_modal;
-
-    $(modal).remove();
   }
 };

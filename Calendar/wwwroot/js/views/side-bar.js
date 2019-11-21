@@ -1,6 +1,7 @@
-import { MainCalendar } from './MainCalendar.js';
-import { EventForm } from './EventForm.js';
-import { ViewMode } from './ViewMode.js';
+import { MainCalendar } from './main-calendar.js';
+import { EventForm } from './event-form.js';
+import { ViewMode } from './view-mode.js';
+
 
 export let SideBar = {
   data: {

@@ -1,9 +1,9 @@
-import { EventForm } from '../EventForm.js';
+import { EventForm } from '../event-form.js';
 import { GUID } from '../../models/share/GUID.js';
-import { EventRepository } from '../../models/mvc/EventRepository.js';
-import { DeleteEvent } from '../pop-ups/DeleteEvent.js';
-import { CalendarRepository } from '../../models/mvc/CalendarRepository.js';
-import { CalendarList } from '../CalendarList.js';
+import { EventRepository } from '../../models/mvc/event-repository.js';
+import { DeleteEvent } from '../pop-ups/delete-event.js';
+import { CalendarRepository } from '../../models/mvc/calendar-repository.js';
+import { CalendarList } from '../calendar-list.js';
 
 export let Daily = {
   data: {
@@ -46,7 +46,6 @@ export let Daily = {
   },
 
   async run() {    
-    console.log("Daily");
     let calendars = CalendarList.getSelectedCalendars();
     let repo = new EventRepository(); 
     let events = await repo.getList(moment(new Date())

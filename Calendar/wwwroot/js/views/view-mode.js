@@ -1,4 +1,4 @@
-import { Daily } from './view-modes/Daily.js';
+import { Daily } from './view-modes/daily.js';
 
 export let ViewMode = {
   data: {

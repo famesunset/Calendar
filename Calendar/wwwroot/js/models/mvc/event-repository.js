@@ -1,4 +1,4 @@
-import { Repository } from './Repository.js';
+import { Repository } from './repository.js';
 
 export class EventRepository extends Repository {
   async get(id) {

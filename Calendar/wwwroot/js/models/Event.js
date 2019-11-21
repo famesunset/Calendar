@@ -1,4 +1,4 @@
-import { EventRepository } from '../models/mvc/EventRepository.js';
+import { EventRepository } from '../models/mvc/event-repository.js';
 
 export class Event {
   constructor(title, description, start, finish, color, isAllDay, notify) {

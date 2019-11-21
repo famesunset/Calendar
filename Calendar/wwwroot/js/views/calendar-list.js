@@ -1,5 +1,6 @@
-import { ViewMode } from "./ViewMode.js";
-import { CalendarRepository } from '../models/mvc/CalendarRepository.js';
+import { ViewMode } from "./view-mode.js";
+import { CalendarRepository } from '../models/mvc/calendar-repository.js';
+import { CreateCalendar } from '../views/pop-ups/create-calendar.js'
 
 export let CalendarList = {
   data: {
@@ -16,6 +17,7 @@ export let CalendarList = {
   },
 
   run(callback) {
+    CreateCalendar.open();
     this.renderCalendarList(callback);
   },
 

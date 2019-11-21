@@ -45,6 +45,7 @@
   flex-direction: column;
   justify-content: center;
   align-content: center;
+  position: relative;
   margin-top: 20px;
 }
 

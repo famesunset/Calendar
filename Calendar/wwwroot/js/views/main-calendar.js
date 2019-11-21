@@ -1,8 +1,8 @@
-import { DatePicker } from '../models/DatePicker.js';
-import { ViewMode } from './ViewMode.js';
-import { Header } from './Header.js';
-import { EventRepository } from '../models/mvc/EventRepository.js';
-import { CalendarList } from './CalendarList.js';
+import { DatePicker } from '../models/date-picker.js';
+import { ViewMode } from './view-mode.js';
+import { Header } from './header.js';
+import { EventRepository } from '../models/mvc/event-repository.js';
+import { CalendarList } from './calendar-list.js';
 
 export let MainCalendar = {
   data: {

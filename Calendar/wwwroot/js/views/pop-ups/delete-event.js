@@ -1,5 +1,6 @@
-import { EventRepository } from '../../models/mvc/EventRepository.js';
-import { ViewMode } from '../ViewMode.js';
+import { EventRepository } from '../../models/mvc/event-repository.js';
+import { ViewMode } from '../view-mode.js';
+import { Modal } from '../pop-ups/modal.js';
 
 export let DeleteEvent = {
   data: {
@@ -10,12 +11,7 @@ export let DeleteEvent = {
     selectors: {
       s_loadDeleteEvent: '#load-delete-event',
       s_deleteEvent: '.delete-event',
-      s_deleteEventBtn: '.delete-event-btn',
-      s_modal: '#main-modal',
-    },
-
-    css: {
-      c_modal: 'main-modal'
+      s_deleteEventBtn: '.delete-event-btn'
     },
 
     url: {
@@ -26,12 +22,13 @@ export let DeleteEvent = {
   setUpListeners() {
     let s = this.data.selectors;
 
-    $(s.s_modal).click(() => this.onClose());
     $(s.s_deleteEvent).click(() => this.onDeleteEvent());
   },
 
   onClose() {
-    this.close();
+    let _this = DeleteEvent;
+    _this.close();
+    Modal.close();
   },  
 
   onDeleteEvent() {
@@ -44,32 +41,15 @@ export let DeleteEvent = {
     let url = this.data.url.u_windowLoad;
 
     $(container).load(url, () => {
-      this.data.cache.eventId = eventId;
-      this.openModal();      
+      this.data.cache.eventId = eventId;          
       this.setUpListeners();   
       this.openAnimation(pos);
+      Modal.open(this.onClose);
     });
   },
 
   close() {    
-    this.closeAnimation();    
-    this.closeModal();
-  },
-
-  openModal(container) {
-    let s = this.data.selectors;
-    let c = this.data.css;
-
-    if ($(s.s_modal)[0] != undefined)
-      return;
-
-    let modal = `<div id="${c.c_modal}"></div>`;
-    $('body').prepend(modal);
-  },
-
-  closeModal() {
-    let modal = this.data.selectors.s_modal;
-    $(modal).remove();
+    this.closeAnimation();
   },
 
   openAnimation(pos) {

@@ -1,8 +1,9 @@
-import { DatePicker } from '../models/DatePicker.js';
-import { TimePicker } from '../models/TimePicker.js';
-import { Dropdown } from '../models/Dropdown.js';
-import { ViewMode } from './ViewMode.js';
-import { EventRepository } from '../models/mvc/EventRepository.js';
+import { DatePicker } from '../models/date-picker.js';
+import { TimePicker } from '../models/time-picker.js';
+import { Dropdown } from '../models/dropdown.js';
+import { ViewMode } from './view-mode.js';
+import { EventRepository } from '../models/mvc/event-repository.js';
+import { Modal } from '../views/pop-ups/modal.js';
 
 export let EventForm = {
   data: {
@@ -27,8 +28,7 @@ export let EventForm = {
       s_timeFinish: '#time-finish',
       s_dateStart: '#date-start',
       s_dateFinish: '#date-finish',
-      s_isAllDay: '#all-day',
-      s_modal: '#main-modal',
+      s_isAllDay: '#all-day',      
       s_optionsLoad: '#more-options',
       s_options: '.options',
       s_submitBtn: '#event-submit-btn',
@@ -55,8 +55,7 @@ export let EventForm = {
   setUpListeners() {
     let s = this.data.selectors;
 
-    $(s.s_closeTrigger).click(() => this.onCancelCreation());     
-    $(s.s_modal).click(() => this.onCancelCreation());
+    $(s.s_closeTrigger).click(() => this.onCancelCreation());  
     $(s.s_optionsTrigger).click(() => this.onOptionsOpen());
     $(s.s_submitCreate).click(() => this.onCreate());
     $(s.s_submitEdit).click(() => this.onEdit());
@@ -74,14 +73,14 @@ export let EventForm = {
     let container = s.s_formLoad;
     let url = this.data.url.createEventForm;    
 
-    $(container).load(url, () => {          
+    $(container).load(url, () => {                
       this.renderDatePickers(start, finish);
-      this.renderTimePickers(start, finish);
-      this.openModal();
+      this.renderTimePickers(start, finish);      
       this.openAnimation();
-
       this.formState('create');
       this.setUpListeners();
+
+      Modal.open(this.onCancelCreation);
     });
   },
 
@@ -94,40 +93,40 @@ export let EventForm = {
     let url = this.data.url.editEventForm + `?id=${id}`;
 
     $.get(url, (content) => {
-      $(container).html(content);
-
+      $(container).html(content);      
       let start = new Date($(s.s_dateStart).val());
       let finish = new Date($(s.s_dateFinish).val());
-
+      
       this.renderDatePickers(start, finish);
-      this.renderTimePickers(start, finish);
-      this.openModal();
+      this.renderTimePickers(start, finish);      
       this.openAnimation();      
       this.formState('edit');
       this.setUpListeners();
+
+      Modal.open(this.onCancelCreation);
     });
   },
 
   close() {
     let s = this.data.selectors;
     
-    let el = s.s_formWrapper;
-    let modal = s.s_modal;
+    let el = s.s_formWrapper;    
 
-    this.closeAnimation();
-    $(modal).remove();
+    Modal.close();
+    this.closeAnimation();    
     $(el).remove();     
     this.formState('close');      
     ViewMode.cacheEvent('');  
   },
 
-  onCancelCreation() {    
+  onCancelCreation() {  
+    let _this = EventForm;
     let selector = ViewMode.getCachedEvent();
 
-    if (this.getFormState() == this.data.form.states.create) {
+    if (_this.getFormState() == _this.data.form.states.create) {
       ViewMode.deleteEvent(selector);      
     }        
-    this.close();
+    _this.close();
   },
 
   async onCreate() {    
@@ -312,15 +311,6 @@ export let EventForm = {
 
     $(s.s_timeStart).val(start);
     $(s.s_timeFinish).val(finish);
-  },
-
-  openModal() {
-    let s = this.data.selectors;
-    if ($(s.s_modal)[0] != undefined)
-      return;
-
-    let modal = `<div id="main-modal"></div>`;
-    $('body').prepend(modal);
   },
 
   renderDatePickers(dateStart, dateFinish) {

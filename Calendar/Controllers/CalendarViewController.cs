@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Business.Models;
 using Business.Services.Calendar;
 using Business.Services.User;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Calendar.Controllers
 {
+    [Authorize]
     public class CalendarViewController : Controller
     {
         private readonly SignInManager<IdentityUser> signInManager;
@@ -26,7 +28,7 @@ namespace Calendar.Controllers
             this.userService = userService;
         }
 
-        [Authorize]
+        [HttpGet]        
         public IActionResult GetList([FromServices] ICalendarService service)
         {
             var calendars = service.GetCalendars(userManager.GetUserId(User));
