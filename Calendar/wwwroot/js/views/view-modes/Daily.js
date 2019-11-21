@@ -371,6 +371,9 @@ export let Daily = {
     let $event = $(`#${selector}`);     
     let $wrapper = $(`#${selector} ${s.s_eventContentWrapper}`);  
 
+    // Convert start and finish to the same date
+    finish = moment(start).set({hour: finish.getHours(), minute: finish.getMinutes()}).toDate();
+
     let minutesDiff = Math.abs(start.getTime() - finish.getTime()) / 1000.0 / 60.0;
     let factor = (this.data.ux.cellHeight * minutesDiff) / 60.0 - this.data.ux.cellHeight;
     let margin = (this.data.ux.cellHeight * start.getMinutes()) / 60.0;
