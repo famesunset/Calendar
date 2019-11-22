@@ -328,9 +328,7 @@ export let Daily = {
 
   async hideEventsByCalendarId(calendarId) {
     let date = new Date(sessionStorage.getItem('currentDate'));
-    let events = await new EventRepository().getList(date, [calendarId]);    
-
-    console.log(events);
+    let events = await new EventRepository().getList(date, [calendarId]);        
 
     events.forEach(event => {                    
       let root = this.findRootByEventId(event.id);
@@ -340,9 +338,7 @@ export let Daily = {
 
   async showEventsByCalendarId(calendarId) {    
     let date = new Date(sessionStorage.getItem('currentDate'));
-    let events = await new EventRepository().getList(date, [calendarId]); 
-
-    console.log(events);
+    let events = await new EventRepository().getList(date, [calendarId]);     
 
     this.renderEvents(events);
   },
@@ -370,10 +366,10 @@ export let Daily = {
     let $event = $(`#${selector}`);     
     let $wrapper = $(`#${selector} ${s.s_eventContentWrapper}`);  
 
-    // Convert start and finish to the same date
-    finish = moment(start).set({hour: finish.getHours(), minute: finish.getMinutes()}).toDate();
+    let startMinutes = (start.getHours() * 60) + start.getMinutes();
+    let finishMinutes = (finish.getHours() * 60) + finish.getMinutes();
 
-    let minutesDiff = Math.abs(start.getTime() - finish.getTime()) / 1000.0 / 60.0;
+    let minutesDiff = Math.abs(startMinutes - finishMinutes);
     let factor = (this.data.ux.cellHeight * minutesDiff) / 60.0 - this.data.ux.cellHeight;
     let margin = (this.data.ux.cellHeight * start.getMinutes()) / 60.0;
     

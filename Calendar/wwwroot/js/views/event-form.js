@@ -66,22 +66,23 @@ export let EventForm = {
   },
 
   openCreate(start, finish) {    
-    if (!this.formCanOpen())
-      return;
-
     let s = this.data.selectors;
     let container = s.s_formLoad;
     let url = this.data.url.createEventForm;    
 
-    $(container).load(url, () => {                
+    $.get(url, (content) => {
+      if (!this.formCanOpen())
+        return;
+
+      $(container).html(content);      
       this.renderDatePickers(start, finish);
-      this.renderTimePickers(start, finish);      
-      this.openAnimation();
+      this.renderTimePickers(start, finish);            
       this.formState('create');
       this.setUpListeners();
 
       Modal.open(this.onCancelCreation);
     });
+
   },
 
   openEdit(id) {
@@ -98,8 +99,7 @@ export let EventForm = {
       let finish = new Date($(s.s_dateFinish).val());
       
       this.renderDatePickers(start, finish);
-      this.renderTimePickers(start, finish);      
-      this.openAnimation();      
+      this.renderTimePickers(start, finish);             
       this.formState('edit');
       this.setUpListeners();
 
@@ -111,9 +111,7 @@ export let EventForm = {
     let s = this.data.selectors;
     
     let el = s.s_formWrapper;    
-
-    Modal.close();
-    this.closeAnimation();    
+            
     $(el).remove();     
     this.formState('close');      
     ViewMode.cacheEvent('');  

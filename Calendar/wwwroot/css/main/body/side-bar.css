@@ -105,3 +105,33 @@
   font-weight: 500;
   transform: scale(1.3, 1.3);
 }
+
+.calendar .delete-calendar i:hover {
+  transform: scale(1.5, 1.5);
+}
+
+.calendar-list-wrapper .title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#create-calendar-target {
+  margin-right: 40px;
+  border-radius: 50%;    
+  display: flex;
+  align-items: center;
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;  
+}
+
+#create-calendar-target:hover {
+  cursor: pointer;
+  background-color: var(--color-items-main-gray-bg);
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;
+}
+
+#create-calendar-target i {
+  transform: scale(.8, .8);
+}

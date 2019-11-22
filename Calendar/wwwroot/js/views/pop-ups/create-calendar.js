@@ -1,44 +1,72 @@
-import { CalendarRepository } from '../../models/mvc/calendar-repository.js';
+import { Modal } from '../pop-ups/modal.js';
 
-// Тянуть форму с backend
 export let CreateCalendar = {
   data: {
     selectors: {
-      s_colors: '#colors'
+      s_loadContainer: '#create-calendar',
+      s_createCalendarForm: '.create-calendar',
+      s_createCalendarSubmit: '#create-calendar-submit',
+      s_selectedColor: '.color-selected',
+      s_colors: '#colors',
+      s_color: '.color'
+    },
+
+    html: {
+      colorSelected: '<i class="material-icons tiny color-selected">check</i>',
     },
 
     css: {
       c_color: 'color',
       c_colorSelected: 'color-selected'
+    },
+
+    url: {
+      loadForm: '/CalendarView/GetCreateCalendarForm'
     }
   },  
 
   setUpListeners() {
+    let s = this.data.selectors;
 
+    $(s.s_color).click(e => this.onColorSelected(e));
+    $(s.s_createCalendarSubmit).click(() => this.onCreateCalendar());
   },
 
   open() {
-    this.initialzeColors();
-    // this.openModal();
+    let url = this.data.url.loadForm;
+    let container = this.data.selectors.s_loadContainer;    
+    
+    $(container).load(url, () => {
+      Modal.open(this.close);
+      this.setUpListeners();
+    });
   },
 
   close() {
-
+    let _this = CreateCalendar;
+    let form = _this.data.selectors.s_createCalendarForm;
+    $(form).remove();
   },
 
-  async initialzeColors() {
-    let uiColors = $(this.data.selectors.s_colors);
-    let colors = await new CalendarRepository().getColorList();
+  onColorSelected(e) {
+    let color = e.currentTarget;
+    let prevSelected = this.data.selectors.s_selectedColor;
+    let htmlSelected = this.data.html.colorSelected;
 
-    for(let color of colors) {
-      let el = 
-      `<div class="color">
-        <div class="value"></div>        
-        <input type="hidden" value="#9E69AF">
-      </div>`;
-      
-      $(el).css('background-color', color.hex);
-      $(uiColors).append(el);
-    }    
-  }
+    $(prevSelected).remove();
+    $(color).append(htmlSelected);
+  },
+
+  onCreateCalendar() {
+    let form = this.data.selectors.s_createCalendarForm;
+    let selectedColor = $(this.data.selectors.s_selectedColor)[0].parentElement;
+
+    let colorId = $(selectedColor).find('input[name="colorId"]').val();   
+    let name = $(form).find('input[name="calendarName"]').val();    
+    if (!name || name.trim() === '') {
+      name = '(No name)';
+    }
+
+        
+  },  
 };

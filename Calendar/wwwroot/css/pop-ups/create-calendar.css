@@ -9,6 +9,8 @@
   align-items: center;
   padding: 10px 20px;
   background-color: #fff;
+  animation-name: pop-up;
+  animation-duration: var(--animation-duration);
 }
 
 .create-calendar .top-case {
@@ -53,18 +55,22 @@
 .color {
   padding: 2px;
   border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.value {
-  background-color: #9E69AF;
+.value {  
   height: 18px;
   width: 18px;
   border-radius: 50%;
 }
 
 .color-selected {  
-  border: 1px solid rgba(0,0,0, .2);
-  background-origin: content-box;
-  transform: scale(1.2, 1.2);
-  padding: 2px;
+  user-select: none;
+  color: #fff;
+  position: absolute;
+  animation-name: pop-up;
+  animation-duration: var(--animation-duration);
 }

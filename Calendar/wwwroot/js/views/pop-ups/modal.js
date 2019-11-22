@@ -12,7 +12,10 @@ export let Modal = {
   setUpListeners(callback) {
     let modal = this.data.selectors.s_modal;
 
-    $(modal).click(() => callback());
+    $(modal).click(() => {
+      this.close();
+      callback();
+    });
   },
 
   open(callback) {

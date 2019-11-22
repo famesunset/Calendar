@@ -16,15 +16,4 @@ export class CalendarRepository extends Repository {
 
     return list;
   }
-
-  async getColorList() {
-    let list = [];
-
-    let promise = super.getList(null, '/Calendar/GetCalendarColorsList');    
-    await promise.then(data => {
-      list = data;
-    });
-
-    return list;
-  }
 }

@@ -1,6 +1,7 @@
 import { ViewMode } from "./view-mode.js";
 import { CalendarRepository } from '../models/mvc/calendar-repository.js';
 import { CreateCalendar } from '../views/pop-ups/create-calendar.js'
+import { Modal } from "./pop-ups/modal.js";
 
 export let CalendarList = {
   data: {
@@ -8,11 +9,15 @@ export let CalendarList = {
       s_calendarList: '#calendar-list',
       s_calendar: '.calendar',
       s_displayCalendar: '.display-calendar',
-      s_deleteCalendar: '.delete-calendar'
+      s_deleteCalendar: '.delete-calendar',
+      s_calendarFormTarget: '#create-calendar-target',
+      s_calendarFormContainer: '#create-calendar',    
+      s_calendarFormContent: '.create-calendar',      
     },
 
     url: {
-      u_loadList: '/CalendarView/GetList'
+      u_loadList: '/CalendarView/GetList',
+      u_loadCalendarForm: 'CalendarView/GetCreateCalendarForm'
     }
   },
 
@@ -24,6 +29,7 @@ export let CalendarList = {
   setUpListeners() {
     let s = this.data.selectors;
 
+    $(s.s_calendarFormTarget).click(() => this.onOpenCreationMenu())
     $(s.s_displayCalendar).change(e => this.onShowCalendarEvents(e));
     $(s.s_deleteCalendar).click(e => this.onDeleteCalendar(e));
     $(s.s_calendar).mouseenter(e => this.onShowDeleteBtn(e));
@@ -51,6 +57,10 @@ export let CalendarList = {
     } else {
       ViewMode.hideEventsByCalendarId(id);
     }
+  },
+
+  onOpenCreationMenu() {    
+    CreateCalendar.open();
   },
 
   onDeleteCalendar(e) {

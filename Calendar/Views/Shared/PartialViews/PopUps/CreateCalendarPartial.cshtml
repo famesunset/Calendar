@@ -1,43 +1,23 @@
-<div id="create-calendar" class="create-calendar pop-up">
-  <div class="top-case">
-    <input type="text" name="calendarName" placeholder="Name">
-    <div id="create-calendar-submit">
-      <i class="material-icons small">add_circle</i>
-    </div>
-  </div>
-  <div id="colors">
-    <div class="color color-selected">
-      <div class="value"></div>
-      <!-- Value - colorId -->
-      <input type="hidden" value="#9E69AF">
-    </div>
-    <div class="color">
-      <div class="value"></div>
-      <!-- Value - colorId -->
-      <input type="hidden" value="#9E69AF">
-    </div>
+@model List<Business.Models.Color>
 
-    <div class="color">
-      <div class="value"></div>
-      <!-- Value - colorId -->
-      <input type="hidden" value="#9E69AF">
-    </div>
-
-    <div class="color">
-      <div class="value"></div>
-      <!-- Value - colorId -->
-      <input type="hidden" value="#9E69AF">
-    </div>
-
-    <div class="color">
-      <div class="value"></div>
-      <!-- Value - colorId -->
-      <input type="hidden" value="#9E69AF">
-    </div>
-    <div class="color">
-        <div class="value"></div>
-        <!-- Value - colorId -->
-        <input type="hidden" value="#9E69AF">      
+  <div class="create-calendar pop-up">
+    <div class="top-case">
+      <input type="text" name="calendarName" placeholder="Name">
+      <div id="create-calendar-submit">
+        <i class="material-icons small">add_circle</i>
       </div>
+    </div>
+    <div id="colors">
+      @for (int i = 0; i < Model.Count; ++i)
+      { 
+      <div class="color">
+        <div class="value" style='background-color: @Model[i].Hex'></div>
+        <input type="hidden" name="colorId" value="@Model[i].Id">
+        @if(i == 0) 
+        {
+          <i class="material-icons tiny color-selected">check</i>
+        }
+      </div>
+      }
+    </div>
   </div>
-</div>

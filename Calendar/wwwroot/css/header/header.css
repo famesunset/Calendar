@@ -212,6 +212,8 @@ form button:focus {
   align-items: center;
   padding: 20px 30px;
   background-color: #fff;
+  animation-name: pop-up;
+  animation-duration: var(--animation-duration);
 }
 
 .avatar-large {

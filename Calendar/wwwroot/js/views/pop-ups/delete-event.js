@@ -27,8 +27,7 @@ export let DeleteEvent = {
 
   onClose() {
     let _this = DeleteEvent;
-    _this.close();
-    Modal.close();
+    _this.close();    
   },  
 
   onDeleteEvent() {
