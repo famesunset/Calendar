@@ -14,7 +14,7 @@ namespace Data.Repository
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                int calendarId = connection.ExecuteScalar<int>("uspCreateCalendar", new { IdUser = userId, calendar.Name, calendar.AccessId },
+                int calendarId = connection.ExecuteScalar<int>("uspCreateCalendar", new { IdUser = userId, calendar.Name, calendar.AccessId, calendar.ColorId },
                     commandType: CommandType.StoredProcedure);
                 return calendarId;
             }
