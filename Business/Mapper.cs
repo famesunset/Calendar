@@ -28,7 +28,7 @@
                         Events = new List<BaseEvent>(),
                         Id = val.Id,
                         Users = new List<User>(),
-                        ColorId = val.ColorId,
+                        Color = new Color {Id = val.ColorId, Hex = val.ColorHex},
                         UserOwnerId = val.UserOwnerId
                     })
                     .ForMember(dest => dest.Name,
@@ -40,7 +40,8 @@
                         Id = val.Id,
                         Name = val.Name,
                         AccessId = (int)val.Access,
-                        ColorId = val.ColorId,
+                        ColorId = val.Color.Id,
+                        ColorHex =  val.Color.Hex,
                         UserOwnerId = val.UserOwnerId
                     });
 
@@ -116,6 +117,13 @@
                        expression => expression.MapFrom(src => Encode(src.Email)))
                     .ForMember(dest => dest.Picture,
                        expression => expression.MapFrom(src => Encode(src.Picture)));
+
+                cfg.CreateMap<Data.Models.Color, Color>()
+                    .ForMember(dest => dest.Hex,
+                        expression => expression.MapFrom(src => Encode(src.Hex)));
+
+                cfg.CreateMap<Color, Data.Models.Color>();
+
             });
             Map = config.CreateMapper();
         }

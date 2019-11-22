@@ -8,7 +8,7 @@ namespace Business.Tests
     [TestClass]
     public class UnitTest1
     {
-        private readonly CalendarService calendarService = new CalendarService(new CalendarRepo(), new UserRepo(), new AllDataRepo());
+        private readonly CalendarService calendarService = new CalendarService(new CalendarRepo(), new UserRepo(), new AllDataRepo(), new ColorRepo());
 
         [TestMethod]
         public void TestCreateCalendar()

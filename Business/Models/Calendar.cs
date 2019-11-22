@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-
 namespace Business.Models
 {
+    using System.Collections.Generic;
     public class Calendar
     {
         public int Id { get; set; }
@@ -9,8 +8,7 @@ namespace Business.Models
         public Access Access { get; set; }
         public List<User> Users { get; set; }
         public List<BaseEvent> Events { get; set; }
-        public int ColorId { get; set; }
+        public Color Color { get; set; }
         public int UserOwnerId { get; set; }
-        // HEX Color
     }
 }

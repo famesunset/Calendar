@@ -13,7 +13,6 @@ namespace Data.Models
         public DateTime TimeStart { get; set; }
         public DateTime TimeFinish { get; set; }
         public bool AllDay { get; set; }
-        public string CalendarColor { get; set; }
 
         public AllData(int calendarId, string calendarName, string accessName, int eventId, string description,
             string title, int eventScheduleId, DateTime timeStart, DateTime timeFinish)

@@ -36,7 +36,8 @@ namespace Calendar
                 new CalendarService(
                     new CalendarRepo(),
                     new UserRepo(),
-                    new AllDataRepo()
+                    new AllDataRepo(),
+                    new ColorRepo()
                     )
                 );
 

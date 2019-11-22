@@ -8,5 +8,6 @@
         Calendar GetCalendar(string loginedUserId, int calendarId);
         int CreateCalendar(string loginedUserId, Calendar calendar);
         bool DeleteCalendar(string loginedUserId, int calendaId);
+        IEnumerable<Color> GetCalendarColors();
     }
 }

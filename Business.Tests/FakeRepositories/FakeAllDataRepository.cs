@@ -43,14 +43,11 @@ namespace Business.Tests.FakeRepositories
         CalendarId = _event.Calendar.Id,
         Description = _event.Description,
         Title = _event.Title,
-        Notification = _event.Notification.Text,
         AccessName = _event.Calendar.Access.ToString(),
         AllDay = _event.IsAllDay,
-        NotificationTime = _event.Notification.Time,
         TimeStart = _event.Start,
         TimeFinish = _event.Finish,
         CalendarName = _event.Calendar.Name,
-        EventScheduledId = 0,
       }; 
     }
   }

@@ -24,7 +24,7 @@ namespace Data.Tests
         public void TestCreateInfinityEvent()
         {
             Event even = new Event(2, "Description2", "Notification2", "Title2", 30, DateTime.Now, DateTime.Now, true);
-            eventRepo.CreateInfinityEvent(even);
+            eventRepo.CreateEvent(even);
         }
     }
 }

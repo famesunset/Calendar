@@ -14,5 +14,10 @@ namespace Business.Models
             Id = id;
             Hex = hex;
         }
+
+        public Color()
+        {
+            
+        }
     }
 }

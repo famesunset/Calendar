@@ -1,8 +1,7 @@
-﻿using static Business.Mapper;
-
-namespace Business.Services.User
+﻿namespace Business.Services.User
 {
     using Data.Repository.Interfaces;
+    using static Business.Mapper;
     using Models;
     public class UserService : IUserService
     {

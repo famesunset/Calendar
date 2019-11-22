@@ -1,8 +1,7 @@
-﻿using System.Linq;
-
-namespace Business.Services.Calendar
+﻿namespace Business.Services.Calendar
 {
     using Models;
+    using System.Linq;
     using System.Collections.Generic;
     using Data.Repository.Interfaces;
     using static Mapper;
@@ -12,7 +11,8 @@ namespace Business.Services.Calendar
         private readonly ServiceHelper serviceHelper;
 
         private readonly ICalendar calendarRepos;
-        public CalendarService(ICalendar calendarRepository, IUser userRepository, IAllData bigEventRepository)
+        private readonly IColor colorRepos;
+        public CalendarService(ICalendar calendarRepository, IUser userRepository, IAllData bigEventRepository, IColor colorRepository)
         {
             calendarRepos = calendarRepository;
 
@@ -56,6 +56,11 @@ namespace Business.Services.Calendar
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendaId);
             int? deleted = calendarRepos.RemoveCalendar(dataCalendar.Id);
             return dataCalendar != null && deleted == null;
+        }
+
+        public IEnumerable<Color> GetCalendarColors()
+        {
+            return colorRepos.GetColors().Select(c => Map.Map<Data.Models.Color, Color>(c));
         }
     }
 }
