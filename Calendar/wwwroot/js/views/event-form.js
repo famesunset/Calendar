@@ -115,6 +115,7 @@ export let EventForm = {
     $(el).remove();     
     this.formState('close');      
     ViewMode.cacheEvent('');  
+    Modal.close();
   },
 
   onCancelCreation() {  

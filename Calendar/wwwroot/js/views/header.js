@@ -60,7 +60,8 @@ export let Header = {
     let close = _this.data.css.stateClose;
     let menu = _this.data.cache.userMenu;
     
-    $(menu).addClass(close)    
+    $(menu).addClass(close);
+    Modal.close();
   },
 
   onNext() {

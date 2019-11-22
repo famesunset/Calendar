@@ -33,6 +33,7 @@ export let DeleteEvent = {
   onDeleteEvent() {
     this.deleteEvent();
     this.close();
+    Modal.close();
   },
 
   open(eventId, pos) {    
