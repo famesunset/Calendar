@@ -38,12 +38,12 @@ export let MainCalendar = {
     let input = this.data.selectors.s_input;
 
     this.data.calendar = new DatePicker({
-        container: container,
-        setDefaultDate: true,
-        defaultDate: new Date(),
-        firstDay: 1,
-        animation: false,
-        onSelect: (date) => _this.onSelect(date)
+      container: container,
+      setDefaultDate: true,
+      defaultDate: new Date(),
+      firstDay: 1,
+      animation: false,
+      onSelect: (date) => _this.onSelect(date)
     }, input);
     
     this.data.calendar.runDatePicker();  

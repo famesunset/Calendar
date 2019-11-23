@@ -11,16 +11,7 @@
   <div class="calendar-list">
     @foreach (var calendar in Model)
     {
-    <div class="calendar">
-      <input type="hidden" name="calendarId" value="@calendar.Id">
-      <label>
-        <input checked="true" class="filled-in display-calendar" type="checkbox" />
-        <span>@calendar.Name</span>
-      </label>
-      <div class="delete-calendar waves-effect">
-        <i class="material-icons tiny">close</i>
-      </div>
-    </div>
+      @Html.Partial("PartialViews/SideBar/CalendarPartial", calendar);
     }
   </div>
 </div>

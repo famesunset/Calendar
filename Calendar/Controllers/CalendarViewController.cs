@@ -17,37 +17,41 @@ namespace Calendar.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IUserService userService;
+        private readonly ICalendarService calendarService;
 
         public CalendarViewController(
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
-            [FromServices] IUserService userService)
+            [FromServices] IUserService userService,
+            [FromServices] ICalendarService calendarService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.userService = userService;
+            this.calendarService = calendarService;
         }
 
         [HttpGet]        
-        public IActionResult GetList([FromServices] ICalendarService service)
+        public IActionResult GetList()
         {
-            var calendars = service.GetCalendars(userManager.GetUserId(User));
+            var calendars = calendarService.GetCalendars(userManager.GetUserId(User));
 
             return PartialView("PartialViews/SideBar/MyCalendarsPartial", calendars);
         }
 
         [HttpGet]
+        public IActionResult GetCalendarView(int id)
+        {
+            string user = userManager.GetUserId(User);
+            Business.Models.Calendar calendar = calendarService.GetCalendar(user, id);
+
+            return PartialView("PartialViews/SideBar/CalendarPartial", calendar);
+        }
+
+        [HttpGet]
         public IActionResult GetCreateCalendarForm()
         {
-            List<Color> colors = new List<Color>()
-            {
-                new Color(1, "#9E69AF"),
-                new Color(2, "#039BE5"),
-                new Color(3, "#3F51B5"),
-                new Color(4, "#0B8043"),
-                new Color(5, "#F6BF26"),
-                new Color(6, "#D50000"),  //Red
-            };
+            List<Color> colors = calendarService.GetCalendarColors().ToList();
 
             return PartialView("PartialViews/PopUps/CreateCalendarPartial", colors);
         }

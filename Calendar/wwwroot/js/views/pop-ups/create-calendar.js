@@ -1,4 +1,5 @@
 import { Modal } from '../pop-ups/modal.js';
+import { CalendarList } from '../calendar-list.js';
 
 export let CreateCalendar = {
   data: {
@@ -46,6 +47,7 @@ export let CreateCalendar = {
     let _this = CreateCalendar;
     let form = _this.data.selectors.s_createCalendarForm;
     $(form).remove();
+    Modal.close();
   },
 
   onColorSelected(e) {
@@ -63,10 +65,8 @@ export let CreateCalendar = {
 
     let colorId = $(selectedColor).find('input[name="colorId"]').val();   
     let name = $(form).find('input[name="calendarName"]').val();    
-    if (!name || name.trim() === '') {
-      name = '(No name)';
-    }
 
-        
+    CalendarList.addCalendar(name, colorId);
+    this.close();
   },  
 };

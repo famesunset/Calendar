@@ -7,6 +7,7 @@ export let CalendarList = {
   data: {
     selectors: {
       s_calendarList: '#calendar-list',
+      s_calendars: '.calendar-list',
       s_calendar: '.calendar',
       s_displayCalendar: '.display-calendar',
       s_deleteCalendar: '.delete-calendar',
@@ -17,6 +18,7 @@ export let CalendarList = {
 
     url: {
       u_loadList: '/CalendarView/GetList',
+      u_calendarView: '/CalendarView/GetCalendarView',
       u_loadCalendarForm: 'CalendarView/GetCreateCalendarForm'
     }
   },
@@ -46,6 +48,21 @@ export let CalendarList = {
     });
   },
 
+  async addCalendar(name, colorId) {
+    if (!name || name.trim() === '') {
+      name = '(No name)';
+    }
+
+    let id = await new CalendarRepository().insert(name, colorId);
+
+    let url = this.data.url.u_calendarView + `?id=${id}`;
+    let container = this.data.selectors.s_calendars;
+
+    $.get(url, (content) => {
+      $(container).append(content);            
+    });
+  },
+
   onShowCalendarEvents(e) {
     let target = e.currentTarget;
     let checked = target.checked;
@@ -67,7 +84,8 @@ export let CalendarList = {
     let root = e.currentTarget.parentElement;
     let id = $(root).find('input[name="calendarId"]').val();
     
-    // new CalendarRepository().delete(id);
+    new CalendarRepository().delete(id);
+    $(root).remove();
   },
 
   onShowDeleteBtn(e) {

@@ -4,18 +4,63 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Models;
 using Business.Services.Calendar;
+using Business.Services.User;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Calendar.Controllers
 {
     public class CalendarController : Controller
     {
+        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly IUserService userService;
+        private readonly ICalendarService calendarService;
 
-        public IActionResult GetCalendarList([FromServices] ICalendarService service)
+        public CalendarController(
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            [FromServices] IUserService userService,
+            [FromServices] ICalendarService calendarService)
         {
-            var calendars = service.GetCalendars(null);
+            this.signInManager = signInManager;
+            this.userManager = userManager;
+            this.userService = userService;
+            this.calendarService = calendarService;
+        }
+
+        public IActionResult GetCalendarList()
+        {
+            string user = userManager.GetUserId(User);
+            var calendars = calendarService.GetCalendars(user);
 
             return Json(calendars);
+        }
+
+        [HttpGet]
+        public IActionResult CreateCalendar(string name, int colorId)
+        {
+            var color = calendarService.GetCalendarColors().Where(c => c.Id == colorId).FirstOrDefault();
+            var calendar = new Business.Models.Calendar()
+            {
+                Name = name,
+                Color = color,
+                Access = Access.Private
+            };
+
+            string user = userManager.GetUserId(User);
+            //int id = calendarService.CreateCalendar(user, calendar);            
+
+            return Json(10);
+        }
+    
+        [HttpGet]
+        public IActionResult DeleteCalendar(int id)
+        {
+            string user = userManager.GetUserId(User);
+            calendarService.DeleteCalendar(user, id);
+
+            return Json("success");
         }
     }
 }

@@ -17,6 +17,7 @@
             calendarRepos = calendarRepository;
 
             serviceHelper = new ServiceHelper(userRepository, calendarRepository, bigEventRepository);
+            colorRepos = colorRepository;
         }
         public IEnumerable<Calendar> GetCalendars(string loginedUserId)
         {

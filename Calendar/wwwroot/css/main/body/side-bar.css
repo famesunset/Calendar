@@ -135,3 +135,8 @@
 #create-calendar-target i {
   transform: scale(.8, .8);
 }
+
+.calendar-events-checkbox[type="checkbox"].filled-in:checked + span:not(.lever):after {
+  border: 2px solid attr(data-color) !important;
+  background-color: attr(data-color) !important;
+}
