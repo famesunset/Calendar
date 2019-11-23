@@ -68,5 +68,5 @@ export let CreateCalendar = {
 
     CalendarList.addCalendar(name, colorId);
     this.close();
-  },  
+  }, 
 };

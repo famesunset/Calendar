@@ -268,19 +268,19 @@ export let Daily = {
       let container = $(`#cell-${start.getHours()}`);
 
       if (event.isAllDay) {
-        this.renderAllDayEvent(selector, event.id, event.title);
+        this.renderAllDayEvent(selector, event.id, event.title, event.color);
       } else {
-        this.renderEvent(container, selector, event.id, event.title, start, finish);
+        this.renderEvent(container, selector, event.id, event.title, start, finish, event.color);
       }      
     });
   },
 
-  renderEvent(container, selector, id, title, start, finish) {
+  renderEvent(container, selector, id, title, start, finish, color) {
     if (!title || title.trim() === '') {
       title = '(No title)';
     }
     
-    var eventEl =   `<div class="daily-event" id="${selector}">` +
+    var el =   `<div class="daily-event" id="${selector}">` +
                         `<div class="${this.data.css.s_eventContentWrapper}">` +
                           `<input type="hidden" name="id" value="${id}">` +
                           `<h6 class="title">${title}</h4>` +
@@ -292,11 +292,12 @@ export let Daily = {
                         '</div>' +
                         `<div class="${this.data.css.c_loadDeleteEvent}"></div>` +
                     '</div>';      
-
-    $(container).append(eventEl);
+    
+    $(container).append(el);
 
     this.calcEventPosition(selector, start, finish);   
     this.cacheEvent(selector); 
+    $(`#${selector}`).css('background-color', color);
     $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
     $(`#${selector}`).mouseup(e => {
       if (this.data.cache.state == 'create')
@@ -306,7 +307,7 @@ export let Daily = {
     });
   },
 
-  renderAllDayEvent(selector, id, title) {
+  renderAllDayEvent(selector, id, title, color) {
     let s = this.data.selectors;    
     
     if (!title || title.trim() === '') {
@@ -318,10 +319,11 @@ export let Daily = {
                 <span class="title">${title}</span>
                 <div class="${this.data.css.c_loadDeleteEvent}"></div>
               </div>`;
-
+    
     $(s.s_allDayEvents).append(el);
 
     this.cacheEvent(selector); 
+    $(`#${selector}`).css('background-color', color);
     $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
     $(`#${selector}`).mouseup(e => this.onEditEvent(e));
   },
@@ -366,10 +368,14 @@ export let Daily = {
     let $event = $(`#${selector}`);     
     let $wrapper = $(`#${selector} ${s.s_eventContentWrapper}`);  
 
-    let startMinutes = (start.getHours() * 60) + start.getMinutes();
-    let finishMinutes = (finish.getHours() * 60) + finish.getMinutes();
+    // Convert start and finish to the same date
+    finish = moment(start).set({hour: finish.getHours(), minute: finish.getMinutes()}).toDate();
+    if (finish.getHours() == 0 &&
+        finish.getMinutes() == 0) {
+      finish = moment(finish).add(1, 'days');
+    }
 
-    let minutesDiff = Math.abs(startMinutes - finishMinutes);
+    let minutesDiff = Math.abs(start.getTime() - finish.getTime()) / 1000.0 / 60.0;
     let factor = (this.data.ux.cellHeight * minutesDiff) / 60.0 - this.data.ux.cellHeight;
     let margin = (this.data.ux.cellHeight * start.getMinutes()) / 60.0;
     

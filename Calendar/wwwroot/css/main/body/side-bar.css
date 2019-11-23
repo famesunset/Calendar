@@ -137,6 +137,6 @@
 }
 
 .calendar-events-checkbox[type="checkbox"].filled-in:checked + span:not(.lever):after {
-  border: 2px solid attr(data-color) !important;
-  background-color: attr(data-color) !important;
+  border: 2px solid var(--checkbox-color) !important;
+  background-color: var(--checkbox-color) !important;
 }

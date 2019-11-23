@@ -39,6 +39,7 @@ namespace Calendar.Controllers
             var _calendars = new List<Business.Models.Calendar>
                  (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars));
 
+            _calendars.ForEach(c => c.Events.ForEach(e => e.Color = c.Color.Hex));
             var events = _calendars.SelectMany(c => c.Events).ToList();
             return Json(events);
         }

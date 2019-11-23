@@ -9,7 +9,7 @@ export let CalendarList = {
       s_calendarList: '#calendar-list',
       s_calendars: '.calendar-list',
       s_calendar: '.calendar',
-      s_displayCalendar: '.display-calendar',
+      s_displayCalendar: '.calendar-events-checkbox',
       s_deleteCalendar: '.delete-calendar',
       s_calendarFormTarget: '#create-calendar-target',
       s_calendarFormContainer: '#create-calendar',    
@@ -44,7 +44,7 @@ export let CalendarList = {
 
     $(container).load(url, () => {
       this.setUpListeners();
-      callback();
+      callback();      
     });
   },
 
@@ -120,4 +120,17 @@ export let CalendarList = {
 
     return checkedArray;
   },
+
+  findRootById(calendarId) {
+    let calendars = $(this.data.selectors.s_calendar);
+
+    for (let calendar of calendars) {
+      let id = $(calendar).find('input[name="calendarId"]').val();
+      if (id == calendarId) {
+        return calendar;
+      }
+    }
+
+    return null;
+  }
 };

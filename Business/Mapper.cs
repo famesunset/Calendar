@@ -53,7 +53,7 @@
                         Start = val.TimeStart,
                         Finish = val.TimeFinish,
                         Id = val.EventId,
-                        IsAllDay = val.AllDay
+                        IsAllDay = val.AllDay                        
                     })
                     .ForMember(baseEvent => baseEvent.Title,
                         expression => expression.MapFrom(data => Encode(data.Title)))

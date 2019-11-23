@@ -49,9 +49,9 @@ namespace Calendar.Controllers
             };
 
             string user = userManager.GetUserId(User);
-            //int id = calendarService.CreateCalendar(user, calendar);            
+            int id = calendarService.CreateCalendar(user, calendar);            
 
-            return Json(10);
+            return Json(id);
         }
     
         [HttpGet]
