@@ -59,7 +59,8 @@ export let CalendarList = {
     let container = this.data.selectors.s_calendars;
 
     $.get(url, (content) => {
-      $(container).append(content);            
+      $(container).append(content);  
+      this.setUpListeners();
     });
   },
 
