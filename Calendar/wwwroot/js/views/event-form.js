@@ -120,6 +120,19 @@ export let EventForm = {
       this.setUpListeners();
 
       Modal.open(this.onCancelCreation);
+
+      let title = $(s.s_title).val();
+      let color = ViewMode.getCachedColor();
+
+      let rollback = {
+        id,
+        start,
+        finish,
+        title,
+        color
+      };
+
+      ViewMode.cacheRollback(rollback);
     });
   },
 
@@ -140,7 +153,9 @@ export let EventForm = {
 
     if (_this.getFormState() == _this.data.form.states.create) {
       ViewMode.deleteEvent(selector);      
-    }        
+    } else {
+      ViewMode.eventRollback();
+    }    
     _this.close();
   },
 

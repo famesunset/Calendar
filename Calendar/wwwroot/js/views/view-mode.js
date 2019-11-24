@@ -78,6 +78,14 @@ export let ViewMode = {
     return this.data.current.getCachedColor();
   },
 
+  eventRollback() {
+    this.data.current.eventRollback();
+  },
+
+  cacheRollback(settings) {
+    this.data.current.cacheRollbackSettings(settings);
+  },
+
   deleteEvent(selector) {    
     let el = document.getElementById(selector);
 

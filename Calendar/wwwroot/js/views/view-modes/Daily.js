@@ -9,11 +9,18 @@ export let Daily = {
   data: {
     cache: {
       cachedEvent: '',
-      cachedColor: '',
+      cachedColor: '',      
       c_targetCellShift: {},
       timeStart: {},
       timeFinish: {},
-      state: ''      
+      state: '',
+      rollback: {
+        id: 0,
+        color: null,
+        title: null,
+        start: null,
+        finish: null
+      } 
     },
 
     selectors: {
@@ -103,11 +110,14 @@ export let Daily = {
     if (e.which != this.data.ux.leftMouseBtn)
       return;
           
-    let id = $(e.currentTarget).find('input[name="id"]').val();
+    let target = e.currentTarget;
+    let id = $(target).find('input[name="id"]').val();
     
     if (id != 0 && EventForm.formCanOpen()) {
+      let color = $(target).css('background-color');
       EventForm.openEdit(id);    
-      this.cacheEvent(e.currentTarget.id);
+      this.cacheEvent(target.id);      
+      this.cacheColor(color);
     }        
   },
 
@@ -438,6 +448,23 @@ export let Daily = {
     $(`#${event}`).css('background-color', calendar.color.hex);    
   },
 
+  eventRollback() {
+    let settings = this.data.cache.rollback;
+    let target = this.getCachedEvent();
+    $(`#${target}`).remove();
+
+    let container = this.findCellByTime(settings.start);
+    
+    this.renderEvent(
+      container, 
+      target, 
+      settings.id, 
+      settings.title,
+      settings.start,
+      settings.finish,
+      settings.color);
+  },
+
   eventExists(id) {
     let daily = this.data.selectors.s_dailyEvent;
     let allDay = this.data.selectors.s_allDayEvent;
@@ -476,6 +503,10 @@ export let Daily = {
 
   cacheColor(color) {
     this.data.cache.cachedColor = color;
+  },
+
+  cacheRollbackSettings(settings) {
+    this.data.cache.rollback = settings;
   },
 
   getCachedColor() {
