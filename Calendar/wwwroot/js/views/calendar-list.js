@@ -84,6 +84,7 @@ export let CalendarList = {
     let root = e.currentTarget.parentElement;
     let id = $(root).find('input[name="calendarId"]').val();
     
+    ViewMode.hideEventsByCalendarId(id);
     new CalendarRepository().delete(id);
     $(root).remove();
   },
