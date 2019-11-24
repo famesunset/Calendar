@@ -267,8 +267,11 @@ export let Daily = {
     $(s.s_day).text(m_date.format('D'));
   },
 
-  renderEvents(events) {    
-    events.forEach(event => {              
+  renderEvents(events) {           
+    events.forEach(event => {   
+      if (this.eventExists(event.id))
+        return;      
+
       let start = new Date(event.start);
       let finish = new Date(event.finish);
       let selector = GUID();     
@@ -418,6 +421,22 @@ export let Daily = {
     
     let event = this.getCachedEvent();
     $(`#${event}`).css('background-color', calendar.color.hex);    
+  },
+
+  eventExists(id) {
+    let daily = this.data.selectors.s_dailyEvent;
+    let allDay = this.data.selectors.s_allDayEvent;
+
+    let events = [...$(daily), ...$(allDay)];
+
+    if (events.length != 0) {
+      for(let event of events) {
+        let _id = $(event).find('input[name="id"]').val();
+        if (_id == id) return true;
+      }
+    }
+
+    return false;
   },
 
   setEventTitle(title, id) {

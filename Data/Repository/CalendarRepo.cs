@@ -57,7 +57,7 @@ namespace Data.Repository
                 var removeCalendar = connection.Query("uspRemoveCalendar", new { calendarId },
                     commandType: CommandType.StoredProcedure);
                 string idCheck = "SELECT Id FROM Calendars WHERE Id = @calendarId";
-                return connection.Query(idCheck, new { calendarId }).SingleOrDefault();
+                return connection.Query<int?>(idCheck, new { calendarId }).SingleOrDefault();
             }
         }
     }

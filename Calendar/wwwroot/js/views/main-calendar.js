@@ -19,6 +19,9 @@ export let MainCalendar = {
   },
 
   async onSelect(date) {
+    if (!this.validDate(date)) 
+      return;
+
     ViewMode.close();     
 
     Header.renderDate(date);
@@ -52,5 +55,13 @@ export let MainCalendar = {
 
   setDate(date) {
     this.data.calendar.setDate(date);
+  },
+
+  validDate(date) {
+    let userSelectedDate = new Date(sessionStorage.getItem('currentDate'));
+    let mUserSelectedDate = moment(userSelectedDate).startOf('day');
+    let mNewDate = moment(date).startOf('day');
+
+    return !mUserSelectedDate.isSame(mNewDate);
   }
 };
