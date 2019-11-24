@@ -39,11 +39,12 @@ export let MainCalendar = {
     let _this = this;
     let container = this.data.selectors.s_calendarWrapper;
     let input = this.data.selectors.s_input;
+    let sessionDate = new Date(sessionStorage.getItem('currentDate'));
 
     this.data.calendar = new DatePicker({
       container: container,
       setDefaultDate: true,
-      defaultDate: new Date(),
+      defaultDate: sessionDate,
       firstDay: 1,
       animation: false,
       onSelect: (date) => _this.onSelect(date)

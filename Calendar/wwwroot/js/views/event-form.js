@@ -56,7 +56,11 @@ export let EventForm = {
     url: {
       createEventForm: '/EventView/CreateEventForm',
       editEventForm: '/EventView/EditEventForm'
-    } 
+    },
+
+    cache: {
+      formCallback: null
+    }
   },
 
   setUpListeners() {
@@ -73,7 +77,7 @@ export let EventForm = {
     $(s.s_timeFinish).focusout(e => this.onTimeFocusOut(e));
   },
 
-  openCreate(start, finish, allDay = false) {    
+  openCreate(start, finish, allDay = false, callback = null) {    
     let s = this.data.selectors;
     let container = s.s_formLoad;
     let url = this.data.url.createEventForm;    
@@ -88,6 +92,7 @@ export let EventForm = {
       this.renderTimePickers(start, finish);            
       this.formState('create');
       this.setUpListeners();
+      this.cacheFromCallback(callback);
 
       if (allDay) $(s.s_isAllDay).show();
       Modal.open(this.onCancelCreation);
@@ -147,6 +152,7 @@ export let EventForm = {
     $(`#${selector}`).find('input[name="id"]').val(id);
 
     this.close();
+    this.execFormCallback();
   },
 
   onEdit() {
@@ -399,6 +405,17 @@ export let EventForm = {
       this.data.form.timePickers[key].setDefaultInputValue();
       this.data.form.timePickers[key].runTimePicker();
     }
+  },
+
+  cacheFromCallback(callback) {
+    this.data.cache.formCallback = callback;
+  },
+
+  execFormCallback() {
+    let callback = this.data.cache.formCallback;
+
+    if (callback != null)
+      callback();
   },
 
   openAnimation() {

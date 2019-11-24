@@ -6,8 +6,10 @@ import { CalendarList } from './views/calendar-list.js';
 
 $(function() {
   let app = {
-    async run() {      
-      let date = new Date();
+    async run() {    
+      let sessionDate = sessionStorage.getItem('currentDate');          
+      let date = sessionDate != null ? new Date(sessionDate) : new Date();
+
       sessionStorage.setItem('currentDate', 
         moment(date).startOf('day').toDate());
             

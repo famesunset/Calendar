@@ -50,11 +50,12 @@ export let Daily = {
   async run() {    
     let calendars = CalendarList.getSelectedCalendars();
     let repo = new EventRepository(); 
-    let events = await repo.getList(moment(new Date())
+    let date = new Date(sessionStorage.getItem('currentDate'));
+    let events = await repo.getList(moment(date)
                                     .startOf('day')
                                     .toDate(), calendars);
 
-    this.renderDate(new Date(sessionStorage.getItem('currentDate')));
+    this.renderDate(date);
     this.renderTable();
     this.renderEvents(events);
     this.setUpListeners();    
@@ -151,19 +152,22 @@ export let Daily = {
     this.data.cache.cachedColor = color;
   },
 
-  onOpenCreateForm(e, allDay = false) {  
-    if (e.which != this.data.ux.leftMouseBtn) 
+  onOpenCreateForm(event, allDay = false) {  
+    if (event.which != this.data.ux.leftMouseBtn) 
       return;
 
     let s = this.data.selectors;
+    let target = event.currentTarget;
 
     EventForm.openCreate(      
       this.data.cache.timeStart,
       this.data.cache.timeFinish,
-      allDay   
+      allDay,
+      () => $(target).mouseup((e) => this.onEditEvent(e))
     );
 
     $(s.s_table).unbind('mousemove');
+    $(target).unbind('mouseup');
     this.data.cache.state = '';
   },
   
