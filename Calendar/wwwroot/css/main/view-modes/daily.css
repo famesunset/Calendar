@@ -3,23 +3,42 @@
   height: 100%;
 }
 
-#day-view-mode .date {
+#day-view-mode .date-presentation {
   color: var(--color-minor-gray);
+  display: flex;  
+  justify-content: flex-start;  
+  align-items: center;  
+  margin-left: 75px;
+  margin-bottom: 15px;
+}
+
+#day-view-mode .date {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-left: 75px;
+  justify-content: center;
+  align-items: center;
 }
 
 #day-view-mode .date .day-of-week {
   font-size: 11px;
-  font-weight: normal;
+  font-weight: 500;
   text-transform: uppercase;
 }
 
 #day-view-mode .date .day {
-  font-size: 26px;
-  font-weight: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  height: 46px;
+  width: 46px;
+  border-radius: 50%;
+  font-weight: normal;  
+}
+
+.current-date {
+  background-color: var(--color-main);
+  color: #fff;
 }
 
 .day-view-presentation {
