@@ -9,6 +9,7 @@ export let Daily = {
   data: {
     cache: {
       cachedEvent: '',
+      cachedColor: '',
       c_targetCellShift: {},
       timeStart: {},
       timeFinish: {},
@@ -21,6 +22,7 @@ export let Daily = {
       s_dayOfWeek: '.date .day-of-week',
       s_dailyEvent: '.daily-event',
       s_allDayEvent: '.all-day-event',
+      s_createAllDayTarget: '#day-view-mode .date',
       s_loadDeleteEvent: '.load-delete-event',
       s_eventContentWrapper: '.event-content-wrapper',
       s_eventWrapperTiny: '.daily-event-tiny',
@@ -88,8 +90,10 @@ export let Daily = {
 
     EventForm.openCreate(start, finish);       
 
-    this.renderEvent(container, selector, id, '(No title)', start, finish);
+    let color = CalendarList.getTopCalendarColor();
+    this.renderEvent(container, selector, id, '(No title)', start, finish, color);
     this.cacheEvent(selector);
+    this.cacheColor(color);
   },
 
   onEditEvent(e) {  
@@ -135,7 +139,8 @@ export let Daily = {
           
     let timeFinish = moment(timeStart).add(1, 'hours').toDate();
 
-    this.renderEvent(container, selector, eventId, '(No title)', timeStart, timeFinish);
+    let color = CalendarList.getTopCalendarColor();
+    this.renderEvent(container, selector, eventId, '(No title)', timeStart, timeFinish, color);
 
     let targetCoords = this.getCoords(container);
     this.data.cache.c_targetCellShift = Math.abs(e.pageY - targetCoords.y);
@@ -143,9 +148,10 @@ export let Daily = {
     this.data.cache.timeStart = timeStart;
     this.data.cache.timeFinish = timeFinish;
     this.data.cache.state = 'create';
+    this.data.cache.cachedColor = color;
   },
 
-  onOpenCreateForm(e) {  
+  onOpenCreateForm(e, allDay = false) {  
     if (e.which != this.data.ux.leftMouseBtn) 
       return;
 
@@ -153,7 +159,8 @@ export let Daily = {
 
     EventForm.openCreate(      
       this.data.cache.timeStart,
-      this.data.cache.timeFinish,      
+      this.data.cache.timeFinish,
+      allDay   
     );
 
     $(s.s_table).unbind('mousemove');
@@ -402,7 +409,15 @@ export let Daily = {
     let container = $(`${cell}[data-time='${dataTime}']`)[0];
     
     $(`#${selector}`).remove();
-    this.renderEvent(container, selector, id, title, start, finish);
+    let color = this.getCachedColor();
+    this.renderEvent(container, selector, id, title, start, finish, color);
+  },
+
+  async changeEventCalendar(id) {
+    let calendar = await new CalendarRepository().get(id);
+    
+    let event = this.getCachedEvent();
+    $(`#${event}`).css('background-color', calendar.color.hex);    
   },
 
   setEventTitle(title, id) {
@@ -423,6 +438,14 @@ export let Daily = {
   
   cacheEvent(selector) {
     this.data.cache.cachedEvent = selector;
+  },
+
+  cacheColor(color) {
+    this.data.cache.cachedColor = color;
+  },
+
+  getCachedColor() {
+    return this.data.cache.cachedColor;
   },
 
   getCachedEvent() {

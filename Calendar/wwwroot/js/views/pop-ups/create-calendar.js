@@ -36,8 +36,12 @@ export let CreateCalendar = {
   open() {
     let url = this.data.url.loadForm;
     let container = this.data.selectors.s_loadContainer;    
-    
-    $(container).load(url, () => {
+
+    $.get(url, content => {
+      if (!this.canOpen()) 
+      return;
+
+      $(container).html(content);
       Modal.open(this.close);
       this.setUpListeners();
     });
@@ -69,4 +73,10 @@ export let CreateCalendar = {
     CalendarList.addCalendar(name, colorId);
     this.close();
   }, 
+
+  canOpen() {
+    let form = this.data.selectors.s_createCalendarForm;
+
+    return $(form).length == 0;
+  }
 };

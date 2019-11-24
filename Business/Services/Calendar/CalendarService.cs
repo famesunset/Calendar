@@ -25,7 +25,9 @@
             if (dataUser != null)
             {
                 var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
-                return userCalendars.Select(c => Map.Map<Data.Models.Calendar, Calendar>(c));
+                return userCalendars
+                    .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
+                    .OrderBy(c => c.Id);
             }
             return null;
         }

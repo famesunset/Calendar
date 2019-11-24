@@ -11,6 +11,7 @@ export let EventForm = {
       datePickers: [],
       timePickers: [],
       dropdown: null,
+      userCalendars: null,
       state: 'close',
       states: {
         create: 'create',
@@ -24,11 +25,17 @@ export let EventForm = {
       s_formWrapper: '.create-event-wrapper',
       s_form: '.create-event-form',       
       s_title: '.create-event-form #title',
+      s_description: '.create-event-form #description',
       s_timeStart: '#time-start',
       s_timeFinish: '#time-finish',
       s_dateStart: '#date-start',
       s_dateFinish: '#date-finish',
-      s_isAllDay: '#all-day',      
+      s_isAllDay: '.create-event-form #all-day',     
+      s_userCaledars: '#user-calendars-trigger',
+      s_seletedCalendar: '#user-calendars-trigger',
+      s_userCalendar: '.user-calendar',
+      s_userCalendarItem: '#user-calendar-list .user-calendar',
+      s_calendarColor: '.calendar-color',
       s_optionsLoad: '#more-options',
       s_options: '.options',
       s_submitBtn: '#event-submit-btn',
@@ -55,6 +62,7 @@ export let EventForm = {
   setUpListeners() {
     let s = this.data.selectors;
 
+    $(s.s_userCalendarItem).click((e) => this.onCalendarChanged(e));
     $(s.s_closeTrigger).click(() => this.onCancelCreation());  
     $(s.s_optionsTrigger).click(() => this.onOptionsOpen());
     $(s.s_submitCreate).click(() => this.onCreate());
@@ -65,7 +73,7 @@ export let EventForm = {
     $(s.s_timeFinish).focusout(e => this.onTimeFocusOut(e));
   },
 
-  openCreate(start, finish) {    
+  openCreate(start, finish, allDay = false) {    
     let s = this.data.selectors;
     let container = s.s_formLoad;
     let url = this.data.url.createEventForm;    
@@ -74,12 +82,14 @@ export let EventForm = {
       if (!this.formCanOpen())
         return;
 
-      $(container).html(content);      
+      $(container).html(content);   
+      this.runUserCalendars();
       this.renderDatePickers(start, finish);
       this.renderTimePickers(start, finish);            
       this.formState('create');
       this.setUpListeners();
 
+      if (allDay) $(s.s_isAllDay).show();
       Modal.open(this.onCancelCreation);
     });
 
@@ -98,6 +108,7 @@ export let EventForm = {
       let start = new Date($(s.s_dateStart).val());
       let finish = new Date($(s.s_dateFinish).val());
       
+      this.runUserCalendars();
       this.renderDatePickers(start, finish);
       this.renderTimePickers(start, finish);             
       this.formState('edit');
@@ -144,6 +155,25 @@ export let EventForm = {
     this.close();
   },
 
+  onCalendarChanged(e) {
+    let s = this.data.selectors;
+    let target = e.currentTarget;
+    let selectedCalendar = s.s_seletedCalendar;    
+
+    let name = $(target).find('span')[0].innerText;
+    let colorContainer = $(target).find(s.s_calendarColor)[0];
+    let color = $(colorContainer).css('background-color');
+    let id = $(target).find('input[name="calendarId"]').val();
+
+    $(selectedCalendar).find('span')[0].innerText = name;
+    $(selectedCalendar).find('input[name="calendarId"]').val(id);
+    let selectedCalendarColor = $(selectedCalendar).find(s.s_calendarColor)[0];
+    $(selectedCalendarColor).css('background-color', color);
+
+    ViewMode.changeEventCalendar(+id);
+    ViewMode.cacheColor(color);
+  },
+
   onAllDayChanged(e) {
     let s = this.data.selectors;
     let checked = e.currentTarget.checked;    
@@ -151,16 +181,17 @@ export let EventForm = {
     let selector = ViewMode.getCachedEvent();    
     let title = $(s.s_title).val();
     let id = $(s.s_form).find('input[name="eventId"]').val();
+    let color = ViewMode.getCachedColor();
 
-    $(`#${selector}`).remove();
+    $(`#${selector}`).remove();    
 
     if (checked) {            
-      ViewMode.renderAllDayEvent(selector, id, title);
+      ViewMode.renderAllDayEvent(selector, id, title, color);
     } else {      
       let start = moment($(s.s_timeStart).val(), ['h:m a', 'H:m']).toDate();
       let finish = moment($(s.s_timeFinish).val(), ['h:m a', 'H:m']).toDate();
-
-      ViewMode.renderDefaultEvent(selector, id, title, start, finish);
+      
+      ViewMode.renderDefaultEvent(selector, id, title, start, finish, color);
     }    
   },
 
@@ -232,14 +263,16 @@ export let EventForm = {
   },
 
   getEvent() {
+    let s = this.data.selectors;
+
     let datePickers = this.data.form.datePickers;
     let timePickers = this.data.form.timePickers;
 
-    let id = $(this.data.selectors.s_form).find('input[name="eventId"]').val();
-    let calendarId = 2;
-    let title = $('#title').val();
-    let description = $('#description').val();
-    let isAllDay = $('#all-day').is(":checked");
+    let id = $(s.s_form).find('input[name="eventId"]').val();
+    let calendarId = $(s.s_seletedCalendar).find('input[name="calendarId"]').val();
+    let title = $(s.s_title).val();
+    let description = $(s.s_description).val();
+    let isAllDay = $(s.s_isAllDay).is(":checked");
     let start = datePickers['date-start'].getDate();
     let finish = datePickers['date-finish'].getDate();
     let timeStart = timePickers['time-start'].getDate();
@@ -310,6 +343,13 @@ export let EventForm = {
 
     $(s.s_timeStart).val(start);
     $(s.s_timeFinish).val(finish);
+  },
+
+  runUserCalendars() {
+    let s = this.data.selectors;
+
+    this.data.form.userCalendars = new Dropdown(s.s_userCaledars, { constrainWidth: false });
+    this.data.form.userCalendars.runDropdown();    
   },
 
   renderDatePickers(dateStart, dateFinish) {

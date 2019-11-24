@@ -24,7 +24,6 @@ export let CalendarList = {
   },
 
   run(callback) {
-    CreateCalendar.open();
     this.renderCalendarList(callback);
   },
 
@@ -120,6 +119,15 @@ export let CalendarList = {
     }
 
     return checkedArray;
+  },
+
+  getTopCalendarColor() {
+    let calendar = $(this.data.selectors.s_calendar)[0];    
+    let checkbox = $(calendar).find('span')[0];
+    let style = window.getComputedStyle(checkbox);
+    let color = style.getPropertyValue('--checkbox-color')
+
+    return color;
   },
 
   findRootById(calendarId) {

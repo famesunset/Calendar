@@ -47,8 +47,7 @@ namespace Calendar.Controllers
         [HttpPost]
         [Authorize]
         public IActionResult CreateEvent([FromBody] Event @event)
-        {
-            @event.CalendarId = 2;
+        {            
             int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event);
 
             return Json(eventId);

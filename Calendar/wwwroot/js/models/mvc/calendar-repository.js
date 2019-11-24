@@ -1,6 +1,17 @@
 import { Repository } from "./repository.js";
 
 export class CalendarRepository extends Repository {  
+  async get(id) {
+    let calendar = {};
+
+    let promise = super.get({ id }, '/Calendar/GetCalendar');
+    await promise.then(data => {
+      calendar = data;
+    });
+
+    return calendar;
+  }
+  
   async getList() {
     let list = [];
 

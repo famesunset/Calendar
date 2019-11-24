@@ -1,0 +1,30 @@
+@model Calendar.Models.DTO.CalendarDTO;
+
+
+<div class="select-user-calendar">
+    <i class="material-icons">event</i>
+
+    @{
+        var defaultCalendar = Model.Calendar ?? Model.Calendars.ElementAt(0);
+
+        <div id="user-calendars-trigger" class='dropdown-trigger user-calendar'
+             data-target='user-calendar-list'>
+            <div class="calendar-color"
+                 style="--user-calendar-color: @defaultCalendar.Color.Hex"></div>
+            <input type="hidden" name="calendarId" value="@defaultCalendar.Id" />
+            <span>@defaultCalendar.Name</span>
+        </div>
+    }
+
+    <ul id='user-calendar-list' class='dropdown-content'>
+        @foreach (var calendar in Model.Calendars)
+        {
+            <li class='user-calendar'>
+                <div class="calendar-color"
+                     style="--user-calendar-color: @calendar.Color.Hex"></div>
+                <input type="hidden" name="calendarId" value="@calendar.Id" />
+                <span>@calendar.Name</span>
+            </li>
+        }
+    </ul>
+</div>

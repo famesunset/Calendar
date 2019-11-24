@@ -1,4 +1,4 @@
-@model Calendar.Models.DTO.EventAndOptionsDropdownDTO;
+@model Calendar.Models.DTO.EventFormDTO;
 
 <div class="create-event-wrapper scale-transition">
   <div class="create-event-form">
@@ -15,6 +15,7 @@
       <input id="time-finish" type="text" value='@Model.Event.Finish.ToLocalTime().ToString("o")'>
       <input id="date-finish" type="text" value='@Model.Event.Finish.ToLocalTime().ToString("o")'>
     </div>
+    @Html.Partial("PartialViews/CreateEventForms/SelectUserCalendarPartial", Model.CalendarDTO)
     <div id="more-options">
       <div id="options" class="options">
         <div class="inline-group">
@@ -47,7 +48,8 @@
         </div>
         <div class="description">
           <i class="material-icons">format_align_left</i>
-          <textarea rows="2" placeholder="Description" id="description" class="materialize-textarea">@Model.Event.Description</textarea>
+          <textarea rows="2" placeholder="Description" id="description"
+            class="materialize-textarea">@Model.Event.Description</textarea>
         </div>
       </div>
     </div>
@@ -57,3 +59,7 @@
     </div>
   </div>
 </div>
+
+<!--
+event
+-->

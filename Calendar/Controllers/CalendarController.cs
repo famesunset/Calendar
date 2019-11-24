@@ -29,10 +29,19 @@ namespace Calendar.Controllers
             this.calendarService = calendarService;
         }
 
+        [HttpGet]
+        public IActionResult GetCalendar(int id)
+        {
+            string user = userManager.GetUserId(User);
+            var calendar = calendarService.GetCalendar(user, id);
+
+            return Json(calendar);
+        }
+
         public IActionResult GetCalendarList()
         {
             string user = userManager.GetUserId(User);
-            var calendars = calendarService.GetCalendars(user);
+            var calendars = calendarService.GetCalendars(user);            
 
             return Json(calendars);
         }

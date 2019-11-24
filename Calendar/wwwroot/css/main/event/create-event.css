@@ -89,6 +89,10 @@
   transition-duration: var(--transition-main-duration);
 }
 
+.is-all-day-event label {
+  color: var(--color-main-gray);
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;
@@ -120,4 +124,46 @@
   cursor: pointer;
   transition-property: all;
   transition-duration: var(--transition-main-duration);
+}
+
+.create-event-form .material-icons {
+  transform: scale(0.9, 0.9);
+  font-weight: 500;
+}
+
+.select-user-calendar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 25px;
+
+}
+
+.select-user-calendar i {
+  margin-right: 15px;
+}
+
+#user-calendar-list > li {
+  padding: 0px 10px;
+}
+
+#user-calendar-list > li span {
+  padding: 0;
+  font-size: 15px;  
+  color: var(--color-main-gray);
+}
+
+.user-calendar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.calendar-color {
+  background-color: var(--user-calendar-color);
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
 }

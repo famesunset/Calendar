@@ -18,14 +18,18 @@ export let ViewMode = {
     this.data.current.renderDate(date);
   },  
 
-  renderAllDayEvent(selector, id, title) {
-    this.data.current.renderAllDayEvent(selector, id, title);
+  renderAllDayEvent(selector, id, title, color) {
+    this.data.current.renderAllDayEvent(selector, id, title, color);
   },
 
-  renderDefaultEvent(selector, id, title, start, finish) {    
+  renderDefaultEvent(selector, id, title, start, finish, color) {    
     let container = this.data.current.findCellByTime(start); 
 
-    this.data.current.renderEvent(container, selector, id, title, start, finish);    
+    this.data.current.renderEvent(container, selector, id, title, start, finish, color);    
+  },
+
+  changeEventCalendar(id) {
+    this.data.current.changeEventCalendar(id);
   },
 
   showEventsByCalendarId(calendarId) {
@@ -62,8 +66,16 @@ export let ViewMode = {
     this.data.current.cacheEvent(selector);
   },
 
+  cacheColor(color) {
+    this.data.current.cacheColor(color);
+  },
+
   getCachedEvent() {
     return this.data.current.getCachedEvent();
+  },
+
+  getCachedColor() {
+    return this.data.current.getCachedColor();
   },
 
   deleteEvent(selector) {    
