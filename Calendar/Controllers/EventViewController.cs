@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Business.Services.User;
 using Business.Services.Calendar;
+using System;
 
 namespace Calendar.Controllers
 {
@@ -32,13 +33,13 @@ namespace Calendar.Controllers
             this.eventService = eventService;
         }
 
-        public IActionResult CreateEventForm()
+        public IActionResult CreateEventForm(DateTime date)
         {
             string user = userManager.GetUserId(User);
             var calendars = calendarService.GetCalendars(user);
 
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial",
-                new EventFormDTO(null, new Event(), new EventScheduleDropdown(), calendars));
+                new EventFormDTO(null, new Event(), new EventScheduleDropdown(date), calendars));
         }
 
         [Authorize]
@@ -50,7 +51,7 @@ namespace Calendar.Controllers
             var calendars = calendarService.GetCalendars(user);
 
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial",
-                                new EventFormDTO(calendar, @event, new EventScheduleDropdown(), calendars));
+                                new EventFormDTO(calendar, @event, new EventScheduleDropdown(DateTime.UtcNow), calendars));
         }
 
         public IActionResult DeleteEventPopUp()

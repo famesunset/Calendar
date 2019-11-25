@@ -2,6 +2,7 @@
 {
     public enum Interval
     {
+        NoRepeat,
         Day,
         Week,
         Month,

@@ -451,10 +451,10 @@ export let Daily = {
   eventRollback() {
     let settings = this.data.cache.rollback;
     let target = this.getCachedEvent();
-    $(`#${target}`).remove();
+    $('#' + target).remove();
 
-    let container = this.findCellByTime(settings.start);
-    
+    let container = this.findCellByTime(settings.start);    
+
     this.renderEvent(
       container, 
       target, 
