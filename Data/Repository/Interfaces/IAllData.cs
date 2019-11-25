@@ -7,6 +7,7 @@ namespace Data.Repository.Interfaces
     public interface IAllData
     {
         IEnumerable<AllData> GetDataEvents(int userId, IEnumerable<Calendar> @calendarsList, DateTime dateTimeStart, DateTime dateTimeFinish);
+        IEnumerable<AllData> GetInfinityEvents(int userId, IEnumerable<Calendar> @calendarsList); 
         AllData GetEvent(int eventId);
     }
 }

@@ -1,4 +1,8 @@
-﻿namespace Business.Services.Event
+﻿using System.Collections;
+using Data.Models;
+using Data.Repository;
+
+namespace Business.Services.Event
 {
     using System;
     using System.Collections.Generic;
@@ -15,6 +19,10 @@
 
         private readonly ServiceHelper serviceHelper;
 
+        public EventService()
+        {
+
+        }
         public EventService(IEvent eventRepository, ICalendar calendarRepository, IAllData bigEventRepository, IUser userRepository)
         {
             eventRepos = eventRepository;
@@ -85,6 +93,7 @@
                 if (userCalendars.Count() > 0)
                 {
                     var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
+                    var inditiyEvents = BuildInfinityEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
                     var bUserCalendars = userCalendars
                       .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
                       .ToDictionary(c => c.Id);
@@ -100,6 +109,81 @@
                 return new List<Calendar>();
             }
             return null;
+        }
+
+        public List<AllData> BuildInfinityEvents(int idUser, IEnumerable<Data.Models.Calendar> @calendarsList, DateTime dateStart, DateTime dateFinish)
+        {
+            AllDataRepo dataRepo = new AllDataRepo();
+            IEnumerable <Data.Models.AllData> s  = dataRepo.GetInfinityEvents(idUser, @calendarsList);
+            List<AllData> infinity = new List<AllData>();
+            foreach (var t in s)
+            {
+                DateTime tempStart = t.TimeStart;
+                DateTime tempFinish = t.TimeFinish;
+                switch (t.RepeatId)
+                {
+                    case 1:
+                    {
+                        do
+                        {
+                            infinity.Add(new AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+                            t.Description, t.Title,t.EventId, 
+                            tempStart, tempFinish, 
+                            t.RepeatId));
+
+                            tempStart = t.TimeStart.AddDays(1);
+                            tempFinish = t.TimeFinish.AddDays(1);
+                        } while (tempStart <= dateFinish);
+                        break;
+                    }
+
+                    case 7:
+                    {
+                        do
+                        {
+                            infinity.Add(new AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+                                t.Description, t.Title, t.EventId,
+                                tempStart, tempFinish,
+                                t.RepeatId));
+
+                            tempStart = t.TimeStart.AddDays(7);
+                            tempFinish = t.TimeFinish.AddDays(7);
+                        } while (tempStart <= dateFinish);
+                        break;
+                    }
+
+                    case 30:
+                    {
+                        do
+                        {
+                            infinity.Add(new AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+                                t.Description, t.Title, t.EventId,
+                                tempStart, tempFinish,
+                                t.RepeatId));
+
+                            tempStart = t.TimeStart.AddDays(30);
+                            tempFinish = t.TimeFinish.AddDays(30);
+                        } while (tempStart <= dateFinish);
+                        break;
+                    }
+
+                    case 365:
+                    {
+                        do
+                        {
+                            infinity.Add(new AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+                                t.Description, t.Title, t.EventId,
+                                tempStart, tempFinish,
+                                t.RepeatId));
+
+                            tempStart = t.TimeStart.AddDays(365);
+                            tempFinish = t.TimeFinish.AddDays(365);
+                        } while (tempStart <= dateFinish);
+                        break;
+                    }
+                }
+            }
+            return infinity;
         }
 
         public void DeleteEvent(string loginedUserId, int eventId)

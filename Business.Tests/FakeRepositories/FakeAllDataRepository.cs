@@ -10,6 +10,10 @@ namespace Business.Tests.FakeRepositories
   
   public class FakeAllDataRepository : IAllData
   {
+      public IEnumerable<Data.Models.AllData> GetInfinityEvents(int userId, IEnumerable<Calendar> @calendarsList)
+      {
+          return null;
+      }
     public IEnumerable<AllData> GetDataEvents(int userId, IEnumerable<Calendar> calendarsList, DateTime dateTimeStart, DateTime dateTimeFinish)
     {
       var calendars = FakeRepository.Get.Calendars

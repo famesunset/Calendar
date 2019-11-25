@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using Business.Models;
 using Business.Services.Calendar;
+using Business.Services.Event;
 using Data.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -49,6 +52,19 @@ namespace Business.Tests
             calendar.Id = 61;
             calendar.UserOwnerId = 4;
             calendarService.DeleteCalendar(user.IdentityId, calendar.Id);
+        }
+
+        [TestMethod]
+        public void TestBuildInfinityEvents()
+        {
+            User user = new User();
+            user.Id = 39;
+            List<Data.Models.Calendar> calendar = new List<Data.Models.Calendar>();
+            calendar.Add(new Data.Models.Calendar(2));
+            EventService ev = new EventService();
+            DateTime dateStart = new DateTime(2019, 11,25);
+            DateTime dateFinish = new DateTime(2019, 11, 28);
+            ev.BuildInfinityEvents(39, calendar, dateStart, dateFinish);
         }
     }
 }

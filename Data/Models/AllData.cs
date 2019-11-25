@@ -13,9 +13,10 @@ namespace Data.Models
         public DateTime TimeStart { get; set; }
         public DateTime TimeFinish { get; set; }
         public bool AllDay { get; set; }
+        public int RepeatId { get; set; }
 
         public AllData(int calendarId, string calendarName, string accessName, int eventId, string description,
-            string title, int eventScheduleId, DateTime timeStart, DateTime timeFinish)
+            string title, int eventScheduleId, DateTime timeStart, DateTime timeFinish, int repeatId)
         {
             this.CalendarId = calendarId;
             this.CalendarName = calendarName;
@@ -25,6 +26,7 @@ namespace Data.Models
             this.Title = title;
             this.TimeStart = timeStart;
             this.TimeFinish = timeFinish;
+            this.RepeatId = repeatId;
         }
 
         public AllData()

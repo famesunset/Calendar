@@ -22,6 +22,18 @@ namespace Data.Repository
             }
         }
 
+        public IEnumerable<AllData> GetInfinityEvents(int userId, IEnumerable<Calendar> @calendarList)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                DataTable idsCalendars = (@calendarList.Select(x => x.Id).ToList()).ConvertToDatatable("idsCalendars");
+                IEnumerable<AllData> s = connection.Query<AllData>("uspGetDataInfinityEvents",
+                    new {IdUser = userId, id_Calendar = idsCalendars},
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
+
         public AllData GetEvent(int eventId)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
