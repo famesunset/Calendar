@@ -87,7 +87,7 @@
                         Title = val.Title,
                         TimeFinish = val.Finish.ToUniversalTime(),
                         TimeStart = val.Start.ToUniversalTime(),
-                        RepeatId = 0,
+                        RepeatId = (int)val.Repeat,
                     });
 
                 // User

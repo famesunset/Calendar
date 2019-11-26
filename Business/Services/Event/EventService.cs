@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using Data.Models;
-using Data.Repository;
-
-namespace Business.Services.Event
+﻿namespace Business.Services.Event
 {
     using System;
     using System.Collections.Generic;
@@ -19,10 +15,6 @@ namespace Business.Services.Event
 
         private readonly ServiceHelper serviceHelper;
 
-        public EventService()
-        {
-
-        }
         public EventService(IEvent eventRepository, ICalendar calendarRepository, IAllData bigEventRepository, IUser userRepository)
         {
             eventRepos = eventRepository;
@@ -93,8 +85,10 @@ namespace Business.Services.Event
                 if (userCalendars.Count() > 0)
                 {
                     var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
-                    var infinityEvents = BuildInfinityEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
-                    events = events.Concat(infinityEvents);
+                    events = events.Concat(GetInfinityEvents(dataUser.IdUser, userCalendars, beginning, dateUnit, dateFinish));
+                    //var infinityEvents = BuildInfinityEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
+                    //events = events.Concat(infinityEvents);
+
                     var bUserCalendars = userCalendars
                       .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
                       .ToDictionary(c => c.Id);
@@ -112,11 +106,63 @@ namespace Business.Services.Event
             return null;
         }
 
-        public IEnumerable<AllData> BuildInfinityEvents(int idUser, IEnumerable<Data.Models.Calendar> @calendarsList, DateTime dateStart, DateTime dateFinish)
+        private IEnumerable<Data.Models.AllData> GetInfinityEvents(int userId, IEnumerable<Data.Models.Calendar> calendarList, DateTime beginning, DateUnit dateUnit, DateTime finish)
         {
-            AllDataRepo dataRepo = new AllDataRepo();
-            IEnumerable <Data.Models.AllData> s  = dataRepo.GetInfinityEvents(idUser, @calendarsList);
-            List<AllData> infinity = new List<AllData>();
+            var events = bigEventRepos.GetInfinityEvents(userId, calendarList, finish);
+            var result = new List<Data.Models.AllData>();
+
+            foreach (var _event in events)
+            {
+                switch (dateUnit)
+                {
+                    case DateUnit.Day:
+                    default:
+                        switch (_event.RepeatId)
+                        {
+                            case (int)Interval.Day:
+                                result.Add(_event);
+                                break;
+                            case (int)Interval.Week:
+                                if(beginning.DayOfWeek >= _event.TimeStart.DayOfWeek &&
+                                    beginning.DayOfWeek <= _event.TimeFinish.DayOfWeek)
+                                {
+                                    result.Add(_event);
+                                }
+                                break;
+                            case (int)Interval.Month:
+                                if(beginning.Day >= _event.TimeStart.Day &&
+                                    beginning.Day <= _event.TimeFinish.Day)
+                                {
+                                    result.Add(_event);
+                                }
+                                break;
+                            case (int)Interval.Year:
+                                if(beginning.Month >= _event.TimeStart.Month &&
+                                    beginning.Month <= _event.TimeFinish.Month &&
+                                    beginning.Day >= _event.TimeStart.Day &&
+                                    beginning.Day <= _event.TimeFinish.Day)
+                                {
+                                    result.Add(_event);
+                                }
+                                break;
+                        }
+                        break;
+                    case DateUnit.Week:
+                        // TODO: throw new NotImplementedException();
+                        break;
+                    case DateUnit.Month:
+                        // TODO: throw new NotImplementedException();
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        public IEnumerable<Data.Models.AllData> BuildInfinityEvents(int idUser, IEnumerable<Data.Models.Calendar> @calendarsList, DateTime dateStart, DateTime dateFinish)
+        {
+            IEnumerable<Data.Models.AllData> s = bigEventRepos.GetInfinityEvents(idUser, @calendarsList, dateFinish);
+            var infinity = new List<Data.Models.AllData>();
             foreach (var t in s)
             {
                 if (t.TimeStart < dateStart)
@@ -126,68 +172,68 @@ namespace Business.Services.Event
                     switch (t.RepeatId)
                     {
                         case 1:
-                        {
-                            do
                             {
-                                infinity.Add(new AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
-                                    t.Description, t.Title, t.EventId,
-                                    tempStart, tempFinish,
-                                    t.RepeatId));
+                                do
+                                {
+                                    infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+                                        t.Description, t.Title, t.EventId,
+                                        tempStart, tempFinish,
+                                        t.RepeatId));
 
-                                tempStart = tempStart.AddDays(1);
-                                tempFinish = tempFinish.AddDays(1);
-                            } while (dateFinish.AddDays(1) ! > tempStart);
+                                    tempStart = tempStart.AddDays(1);
+                                    tempFinish = tempFinish.AddDays(1);
+                                } while (dateFinish.AddDays(1)! > tempStart);
 
-                            break;
-                        }
+                                break;
+                            }
 
                         case 7:
-                        {
-                            do
                             {
-                                infinity.Add(new AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
-                                    t.Description, t.Title, t.EventId,
-                                    tempStart, tempFinish,
-                                    t.RepeatId));
+                                do
+                                {
+                                    infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+                                        t.Description, t.Title, t.EventId,
+                                        tempStart, tempFinish,
+                                        t.RepeatId));
 
-                                tempStart = tempStart.AddDays(7);
-                                tempFinish = tempFinish.AddDays(7);
-                            } while (dateFinish.AddDays(1)! > tempStart);
+                                    tempStart = tempStart.AddDays(7);
+                                    tempFinish = tempFinish.AddDays(7);
+                                } while (dateFinish.AddDays(1)! > tempStart);
 
-                            break;
-                        }
+                                break;
+                            }
 
                         case 30:
-                        {
-                            do
                             {
-                                infinity.Add(new AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
-                                    t.Description, t.Title, t.EventId,
-                                    tempStart, tempFinish,
-                                    t.RepeatId));
+                                do
+                                {
+                                    infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+                                        t.Description, t.Title, t.EventId,
+                                        tempStart, tempFinish,
+                                        t.RepeatId));
 
-                                tempStart = tempStart.AddDays(30);
-                                tempFinish = tempFinish.AddDays(30);
-                            } while (dateFinish.AddDays(1)! > tempStart);
+                                    tempStart = tempStart.AddDays(30);
+                                    tempFinish = tempFinish.AddDays(30);
+                                } while (dateFinish.AddDays(1)! > tempStart);
 
-                            break;
-                        }
+                                break;
+                            }
 
                         case 365:
-                        {
-                            do
                             {
-                                infinity.Add(new AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
-                                    t.Description, t.Title, t.EventId,
-                                    tempStart, tempFinish,
-                                    t.RepeatId));
+                                do
+                                {
+                                    infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+                                        t.Description, t.Title, t.EventId,
+                                        tempStart, tempFinish,
+                                        t.RepeatId));
 
-                                tempStart = tempStart.AddDays(365);
-                                tempFinish = tempFinish.AddDays(365);
-                            } while (dateFinish.AddDays(1)! > tempStart);
+                                    tempStart = tempStart.AddDays(365);
+                                    tempFinish = tempFinish.AddDays(365);
+                                } while (dateFinish.AddDays(1)! > tempStart);
 
-                            break;
-                        }
+                                break;
+                            }
                     }
                 }
             }
