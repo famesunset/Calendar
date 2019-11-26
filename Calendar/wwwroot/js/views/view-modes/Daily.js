@@ -41,7 +41,8 @@ export let Daily = {
       s_eventContentWrapper: 'event-content-wrapper',
       s_eventWrapperTiny: 'daily-event-tiny',
       c_loadDeleteEvent: 'load-delete-event',
-      c_currentDate: 'current-date'
+      c_currentDate: 'current-date',
+      c_currentDateDayOfWeek: 'current-date-day-of-week'
     },
 
     ux: {
@@ -277,6 +278,7 @@ export let Daily = {
   renderDate(date) {
     let s = this.data.selectors;  
     let cssCurrentDate = this.data.css.c_currentDate;  
+    let cssCurrentDateDayOfWeek = this.data.css.c_currentDateDayOfWeek;
     let m_date = moment(date);
 
     $(s.s_dayOfWeek).text(m_date.format('ddd'));    
@@ -284,10 +286,14 @@ export let Daily = {
     let $day = $(s.s_day);
     let dayWrapper = $day[0].parentElement;
 
-    if (moment().isSame(m_date, 'day')) 
+    if (moment().isSame(m_date, 'day')) {
       $(dayWrapper).addClass(cssCurrentDate);
-    else 
+      $(s.s_dayOfWeek).addClass(cssCurrentDateDayOfWeek);
+    }
+    else  {
+      $(s.s_dayOfWeek).removeClass(cssCurrentDateDayOfWeek);
       $(dayWrapper).removeClass(cssCurrentDate);
+    }      
 
     $day.text(m_date.format('D'));    
   },

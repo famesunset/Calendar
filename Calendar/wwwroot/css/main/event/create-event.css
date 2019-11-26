@@ -78,6 +78,7 @@
 }
 
 .select-date input[type="text"]:focus {
+  background-color: var(--color-items-main-gray-bg);
   border-radius: 4px 4px 0 0;
   border-bottom: none;
   outline: none;
@@ -90,7 +91,12 @@
 }
 
 .is-all-day-event label {
-  color: var(--color-main-gray);
+  color: var(--color-main-gray);  
+}
+
+.is-all-day-event label span {
+  padding-left: 30px !important;
+  padding-bottom: 0 !important;
 }
 
 .actions {
@@ -137,7 +143,6 @@
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 25px;
-
 }
 
 .select-user-calendar i {

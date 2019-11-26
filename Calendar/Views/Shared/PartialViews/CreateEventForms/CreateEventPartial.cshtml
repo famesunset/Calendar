@@ -30,13 +30,13 @@
           </div>
           <div class="repeat">
             <!-- Dropdown Trigger -->
-            <div class="repeat-dropdown">
+            <div data-target='repeat-dropdown-content' class="repeat-dropdown" id='repeat-dropdown-trigger'>
                 @{
                     var selectedItem = Model.Dropdown.Items
                         .Where(item => item.Interval.Equals(Model.Dropdown.Interval))
                         .FirstOrDefault();
 
-                    <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>
+                    <a>
                         <span>@selectedItem.Value</span>
                         <input type="hidden" name="interval" value="@selectedItem.Interval" />
                     </a>
@@ -90,8 +90,8 @@
         </div>
         <div class="description">
           <i class="material-icons">format_align_left</i>
-          <textarea rows="2" placeholder="Description" id="description"
-            class="materialize-textarea">@Model.Event.Description</textarea>
+          <textarea rows="1" placeholder="Description" id="description"
+            class="materialize-textarea scrollbar">@Model.Event.Description</textarea>
         </div>
       </div>
     </div>

@@ -28,12 +28,19 @@
   align-items: center;
   padding: 8px;
   border-radius: 4px;
-  color: var(--color-main-gray);
-  background-color: var(--color-items-main-gray-bg);
+  color: var(--color-main-gray);  
   margin-left: 20px;
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
-.repeat-dropdown #repeat-dropdown-trigger {
+.repeat .repeat-dropdown:hover {
+  background-color: var(--color-items-main-gray-bg);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
+}
+
+#repeat-dropdown-trigger a span {
   color: var(--color-main-gray);
 }
 
@@ -83,10 +90,20 @@
   margin-right: 5px;
   margin-bottom: 0;
   padding-left: 5px;
-  background-color: var(--color-items-main-gray-bg);  
+  box-sizing: border-box;
+  transition-property: all;
+  transition-duration: var(--transition-main-duration); 
 }
 
+.notify input[name="timeValue"]:hover {
+  background-color: var(--color-items-main-gray-bg);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
+}
+
+
 .notify input[name="timeValue"]:focus {
+  background-color: var(--color-items-main-gray-bg);
   border-radius: 4px 4px 0 0;
   border-bottom: none;
   outline: none;
@@ -107,8 +124,15 @@
   border-radius: 4px;
   margin: 0;
   margin-right: 10px;
-  padding: 0 10px;
+  padding: 0 10px;  
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
+}
+
+#notify-time-unit:hover {
   background-color: var(--color-items-main-gray-bg);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
 }
 
 #time-unit-list {
@@ -123,8 +147,6 @@
 
 .description {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
   margin-bottom: 25px;
 }
 

@@ -22,6 +22,7 @@
 .create-calendar .top-case input {
   font-size: 15px;
   color: var(--color-minor-gray);
+  border-bottom: 1px solid var(--color-main-border);
   font-weight: 500;
 }
 

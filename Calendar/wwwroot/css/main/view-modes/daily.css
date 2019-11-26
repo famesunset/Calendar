@@ -41,6 +41,10 @@
   color: #fff;
 }
 
+.current-date-day-of-week {
+  color: var(--color-main);
+}
+
 .day-view-presentation {
   width: 100%;
   height: 100%;

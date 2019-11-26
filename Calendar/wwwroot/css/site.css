@@ -29,3 +29,22 @@
   background-color: var(--color-scrollbar);
   border-radius: 10px;
 }
+
+textarea {
+  overflow-y: auto !important;
+  border: none !important;
+  margin: 0 !important;
+  background-color: #F1F3F4 !important;
+  border-radius: 4px !important;
+  padding: 5px 10px !important;
+  text-align: left;
+  vertical-align: middle;
+  height: 90px !important;
+}
+
+textarea.materialize-textarea:focus:not([readonly]) {
+  border: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+

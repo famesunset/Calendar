@@ -30,11 +30,11 @@ namespace Calendar.Models.ViewModelInitializers
         {
             var thTH = new System.Globalization.CultureInfo("en-US");
 
-            string noRepeat = "Don't repeat";
-            string everyDay = "Everyday";
-            string everyWeek = $"Every week on {Day.ToString("dddd", thTH)}"; 
-            string everyMonth = $"Every month of the {Day.Day}"; 
-            string everyYear = $"Every year on {Day.ToString("MMM", thTH)} {Day.Day}";
+            string noRepeat = "Does not repeat";
+            string everyDay = "Daily";
+            string everyWeek = $"Weekly on {Day.ToString("dddd", thTH)}"; 
+            string everyMonth = $"Monthly on the {Day.Day}"; 
+            string everyYear = $"Annually on {Day.ToString("MMM", thTH)} {Day.Day}";
 
             Items.Add(new IntervalDropdownItem("no-repeat", noRepeat, Interval.NoRepeat));
             Items.Add(new IntervalDropdownItem("everyday", everyDay, Interval.Day));
