@@ -43,7 +43,7 @@ namespace Calendar.Controllers
         [Authorize]
         public IActionResult CreateEvent([FromBody] EventWithTimeOffestDTO @event)
         {            
-            int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event);
+            int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event.Event, @event.Offset);
             
             return Json(eventId);
         }

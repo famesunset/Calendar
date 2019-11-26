@@ -48,7 +48,7 @@
             var calendar = new Calendar()
             {
                 Name = name,
-                Color = color,
+                Color = Map.Map<Data.Models.Color, Color>(color),
                 Access = access
             };
 

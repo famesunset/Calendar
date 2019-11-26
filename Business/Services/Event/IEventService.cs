@@ -5,7 +5,7 @@
     using Models;
     public interface IEventService
     {
-        int CreateEvent(string loginedUserId, Event @event);
+        int CreateEvent(string loginedUserId, Event @event, int timeOffset);
         Event GetEvent(string loginedUserId, int id);
         IEnumerable<BaseEvent> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit, int[] calendarIds = null);
         void DeleteEvent(string loginedUserId, int eventId);
