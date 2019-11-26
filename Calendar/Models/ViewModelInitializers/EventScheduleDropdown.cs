@@ -21,6 +21,11 @@ namespace Calendar.Models.ViewModelInitializers
             InitContent();
         }
 
+        public EventScheduleDropdown(DateTime date, Interval interval) : this(date)
+        {
+            Interval = interval;
+        }
+
         private void InitContent()
         {
             var thTH = new System.Globalization.CultureInfo("en-US");

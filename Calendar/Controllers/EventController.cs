@@ -33,7 +33,7 @@ namespace Calendar.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetEventList(DateTime date, int[] calendars)
+        public IActionResult GetEventList(DateTime date, int[] calendars, int timeOffset)
         {
             var events = eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars);
             return Json(events);
@@ -41,18 +41,17 @@ namespace Calendar.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult CreateEvent([FromBody] EventWithTimeOffestDTO @event)
-        {            
+        public IActionResult CreateEvent([FromBody] EventWithTimeOffsetDTO @event)
+        {   
             int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event.Event, @event.Offset);
-            
             return Json(eventId);
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult EditEvent([FromBody] Event @event)
+        public IActionResult EditEvent([FromBody] EventWithTimeOffsetDTO @event)
         {
-            eventService.UpdateEvent(userManager.GetUserId(User), @event);
+            eventService.UpdateEvent(userManager.GetUserId(User), @event.Event);
             return Json("success");
         }
 

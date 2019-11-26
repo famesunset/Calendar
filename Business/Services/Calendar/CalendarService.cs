@@ -47,6 +47,7 @@
             var color = colorRepos.GetColorById(colorId);
             var calendar = new Calendar()
             {
+
                 Name = name,
                 Color = Map.Map<Data.Models.Color, Color>(color),
                 Access = access
