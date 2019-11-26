@@ -179,3 +179,28 @@
   left: 10px;
   margin-bottom: 2px;
 }
+
+#table-events::before {
+  content: "";
+  display: inline-block;
+  position: absolute;  
+  top: calc(-5px + var(--time-offset));
+  left: 49px;
+  background-color: #ea4335;  
+  border-radius: 50%;    
+  height: 13px;
+  width: 13px;
+  z-index: 100000;
+}
+
+#table-events::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: calc(0px + var(--time-offset));
+  left: 54px;
+  background-color: #ea4335; 
+  height: 2px;
+  width: calc(100% - 64px);
+  z-index: 100000;
+}

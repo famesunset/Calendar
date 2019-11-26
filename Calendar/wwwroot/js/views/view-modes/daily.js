@@ -67,7 +67,8 @@ export let Daily = {
     this.renderDate(date);
     this.renderTable();
     this.renderEvents(events);
-    this.setUpListeners();    
+    this.setUpListeners();  
+    this.currentTimeListener();
   },
 
   setUpListeners() {
@@ -402,7 +403,26 @@ export let Daily = {
     return null;
   },
 
-  async calcEventPosition(selector, start, finish) {
+  currentTimeListener() {        
+    let table = $(this.data.selectors.s_table)[0];    
+    let cellHeight = this.data.ux.cellHeight;
+    let timeout = 1000 * 60;
+
+    this.setCurrentTime(table, cellHeight);
+    setInterval(() => {
+      this.setCurrentTime(table, cellHeight);
+    }, timeout);  
+  },
+
+  setCurrentTime(table, height) {
+    let _moment = moment();
+    let minutes = (_moment.hour() * 60) + _moment.minute();
+    let offset = (height * minutes) / 60; 
+      
+    table.style.setProperty('--time-offset', `${offset}px`); 
+  },
+
+  calcEventPosition(selector, start, finish) {
     let s = this.data.selectors;
     let c = this.data.css;    
 
