@@ -59,8 +59,9 @@ namespace Business.Tests
         {
             User user = new User();
             user.Id = 39;
-            List<Data.Models.Calendar> calendar = new List<Data.Models.Calendar>();
-            calendar.Add(new Data.Models.Calendar(2));
+            var calendar = new List<Data.Models.Calendar>();
+            var t = new Data.Models.Calendar(accessId: 1, id: 33, name: "#2 Share");
+            calendar.Add(t);
             EventService ev = new EventService();
             DateTime dateStart = new DateTime(2019, 11,25);
             DateTime dateFinish = new DateTime(2019, 11, 28);
