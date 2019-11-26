@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace Calendar.Models.ViewModelInitializers
 {
     public class EventScheduleDropdown
-    {        
-        public DateTime Day { get; set; }
+    {
+        public Interval Interval { get; set; }
+        public DateTime Day { get; set; }        
         public List<IntervalDropdownItem> Items { get; set; }
 
         public EventScheduleDropdown(DateTime date)

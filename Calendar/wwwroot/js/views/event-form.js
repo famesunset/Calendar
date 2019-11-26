@@ -372,6 +372,7 @@ export let EventForm = {
     let start = datePickers['date-start'].getDate();
     let finish = datePickers['date-finish'].getDate();
 
+    let offset = new Date().getTimezoneOffset();
     let saveDate = currentDate;    
     let timeStart = timePickers['time-start'].getDate();
     let timeFinish = timePickers['time-finish'].getDate();
@@ -382,17 +383,20 @@ export let EventForm = {
     finish.setHours(timeFinish.getHours());
     finish.setMinutes(timeFinish.getMinutes());
 
-    return { 
-      id,
-      calendarId,
-      title,
-      description,
-      start,
-      finish,     
-      saveDate: saveDate.toISOString(),   
-      isAllDay,   
-      repeat,
-      notify
+    return {
+      event: {
+        id,
+        calendarId,
+        title,
+        description,
+        start,
+        finish,     
+        saveDate: saveDate.toISOString(),   
+        isAllDay,   
+        repeat,
+        notify
+      },
+      offset
     };
   },
 
