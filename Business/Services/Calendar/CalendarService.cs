@@ -80,5 +80,15 @@
         {
             return Map.Map<Data.Models.Color, Color>(colorRepos.GetColorById(id));
         }
+
+        public void SubscribeUser(int userId, int calendarId)
+        {
+            calendarRepos.SubscribeUserToCalendar(userId, calendarId);
+        }
+
+        public void UnsubscribeUser(int userId, int calendarId)
+        {
+            calendarRepos.UnsubscribeUserFromCalendar(userId, calendarId);
+        }
     }
 }

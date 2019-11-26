@@ -10,5 +10,7 @@
         bool DeleteCalendar(string loginedUserId, int calendaId);
         IEnumerable<Color> GetCalendarColors();
         Color GetCalendarColor(int id);
+        void SubscribeUser(int userId, int calendarId);
+        void UnsubscribeUser(int userId, int calendarId);
     }
 }

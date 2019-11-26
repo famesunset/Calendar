@@ -70,5 +70,23 @@ namespace Data.Repository
                 return connection.Query<int?>(idCheck, new { calendarId }).SingleOrDefault();
             }
         }
+
+        public void SubscribeUserToCalendar(int userId, int calendarId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Query("uspSetCalendarToUser", new { calendarId, userId },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public void UnsubscribeUserFromCalendar(int userId, int calendarId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Query("uspRemoveCalendarFromUser", new { calendarId, userId },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
     }
 }

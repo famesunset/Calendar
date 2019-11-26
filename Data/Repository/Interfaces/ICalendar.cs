@@ -11,5 +11,7 @@ namespace Data.Repository.Interfaces
         IEnumerable<User> GetUsersByCalendarId(int calendarId);
         int? RemoveCalendar(int id);
         bool CheckDefaultCalendar(int @idCalendar);
+        void SubscribeUserToCalendar(int userId, int calendarId);
+        void UnsubscribeUserFromCalendar(int userId, int calendarId);
     }
 }

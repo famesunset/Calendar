@@ -56,5 +56,4 @@ namespace Business.Tests.FakeRepositories
             };
         }
     }
-  }
 }
