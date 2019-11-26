@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Business.Models;
 using Business.Services.Event;
+using Hangfire;
+using Hangfire.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -50,8 +53,30 @@ namespace Calendar.Controllers
         {
             @event.CalendarId = 2;
             int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event);
+            if (DateTime.UtcNow < @event.Start)
+            {
+                var time = @event.Start - DateTime.UtcNow - TimeSpan.FromMinutes(1);
+                var task = BackgroundJob.Schedule(
+                    () => CreateReccutingJob(eventId),
+                    time);
+                BackgroundJob.Delete(task);
+
+
+                var manager = new RecurringJobManager();
+
+            }
 
             return Json(eventId);
+        }
+
+        public void CreateReccutingJob(int eventId)
+        {
+            RecurringJob.AddOrUpdate(
+                $"event{eventId}",
+                () => Console.WriteLine("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" +
+                    "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"),
+                Cron.Minutely
+            );
         }
 
         [HttpPost]

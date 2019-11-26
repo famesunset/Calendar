@@ -8,13 +8,24 @@ using Microsoft.Data.SqlClient;
 
 namespace Data.Repository
 {
-    public class NotificationRepo : BaseRepository<Notification>, INotification
+    public class NotificationRepo : BaseRepository<NotificationSchedule>, INotification
     {
-        public IEnumerable<Notification> CreateNotification(int eventScheduleId, DateTime notificationTime)
+        public IEnumerable<Notification> CreateNotification(Notification notification)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 IEnumerable<Notification> s = connection.Query<Notification>("uspCreateNotification",
+                    new { notification.EventId, notification.MinutesBefore },
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
+
+        public IEnumerable<NotificationSchedule> CreateScheduleNotification(int eventScheduleId, DateTime notificationTime)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                IEnumerable<NotificationSchedule> s = connection.Query<NotificationSchedule>("uspCreateScheduleNotification",
                     new { eventScheduleId, notificationTime },
                     commandType: CommandType.StoredProcedure);
                 return s;

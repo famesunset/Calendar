@@ -6,6 +6,7 @@ namespace Data.Repository.Interfaces
 {
     public interface INotification
     {
-        IEnumerable<Notification> CreateNotification(int eventScheduleId, DateTime notificationTime);
+        IEnumerable<Notification> CreateNotification(Notification notification);
+        IEnumerable<NotificationSchedule> CreateScheduleNotification(int eventScheduleId, DateTime notificationTime);
     }
 }

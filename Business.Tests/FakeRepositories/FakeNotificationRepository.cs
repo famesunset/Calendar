@@ -9,7 +9,7 @@ namespace Business.Tests.FakeRepositories
   
   public class FakeNotificationRepository : INotification
   {
-    public IEnumerable<Notification> CreateNotification(int eventScheduleId, DateTime notificationTime)
+    public IEnumerable<NotificationSchedule> CreateNotification(int eventScheduleId, DateTime notificationTime)
     {
       throw new NotImplementedException();
     }
