@@ -68,7 +68,7 @@
                        Finish = val.TimeFinish,
                        Start = val.TimeStart,
                        IsAllDay = val.AllDay,
-                       // Repeat = val
+                       Repeat = (Interval)Enum.ToObject(typeof(Interval), val.RepeatId)
                    })
                    .ForMember(dest => dest.Title,
                        expression => expression.MapFrom(src => Encode(src.Title)))
@@ -123,7 +123,7 @@
                         expression => expression.MapFrom(src => Encode(src.Hex)));
 
                 cfg.CreateMap<Color, Data.Models.Color>();
-
+                //resolver
             });
             Map = config.CreateMapper();
         }

@@ -54,5 +54,10 @@ namespace Business.Tests.FakeRepositories
         CalendarName = _event.Calendar.Name,
       }; 
     }
-  }
+
+        public IEnumerable<AllData> GetInfinityEvents(int userId, IEnumerable<Calendar> calendarsList, DateTime finish)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
