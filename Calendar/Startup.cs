@@ -64,7 +64,7 @@ namespace Calendar
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddNewtonsoftJson(options =>  
                 {  
-                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
+                    // options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
                 }); 
 
             var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");

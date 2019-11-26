@@ -24,11 +24,13 @@
             serviceHelper = new ServiceHelper(userRepository, calendarRepository, bigEventRepository);
         }
 
-        public int CreateEvent(string loginedUserId, Event @event)
+        public int CreateEvent(string loginedUserId, Event @event, int timeOffset)
         {
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
             if (dataCalendar != null)
             {
+                @event.Start.AddMinutes(timeOffset);
+                @event.Finish.AddMinutes(timeOffset);
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
                 int eventId = eventRepos.CreateEvent(dataEvent);
                 return eventId;
