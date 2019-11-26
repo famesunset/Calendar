@@ -9,6 +9,7 @@ namespace Business.Models
         public List<User> Users { get; set; }
         public List<BaseEvent> Events { get; set; }
         public Color Color { get; set; }
-        public int UserOwnerId { get; set; }
+        public bool IsOwner { get; set; }
+        public int OwnerId { get; set; }
     }
 }

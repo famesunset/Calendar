@@ -29,7 +29,7 @@
                         Id = val.Id,
                         Users = new List<User>(),
                         Color = new Color {Id = val.ColorId, Hex = val.ColorHex},
-                        UserOwnerId = val.UserOwnerId
+                        OwnerId = val.UserOwnerId,
                     })
                     .ForMember(dest => dest.Name,
                         expression => expression.MapFrom(src => Encode(src.Name)));
@@ -42,7 +42,7 @@
                         AccessId = (int)val.Access,
                         ColorId = val.Color.Id,
                         ColorHex =  val.Color.Hex,
-                        UserOwnerId = val.UserOwnerId
+                        UserOwnerId = val.OwnerId,
                     });
 
 

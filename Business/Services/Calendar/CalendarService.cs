@@ -25,19 +25,28 @@
             if (dataUser != null)
             {
                 var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
-                return userCalendars
+                var calendars = userCalendars
                     .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
                     .OrderBy(c => c.Id);
+
+                foreach (var calendar in calendars)
+                {
+                    calendar.IsOwner = calendar.OwnerId.Equals(dataUser.IdUser);
+                }
+                return calendars;
             }
-            return null;
+            return new List<Calendar>();
         }
 
         public Calendar GetCalendar(string loginedUserId, int calendarId)
         {
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendarId);
+            var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataCalendar != null)
             {
-                return Map.Map<Data.Models.Calendar, Calendar>(dataCalendar);
+                var calendar = Map.Map<Data.Models.Calendar, Calendar>(dataCalendar);
+                calendar.IsOwner = calendar.OwnerId.Equals(dataUser.IdUser);
+                return calendar;
             }
             return null;
         }
