@@ -16,12 +16,12 @@ BEGIN
   BEGIN TRY
 	update Events 
 	set 
-	CalendarId = @calendarId, 
-	Description = @description, 
-	Title = @title, 
-	TimeStart = @timeStart, 
-	TimeFinish = @timeFinish,
-	AllDay = @allDay,
+	CalendarId = @CalendarId, 
+	Description = @Description, 
+	Title = @Title, 
+	TimeStart = @TimeStart, 
+	TimeFinish = @TimeFinish,
+	AllDay = @AllDay,
 	RepeatId = @RepeatId
 	where Id = @Id
   COMMIT TRANSACTION Transact

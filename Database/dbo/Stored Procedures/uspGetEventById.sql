@@ -6,7 +6,7 @@ BEGIN
 
 SELECT uc.CalendarId, ca.Name as CalendarName, a.Name as AccessName, 
 e.Id as EventId, e.Description, e.Title,
-e.TimeStart, e.TimeFInish, e.AllDay, color.Hex as CalendarColor
+e.TimeStart, e.TimeFinish, e.AllDay, color.Hex as CalendarColor
 
 FROM Users u
 left join UsersCalendars uc ON u.Id = uc.UserId

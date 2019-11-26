@@ -9,7 +9,6 @@ delete from Users
 delete from Calendars
 DELETE FROM NotificationSchedule
 DELETE FROM EventSchedule
-DELETE FROM EventInfinity 
 delete from NotificationInfinity
 DELETE FROM Events
   COMMIT TRANSACTION Transact

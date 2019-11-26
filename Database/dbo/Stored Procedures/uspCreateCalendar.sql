@@ -12,7 +12,7 @@ BEGIN TRANSACTION Transact
   BEGIN TRY
 
 	insert into Calendars (Name, AccessId, UserOwnerId, ColorId)
-	values (@Name, @AccessId, @idUser, @ColorId)
+	values (@Name, @AccessId, @IdUser, @ColorId)
 
 	insert into @CalendarsUsers (id_User, id_Calendar)
 	values(
