@@ -20,6 +20,11 @@
   animation-duration: var(--animation-duration);
 }
 
+.hide {
+  animation-name: hide;  
+  animation-duration: 100ms;
+}
+
 .close {
   user-select: none;
   padding: 5px;

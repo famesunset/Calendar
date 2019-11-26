@@ -76,7 +76,7 @@ export let EventForm = {
 
     $(s.s_userCalendarItem).click((e) => this.onCalendarChanged(e));
     $(s.s_closeTrigger).click(() => this.onCancelCreation());  
-    $(s.s_optionsTrigger).click(() => this.onOptionsOpen());
+    $(s.s_optionsTrigger).click(() => this.onOptionsOpen(100));
     $(s.s_notifyToggle).click(e => this.onNotifyMenu(e));
     $(s.s_notifyTimeUnitListItem).click(e => this.onChangeNotifyTimeUnit(e));
     $(s.s_repeatIntervalItem).click(e => this.onRepeatIntervalChanged(e));
@@ -120,7 +120,7 @@ export let EventForm = {
     let container = s.s_formLoad;
     let url = this.data.url.editEventForm + `?id=${id}`;
 
-    $.get(url, (content) => {
+    $.get(url, (content) => {      
       $(container).html(content);      
       let start = new Date($(s.s_dateStart).val());
       let finish = new Date($(s.s_dateFinish).val());
@@ -130,6 +130,7 @@ export let EventForm = {
       this.renderTimePickers(start, finish);             
       this.formState('edit');
       this.setUpListeners();
+      this.onOptionsOpen(0);
 
       Modal.open(this.onCancelCreation);
 
@@ -228,7 +229,7 @@ export let EventForm = {
     }    
   },
 
-  onOptionsOpen() {              
+  onOptionsOpen(duration = 100) {              
     let s = this.data.selectors;      
     if ($(s.s_options).hasClass('open'))    
       return;
@@ -239,7 +240,7 @@ export let EventForm = {
     let timeUnitDropdown = new Dropdown(s.s_notifyTimeUnitMenu, { constrainWidth: false });
     timeUnitDropdown.runDropdown();
       
-    this.openOptionsAnimation();
+    this.openOptionsAnimation(duration);
   },
 
   onRepeatIntervalChanged(e) {
@@ -536,19 +537,23 @@ export let EventForm = {
     }, 50, () => $content.css('display', 'none'));
   },
 
-  openOptionsAnimation() {
-    var $wrapper = $(this.data.selectors.s_optionsLoad);
-    var $content = $(this.data.selectors.s_options);
+  openOptionsAnimation(duration) {
+    let s = this.data.selectors;
+
+    var $trigger = $(s.s_optionsTrigger);
+    var $wrapper = $(s.s_optionsLoad);
+    var $content = $(s.s_options);
 
     $wrapper.animate({
       height: `+=${$content.height()}`
-    }, 100, () => {
+    }, duration, () => {
       $content.css('display', 'block');
       $content.animate({
         opacity: 1
-      }, 150);
+      }, duration);
     });
 
     $content.addClass('open');
+    $trigger.addClass('hide');
   }
 };
