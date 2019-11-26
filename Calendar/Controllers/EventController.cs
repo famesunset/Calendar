@@ -42,9 +42,8 @@ namespace Calendar.Controllers
         [HttpPost]
         [Authorize]
         public IActionResult CreateEvent([FromBody] EventWithTimeOffsetDTO @event)
-        {            
-            int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event.Event);
-            
+        {   
+            int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event.Event, @event.Offset);
             return Json(eventId);
         }
 
