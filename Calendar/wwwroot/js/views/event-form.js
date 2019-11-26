@@ -30,7 +30,9 @@ export let EventForm = {
       s_timeFinish: '#time-finish',
       s_dateStart: '#date-start',
       s_dateFinish: '#date-finish',
-      s_isAllDay: '.create-event-form #all-day',     
+      s_isAllDay: '.create-event-form #all-day', 
+      s_repeatInterval: '#repeat-dropdown-trigger',
+      s_repeatIntervalItem: '#repeat-dropdown-content li',
       s_userCaledars: '#user-calendars-trigger',
       s_seletedCalendar: '#user-calendars-trigger',
       s_userCalendar: '.user-calendar',
@@ -69,6 +71,7 @@ export let EventForm = {
     $(s.s_userCalendarItem).click((e) => this.onCalendarChanged(e));
     $(s.s_closeTrigger).click(() => this.onCancelCreation());  
     $(s.s_optionsTrigger).click(() => this.onOptionsOpen());
+    $(s.s_repeatIntervalItem).click(e => this.onRepeatIntervalChanged(e));
     $(s.s_submitCreate).click(() => this.onCreate());
     $(s.s_submitEdit).click(() => this.onEdit());
     $(s.s_title).focusout(e => this.onTitleFocusOut(e));
@@ -79,8 +82,9 @@ export let EventForm = {
 
   openCreate(start, finish, allDay = false, callback = null) {    
     let s = this.data.selectors;
+    let date = new Date(sessionStorage.getItem('currentDate'));
     let container = s.s_formLoad;
-    let url = this.data.url.createEventForm;    
+    let url = this.data.url.createEventForm + `?date=${date.toISOString()}`;    
 
     $.get(url, (content) => {
       if (!this.formCanOpen())
@@ -223,11 +227,18 @@ export let EventForm = {
 
     this.data.form.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });
     this.data.form.dropdown.runDropdown();
-
-    $('#repeat-dropdown-content a').click(event => 
-      this.data.form.dropdown.clickHandler(event));
       
     this.openOptionsAnimation();
+  },
+
+  onRepeatIntervalChanged(e) {
+    let target = e.currentTarget;    
+    let repeatInterval = this.data.selectors.s_repeatInterval;
+    let text = $(target).find('a').text();
+    let interval = $(target).find('input[name="interval"]').val();
+
+    $(repeatInterval).find('span').text(text);
+    $(repeatInterval).find('input[name="interval"]').val(interval);    
   },
 
   onTitleFocusOut(e) {
@@ -285,6 +296,7 @@ export let EventForm = {
 
   getEvent() {
     let s = this.data.selectors;
+    let currentDate = new Date(sessionStorage.getItem('currentDate'));
 
     let datePickers = this.data.form.datePickers;
     let timePickers = this.data.form.timePickers;
@@ -294,8 +306,10 @@ export let EventForm = {
     let title = $(s.s_title).val();
     let description = $(s.s_description).val();
     let isAllDay = $(s.s_isAllDay).is(":checked");
+    let repeat = $(s.s_repeatInterval).find('input[name="interval"]').val();
     let start = datePickers['date-start'].getDate();
     let finish = datePickers['date-finish'].getDate();
+    let saveDate = currentDate;
     let timeStart = timePickers['time-start'].getDate();
     let timeFinish = timePickers['time-finish'].getDate();
 
@@ -311,8 +325,10 @@ export let EventForm = {
       title,
       description,
       start,
-      finish,      
-      isAllDay,      
+      finish,     
+      saveDate: saveDate.toISOString(),   
+      isAllDay,   
+      repeat   
     };
   },
 

@@ -31,17 +31,21 @@
           <div class="repeat">
             <!-- Dropdown Trigger -->
             <div class="repeat-dropdown">
-              <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>Don't repeat</a>
-              <i class="material-icons tiny">arrow_drop_down</i>
+              <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>
+                <span>Don't repeat</span>
+                <input type="hidden" name="interval" value="@Business.Models.Interval.NoRepeat" />
+              </a>
+              <i class="material-icons tiny">arrow_drop_down</i>              
             </div>
 
             <!-- Dropdown Structure -->
             <ul id='repeat-dropdown-content' class='dropdown-content'>
-              <li><a class="no-repeat">Don't repeat</a></li>
-
               @foreach (var item in Model.Dropdown.Items)
               {
-              <li><a id="@item.Selector" class="no-repeat">@item.Value</a></li>
+              <li>
+                <a>@item.Value</a>
+                <input type="hidden" name="interval" value="@item.Interval" />
+              </li>
               }
             </ul>
           </div>
@@ -59,7 +63,3 @@
     </div>
   </div>
 </div>
-
-<!--
-event
--->

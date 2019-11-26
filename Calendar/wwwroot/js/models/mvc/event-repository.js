@@ -23,10 +23,10 @@ export class EventRepository extends Repository {
     return list;
   }  
 
-  async insert(item) {
+  async insert(event) {
     let id;
     
-    let promise = super.insert(item, '/Event/CreateEvent');    
+    let promise = super.insert(event, '/Event/CreateEvent');    
     await promise.then((data) => {
         id = data
     }).catch(err => {
