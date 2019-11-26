@@ -6,7 +6,7 @@ CREATE PROCEDURE [dbo].[uspCreateCalendar]
 	@ColorId int
 AS
 BEGIN
-declare @CalendarsUsers calendarsUsers
+declare @CalendarsUsers CalendarsUsers
 	SET NOCOUNT ON;
 BEGIN TRANSACTION Transact
   BEGIN TRY

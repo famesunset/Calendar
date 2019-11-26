@@ -11,6 +11,11 @@
             throw new NotImplementedException();
         }
 
+        public User GetUserByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         public User GetUserByIdentityId(string id)
         {
             throw new NotImplementedException();

@@ -46,12 +46,12 @@ namespace Business.Tests
         [TestMethod]
         public void TestRemoveCalendar()
         {
-            User user = new User();
-            user.IdentityId = "a1d4e615-1b09-49af-b30f-5314f4652513";
-            Calendar calendar = new Calendar();
-            calendar.Id = 61;
-            calendar.UserOwnerId = 4;
-            calendarService.DeleteCalendar(user.IdentityId, calendar.Id);
+            //User user = new User();
+            //user.IdentityId = "a1d4e615-1b09-49af-b30f-5314f4652513";
+            //Calendar calendar = new Calendar();
+            //calendar.Id = 61;
+            //calendar.UserOwnerId = 4;
+            //calendarService.DeleteCalendar(user.IdentityId, calendar.Id);
         }
 
         [TestMethod]
