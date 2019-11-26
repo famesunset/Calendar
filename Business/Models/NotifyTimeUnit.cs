@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Business.Models 
+﻿namespace Business.Models
 {
-    public enum NotifyTimeUnit 
+    public enum NotifyTimeUnit
     {
         NoNotify,
         Min,

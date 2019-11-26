@@ -11,7 +11,7 @@ e.TimeStart, e.TimeFinish, e.AllDay, color.Hex as CalendarColor
 FROM Users u
 left join UsersCalendars uc ON u.Id = uc.UserId
 left join Calendars ca ON uc.CalendarId = ca.Id
-left join Access a ON a.id = ca.AccessId
+left join Access a ON a.Id = ca.AccessId
 left join Events e ON e.CalendarId = ca.Id
 left join Color color ON ca.ColorId = color.Id
 

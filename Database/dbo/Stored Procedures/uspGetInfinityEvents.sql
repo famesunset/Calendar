@@ -12,9 +12,9 @@ BEGIN
 from Users u
 left join UsersCalendars uc on u.Id = uc.UserId
 left join Calendars ca on uc.CalendarId = ca.Id
-left join Access a on a.id = ca.AccessId
+left join Access a on a.Id = ca.AccessId
 left join Events e on e.CalendarId = ca.Id
-left join NotificationInfinity ni on ni.EventId = e.id
+left join NotificationInfinity ni on ni.EventId = e.Id
 
 where 
 u.Id = @userId

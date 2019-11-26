@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using Data.Repository.Interfaces;
-    using static Mapper;
+    using static AMapper;
 
     public class CalendarService : ICalendarService
     {
@@ -26,7 +26,7 @@
             {
                 var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
                 var calendars = userCalendars
-                    .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
+                    .Select(c => Mapper.Map<Data.Models.Calendar, Calendar>(c))
                     .OrderBy(c => c.Id);
 
                 foreach (var calendar in calendars)
@@ -44,7 +44,7 @@
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataCalendar != null)
             {
-                var calendar = Map.Map<Data.Models.Calendar, Calendar>(dataCalendar);
+                var calendar = Mapper.Map<Data.Models.Calendar, Calendar>(dataCalendar);
                 calendar.IsOwner = calendar.OwnerId.Equals(dataUser.IdUser);
                 return calendar;
             }
@@ -58,7 +58,7 @@
             {
 
                 Name = name,
-                Color = Map.Map<Data.Models.Color, Color>(color),
+                Color = Mapper.Map<Data.Models.Color, Color>(color),
                 Access = access
             };
 
@@ -66,7 +66,7 @@
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if(dataUser != null)
             {
-                var dCalendar = Map.Map<Calendar, Data.Models.Calendar>(calendar);
+                var dCalendar = Mapper.Map<Calendar, Data.Models.Calendar>(calendar);
                 var calendarId = calendarRepos.CreateCalendar(dataUser.IdUser, dCalendar);
                 return calendarId;
             }
@@ -82,12 +82,12 @@
 
         public IEnumerable<Color> GetCalendarColors()
         {
-            return colorRepos.GetColors().Select(c => Map.Map<Data.Models.Color, Color>(c));
+            return colorRepos.GetColors().Select(c => Mapper.Map<Data.Models.Color, Color>(c));
         }
 
         public Color GetCalendarColor(int id)
         {
-            return Map.Map<Data.Models.Color, Color>(colorRepos.GetColorById(id));
+            return Mapper.Map<Data.Models.Color, Color>(colorRepos.GetColorById(id));
         }
 
         public void SubscribeUser(int userId, int calendarId)

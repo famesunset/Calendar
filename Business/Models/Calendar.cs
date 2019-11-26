@@ -1,6 +1,7 @@
 namespace Business.Models
 {
     using System.Collections.Generic;
+
     public class Calendar
     {
         public int Id { get; set; }

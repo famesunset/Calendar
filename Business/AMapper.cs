@@ -7,7 +7,7 @@
     using System.Text.Encodings.Web;
     using System.Text.Unicode;
 
-    internal static class Mapper
+    internal static class AMapper
     {
         private static HtmlEncoder htmlEncoder;
         private static string Encode(string html)
@@ -15,9 +15,10 @@
             return htmlEncoder.Encode(html ?? string.Empty);
         }
 
-        static Mapper()
+        static AMapper()
         {
             htmlEncoder = HtmlEncoder.Create(UnicodeRanges.Cyrillic, UnicodeRanges.BasicLatin);
+
             var config = new MapperConfiguration(cfg =>
             {
                 // Calendar
@@ -125,8 +126,8 @@
                 cfg.CreateMap<Color, Data.Models.Color>();
                 //resolver
             });
-            Map = config.CreateMapper();
+            Mapper = config.CreateMapper();
         }
-        public static IMapper Map { get; }
+        public static IMapper Mapper { get; }
     }
 }
