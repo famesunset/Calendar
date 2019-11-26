@@ -129,6 +129,7 @@
 .create-event-form .material-icons {
   transform: scale(0.9, 0.9);
   font-weight: 500;
+  user-select: none;
 }
 
 .select-user-calendar {

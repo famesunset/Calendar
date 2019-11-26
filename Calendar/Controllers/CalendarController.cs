@@ -11,21 +11,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace Calendar.Controllers
 {
     public class CalendarController : Controller
-    {
-        private readonly SignInManager<IdentityUser> signInManager;
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly IUserService userService;
+    {        
+        private readonly UserManager<IdentityUser> userManager;        
         private readonly ICalendarService calendarService;
 
-        public CalendarController(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
-            [FromServices] IUserService userService,
+        public CalendarController(            
+            UserManager<IdentityUser> userManager,            
             [FromServices] ICalendarService calendarService)
-        {
-            this.signInManager = signInManager;
-            this.userManager = userManager;
-            this.userService = userService;
+        {            
+            this.userManager = userManager;            
             this.calendarService = calendarService;
         }
 

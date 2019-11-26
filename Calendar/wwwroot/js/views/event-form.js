@@ -38,6 +38,12 @@ export let EventForm = {
       s_userCalendar: '.user-calendar',
       s_userCalendarItem: '#user-calendar-list .user-calendar',
       s_calendarColor: '.calendar-color',
+      s_notifyTimeValue: '.notify input[name="timeValue"]',
+      s_notifyTimeUnitMenu: '#notify-time-unit',     
+      s_notifyTimeUnitText: '#notify-time-unit span' ,
+      s_notifyTimeUnitValue: '#notify-time-unit input[name="timeUnit"]',
+      s_notifyTimeUnitListItem: "#time-unit-list li",
+      s_notifyToggle: '.notify-toggle',
       s_optionsLoad: '#more-options',
       s_options: '.options',
       s_submitBtn: '#event-submit-btn',
@@ -71,6 +77,8 @@ export let EventForm = {
     $(s.s_userCalendarItem).click((e) => this.onCalendarChanged(e));
     $(s.s_closeTrigger).click(() => this.onCancelCreation());  
     $(s.s_optionsTrigger).click(() => this.onOptionsOpen());
+    $(s.s_notifyToggle).click(e => this.onNotifyMenu(e));
+    $(s.s_notifyTimeUnitListItem).click(e => this.onChangeNotifyTimeUnit(e));
     $(s.s_repeatIntervalItem).click(e => this.onRepeatIntervalChanged(e));
     $(s.s_submitCreate).click(() => this.onCreate());
     $(s.s_submitEdit).click(() => this.onEdit());
@@ -91,7 +99,7 @@ export let EventForm = {
         return;
 
       $(container).html(content);   
-      this.runUserCalendars();
+      this.runUserCalendars();      
       this.renderDatePickers(start, finish);
       this.renderTimePickers(start, finish);            
       this.formState('create');
@@ -225,8 +233,11 @@ export let EventForm = {
     if ($(s.s_options).hasClass('open'))    
       return;
 
-    this.data.form.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });
+    this.data.form.dropdown = new Dropdown(s.s_dropdownTrigger, { constrainWidth: false });    
     this.data.form.dropdown.runDropdown();
+
+    let timeUnitDropdown = new Dropdown(s.s_notifyTimeUnitMenu, { constrainWidth: false });
+    timeUnitDropdown.runDropdown();
       
     this.openOptionsAnimation();
   },
@@ -239,6 +250,52 @@ export let EventForm = {
 
     $(repeatInterval).find('span').text(text);
     $(repeatInterval).find('input[name="interval"]').val(interval);    
+  },
+
+  onNotifyMenu(e) {     
+    let target = e.currentTarget;   
+    let notifyMenu = '#' + $(target).attr('data-target');
+    let $menu = $(notifyMenu);
+    
+    if ($menu.hasClass('state-close')) {
+      this.notifyOpen(target, notifyMenu);
+    } else {
+      this.notifyClose(target, notifyMenu);
+    }
+  },
+
+  notifyOpen(target, menu) {
+    let s = this.data.selectors;
+    let $target = $(target);    
+    let $menu = $(menu);
+
+    $menu.removeClass('state-close');
+    $target.removeClass('notify-toggle-add');            
+    $target.addClass('notify-toggle-close');      
+    $(s.s_notifyTimeUnitValue).val('Min');
+  },
+
+  notifyClose(target, menu) {
+    let s = this.data.selectors;
+    let $target = $(target);    
+    let $menu = $(menu);
+
+    $menu.addClass('state-close');      
+    $target.removeClass('notify-toggle-close');            
+    $target.addClass('notify-toggle-add'); 
+    $(s.s_notifyTimeUnitValue).val('NoNotify');
+    $(s.s_notifyTimeUnitText).text('Min');
+  },
+
+  onChangeNotifyTimeUnit(e) {
+    let s = this.data.selectors;
+    let $target = $(e.currentTarget);
+
+    let text = $target.find('a').text();
+    let value = $target.find('input[name="timeUnit"]').val();
+
+    $(s.s_notifyTimeUnitText).text(text);
+    $(s.s_notifyTimeUnitValue).val(value);
   },
 
   onTitleFocusOut(e) {
@@ -306,10 +363,16 @@ export let EventForm = {
     let title = $(s.s_title).val();
     let description = $(s.s_description).val();
     let isAllDay = $(s.s_isAllDay).is(":checked");
+
+    let notify = {
+      timeUnit: $(s.s_notifyTimeUnitValue).val(),
+      value: $(s.s_notifyTimeValue).val(),
+    }
     let repeat = $(s.s_repeatInterval).find('input[name="interval"]').val();
     let start = datePickers['date-start'].getDate();
     let finish = datePickers['date-finish'].getDate();
-    let saveDate = currentDate;
+
+    let saveDate = currentDate;    
     let timeStart = timePickers['time-start'].getDate();
     let timeFinish = timePickers['time-finish'].getDate();
 
@@ -319,7 +382,7 @@ export let EventForm = {
     finish.setHours(timeFinish.getHours());
     finish.setMinutes(timeFinish.getMinutes());
 
-    return {
+    return { 
       id,
       calendarId,
       title,
@@ -328,7 +391,8 @@ export let EventForm = {
       finish,     
       saveDate: saveDate.toISOString(),   
       isAllDay,   
-      repeat   
+      repeat,
+      notify
     };
   },
 
