@@ -34,5 +34,20 @@ namespace Data.Tests
             ColorRepo colorRepo = new ColorRepo();
             var a = colorRepo.GetColorById(1);
         }
+
+        [TestMethod]
+        public void TestDeleteNotificationInfinity()
+        {
+            NotificationRepo notificationRepo = new NotificationRepo();
+            notificationRepo.DeleteNotificationInfinity(1);
+        }
+
+        [TestMethod]
+        public void DeleteNotificationSchedule()
+        {
+            NotificationRepo notificationRepo = new NotificationRepo();
+            notificationRepo.DeleteNotificationSchedule(1);
+        }
+
     }
 }

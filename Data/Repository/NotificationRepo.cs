@@ -2,6 +2,7 @@
 using Data.Repository.Interfaces;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Dapper;
 using Data.Models;
 using Microsoft.Data.SqlClient;
@@ -18,6 +19,38 @@ namespace Data.Repository
                     new { eventScheduleId, notificationTime },
                     commandType: CommandType.StoredProcedure);
                 return s;
+            }
+        }
+
+        public bool DeleteNotificationInfinity(int eventId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                string sql = "delete from NotificationInfinity where EventId = " + eventId;
+                var c = connection.Query(sql);
+                string checkId = "select * from NotificationInfinity where EventId = " + eventId;
+                var t = connection.Query(checkId).FirstOrDefault();
+                if (t == null)
+                {
+                    return true;
+                }
+                else return false;
+            }
+        }
+
+        public bool DeleteNotificationSchedule(int eventScheduleId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                string sql = "delete from NotificationSchedule where EventScheduleId = " + eventScheduleId;
+                var c = connection.Query(sql);
+                string checkId = "select * from NotificationSchedule where EventScheduleId = " + eventScheduleId;
+                var t = connection.Query(checkId).FirstOrDefault();
+                if (t == null)
+                {
+                    return true;
+                }
+                else return false;
             }
         }
     }
