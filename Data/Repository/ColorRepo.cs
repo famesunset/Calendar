@@ -21,11 +21,12 @@ namespace Data.Repository
       }
     }
 
-    public string GetColorById(int colorId)
+    public Color GetColorById(int colorId)
     {
         using (SqlConnection connection = new SqlConnection(ConnectionString))
         {
-            var c = connection.Query<string>("Select Hex from Color where Id = " + colorId).FirstOrDefault();
+            string sql = "Select Hex from Color where Id = " + colorId;
+            var c = connection.Query<Color>(sql).Select(x => (new Color(colorId, x.Hex))).FirstOrDefault();
                 return c;
         }
     }

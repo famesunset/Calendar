@@ -42,23 +42,18 @@ namespace Business.Tests.FakeRepositories
 
     private AllData EventToAllDataConverter(FakeEvent _event)
     {
-      return new AllData
-      {
-        EventId = _event.Id, 
-        CalendarId = _event.Calendar.Id,
-        Description = _event.Description,
-        Title = _event.Title,
-        AccessName = _event.Calendar.Access.ToString(),
-        AllDay = _event.IsAllDay,
-        TimeStart = _event.Start,
-        TimeFinish = _event.Finish,
-        CalendarName = _event.Calendar.Name,
-      }; 
-    }
-
-        public IEnumerable<AllData> GetInfinityEvents(int userId, IEnumerable<Calendar> calendarsList, DateTime finish)
+        return new AllData
         {
-            throw new NotImplementedException();
-        }
+            EventId = _event.Id,
+            CalendarId = _event.Calendar.Id,
+            Description = _event.Description,
+            Title = _event.Title,
+            AccessName = _event.Calendar.Access.ToString(),
+            AllDay = _event.IsAllDay,
+            TimeStart = _event.Start,
+            TimeFinish = _event.Finish,
+            CalendarName = _event.Calendar.Name,
+        };
     }
+  }
 }

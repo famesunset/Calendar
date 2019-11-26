@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Data.Models;
 using Data.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -31,7 +32,7 @@ namespace Data.Tests
         public void TestGetColorById()
         {
             ColorRepo colorRepo = new ColorRepo();
-            string a = colorRepo.GetColorById(1);
+            var a = colorRepo.GetColorById(1);
         }
     }
 }

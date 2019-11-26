@@ -6,6 +6,6 @@ namespace Data.Repository.Interfaces
   public interface IColor
   {
     IEnumerable<Color> GetColors();
-    string GetColorById(int colorId);
+    Color GetColorById(int colorId);
   }
 }
