@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Snapshots\Database_20191120_01-08-50.dacpac" />
+    <None Include="Snapshots\Database_20191126_10-37-51.dacpac" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Repeat.sql">

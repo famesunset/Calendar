@@ -29,12 +29,12 @@
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
             if (dataCalendar != null)
             {
-                if(!@event.Start.Kind.Equals(DateTimeKind.Utc))
+                if (!@event.Start.Kind.Equals(DateTimeKind.Utc))
                 {
                     @event.Start = @event.Start.AddMinutes(timeOffset);
                     @event.Finish = @event.Finish.AddMinutes(timeOffset);
                 }
-                
+
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
                 int eventId = eventRepos.CreateEvent(dataEvent);
                 return eventId;
@@ -58,45 +58,23 @@
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
-                DateTime dateStart;
-                DateTime dateFinish;
                 beginning = beginning.Date;
-                switch (dateUnit)
-                {
-                    case DateUnit.Day:
-                    default:
-                        {
-                            dateStart = beginning.ToUniversalTime();
-                            dateFinish = dateStart.AddDays(1);
-                        }
-                        break;
-                    case DateUnit.Week:
-                        {
-                            int startDay = beginning.Day - (int)beginning.DayOfWeek;
-                            dateStart = new DateTime(beginning.Year, beginning.Month, startDay);
-                            dateFinish = dateStart.AddDays(7);
-                        }
-                        break;
-                    case DateUnit.Month:
-                        {
-                            dateStart = new DateTime(beginning.Year, beginning.Month, 1);
-                            dateFinish = dateStart.AddMonths(1);
-                        }
-                        break;
-                }
+                var dateRange = GetDateRange(beginning, dateUnit);
 
-                var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
-                userCalendars = userCalendars.Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id))).ToList();
+                var userCalendars = calendarRepos
+                    .GetUserCalendars(dataUser.IdUser)
+                    .Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id)))
+                    .ToList();
 
                 if (userCalendars.Count() > 0)
                 {
-                    var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
-                    foreach(var _event in events)
+                    var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateRange.Start, dateRange.Finish);
+                    foreach (var _event in events)
                     {
-                        _event.TimeStart = _event.TimeStart.AddMinutes(-timeOffset);
-                        _event.TimeFinish = _event.TimeFinish.AddMinutes(-timeOffset);
+                        AddTimeOffset(_event, timeOffset);
                     }
-                    events = events.Concat(GetInfinityEvents(dataUser.IdUser, userCalendars, beginning, dateUnit, dateFinish, timeOffset));
+
+                    events = events.Concat(GetInfinityEvents(dataUser.IdUser, userCalendars, beginning, dateUnit, dateRange.Item2, timeOffset));
 
                     var bUserCalendars = userCalendars
                       .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
@@ -105,8 +83,6 @@
                     foreach (var e in events)
                     {
                         var bEvent = Map.Map<Data.Models.AllData, BaseEvent>(e);
-                        //bEvent.Start = bEvent.Start.AddMinutes(-timeOffset);
-                        //bEvent.Finish = bEvent.Finish.AddMinutes(-timeOffset);
                         bUserCalendars[e.CalendarId].Events.Add(bEvent);
                     }
 
@@ -116,62 +92,124 @@
             return new List<BaseEvent>();
         }
 
+        private static (DateTime Start, DateTime Finish) GetDateRange(DateTime beginning, DateUnit dateUnit)
+        {
+            DateTime dateStart;
+            DateTime dateFinish;
+            switch (dateUnit)
+            {
+                default:
+                case DateUnit.Day:
+                    {
+                        dateStart = beginning.ToUniversalTime();
+                        dateFinish = dateStart.AddDays(1);
+                    }
+                    break;
+                case DateUnit.Week:
+                    {
+                        int startDay = beginning.Day - (int)beginning.DayOfWeek;
+                        dateStart = new DateTime(beginning.Year, beginning.Month, startDay);
+                        dateFinish = dateStart.AddDays(7);
+                    }
+                    break;
+                case DateUnit.Month:
+                    {
+                        dateStart = new DateTime(beginning.Year, beginning.Month, 1);
+                        dateFinish = dateStart.AddMonths(1);
+                    }
+                    break;
+            }
+            return (dateStart, dateFinish);
+        }
+
         private IEnumerable<Data.Models.AllData> GetInfinityEvents(int userId, IEnumerable<Data.Models.Calendar> calendarList, DateTime beginning, DateUnit dateUnit, DateTime finish, int timeOffset)
         {
             var events = bigEventRepos.GetInfinityEvents(userId, calendarList, finish);
             var result = new List<Data.Models.AllData>();
-
             foreach (var _event in events)
             {
-                _event.TimeStart = _event.TimeStart.AddMinutes(-timeOffset);
-                _event.TimeFinish = _event.TimeFinish.AddMinutes(-timeOffset);
-                switch (dateUnit)
-                {
-                    case DateUnit.Day:
-                    default:
-                        // переписать
-                        switch (_event.RepeatId)
-                        {
-                            case (int)Interval.Day:
-                                result.Add(_event);
-                                break;
-                            case (int)Interval.Week:
-                                if(beginning.DayOfWeek >= _event.TimeStart.DayOfWeek &&
-                                    beginning.DayOfWeek <= _event.TimeFinish.DayOfWeek)
-                                {
-                                    result.Add(_event);
-                                }
-                                break;
-                            case (int)Interval.Month:
-                                if(beginning.Day >= _event.TimeStart.Day &&
-                                    beginning.Day <= _event.TimeFinish.Day)
-                                {
-                                    result.Add(_event);
-                                }
-                                break;
-                            case (int)Interval.Year:
-                                if(beginning.Month >= _event.TimeStart.Month &&
-                                    beginning.Month <= _event.TimeFinish.Month &&
-                                    beginning.Day >= _event.TimeStart.Day &&
-                                    beginning.Day <= _event.TimeFinish.Day)
-                                {
-                                    result.Add(_event);
-                                }
-                                break;
-                        }
-                        break;
-                    case DateUnit.Week:
-                        // TODO: throw new NotImplementedException();
-                        break;
-                    case DateUnit.Month:
-                        // TODO: throw new NotImplementedException();
-                        break;
-                }
+                AddTimeOffset(_event, timeOffset);
+                result.AddRange(FindEvents(beginning, dateUnit, _event));
             }
-
             return result;
         }
 
+        private static void AddTimeOffset(Data.Models.AllData _event, int timeOffset)
+        {
+            _event.TimeStart = _event.TimeStart.AddMinutes(-timeOffset);
+            _event.TimeFinish = _event.TimeFinish.AddMinutes(-timeOffset);
+        }
+
+        private static IEnumerable<Data.Models.AllData> FindEvents(DateTime beginning, DateUnit dateUnit, Data.Models.AllData _event)
+        {
+            switch (dateUnit)
+            {
+                default:
+                case DateUnit.Day:
+                    return FindEventsDayView(beginning, _event);
+                case DateUnit.Week:
+                    throw new NotImplementedException();
+                case DateUnit.Month:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private static IEnumerable<Data.Models.AllData> FindEventsDayView(DateTime beginning, Data.Models.AllData _event)
+        {
+            var result = new List<Data.Models.AllData>();
+            switch (_event.RepeatId)
+            {
+                case (int)Interval.Day:
+                    result.Add(_event);
+                    break;
+                case (int)Interval.Week:
+                    if (beginning.DayOfWeek >= _event.TimeStart.DayOfWeek &&
+                        beginning.DayOfWeek <= _event.TimeFinish.DayOfWeek)
+                    {
+                        result.Add(_event);
+                    }
+                    break;
+                case (int)Interval.Month:
+                    if (beginning.Day >= _event.TimeStart.Day &&
+                        beginning.Day <= _event.TimeFinish.Day)
+                    {
+                        result.Add(_event);
+                    }
+                    break;
+                case (int)Interval.Year:
+                    if (beginning.Month >= _event.TimeStart.Month &&
+                        beginning.Month <= _event.TimeFinish.Month &&
+                        beginning.Day >= _event.TimeStart.Day &&
+                        beginning.Day <= _event.TimeFinish.Day)
+                    {
+                        result.Add(_event);
+                    }
+                    break;
+            }
+            return result;
+        }
+
+        public void DeleteEvent(string loginedUserId, int eventId)
+        {
+            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
+            if (dataBigEvent != null)
+            {
+                eventRepos.Delete(dataBigEvent.EventId);
+            }
+
+        }
+
+        public void UpdateEvent(string loginedUserId, Event newEvent)
+        {
+            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
+            if (dataBigEvent != null)
+            {
+                Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);
+                eventRepos.UpdateEvent(dataEvent);
+            }
+        }
+
+        #region unused
         public IEnumerable<Data.Models.AllData> BuildInfinityEvents(int idUser, IEnumerable<Data.Models.Calendar> @calendarsList, DateTime dateStart, DateTime dateFinish)
         {
             IEnumerable<Data.Models.AllData> s = bigEventRepos.GetInfinityEvents(idUser, @calendarsList, dateFinish);
@@ -206,7 +244,7 @@
                                 {
                                     infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
                                         t.Description, t.Title, t.EventId,
-                                        tempStart, tempFinish, 
+                                        tempStart, tempFinish,
                                         t.RepeatId));
 
                                     tempStart = tempStart.AddDays(7);
@@ -253,24 +291,6 @@
             return infinity;
         }
 
-        public void DeleteEvent(string loginedUserId, int eventId)
-        {
-            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
-            if (dataBigEvent != null)
-            {
-                eventRepos.Delete(dataBigEvent.EventId);
-            }
-
-        }
-
-        public void UpdateEvent(string loginedUserId, Event newEvent)
-        {
-            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
-            if (dataBigEvent != null)
-            {
-                Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(newEvent);
-                eventRepos.UpdateEvent(dataEvent);
-            }
-        }
+        #endregion
     }
 }
