@@ -31,10 +31,17 @@
           <div class="repeat">
             <!-- Dropdown Trigger -->
             <div class="repeat-dropdown">
-              <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>
-                <span>Don't repeat</span>
-                <input type="hidden" name="interval" value="@Business.Models.Interval.NoRepeat" />
-              </a>
+                @{
+                    var selectedItem = Model.Dropdown.Items
+                        .Where(item => item.Interval.Equals(Model.Dropdown.Interval))
+                        .FirstOrDefault();
+
+                    <a id='repeat-dropdown-trigger' data-target='repeat-dropdown-content'>
+                        <span>@selectedItem.Value</span>
+                        <input type="hidden" name="interval" value="@selectedItem.Interval" />
+                    </a>
+                }                 
+              
               <i class="material-icons tiny">arrow_drop_down</i>
             </div>
 

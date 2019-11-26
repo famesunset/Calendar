@@ -50,7 +50,7 @@
 
                 Name = name,
                 Color = Map.Map<Data.Models.Color, Color>(color),
-                Access = accesss
+                Access = access
             };
 
 
