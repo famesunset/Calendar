@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Business.Models;
 using Business.Services.Event;
 using Microsoft.AspNetCore.Authorization;
@@ -36,11 +34,7 @@ namespace Calendar.Controllers
         [HttpGet]
         public IActionResult GetEventList(DateTime date, int[] calendars)
         {
-            var _calendars = new List<Business.Models.Calendar>
-                 (eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars));
-
-            _calendars.ForEach(c => c.Events.ForEach(e => e.Color = c.Color.Hex));
-            var events = _calendars.SelectMany(c => c.Events).ToList();
+            var events = eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars);
             return Json(events);
         }
 
@@ -49,7 +43,6 @@ namespace Calendar.Controllers
         public IActionResult CreateEvent([FromBody] Event @event)
         {            
             int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event);
-
             return Json(eventId);
         }
 

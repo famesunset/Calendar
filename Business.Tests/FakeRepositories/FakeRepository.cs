@@ -17,10 +17,5 @@
             Events = new List<FakeEvent>();
             Users = new List<FakeUser>();
         }
-
-        private void Init()
-        {
-            // todo: initial values
-        }
     }
 }
