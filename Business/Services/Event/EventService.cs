@@ -47,7 +47,7 @@
             return null;
         }
 
-        public IEnumerable<Calendar> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit, int[] calendarIds = null)
+        public IEnumerable<BaseEvent> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit, int[] calendarIds = null)
         {
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
@@ -86,8 +86,6 @@
                 {
                     var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
                     events = events.Concat(GetInfinityEvents(dataUser.IdUser, userCalendars, beginning, dateUnit, dateFinish));
-                    //var infinityEvents = BuildInfinityEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
-                    //events = events.Concat(infinityEvents);
 
                     var bUserCalendars = userCalendars
                       .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
@@ -99,11 +97,10 @@
                         bUserCalendars[e.CalendarId].Events.Add(bEvent);
                     }
 
-                    return bUserCalendars.Values;
+                    return bUserCalendars.Values.SelectMany(c => c.Events);
                 }
-                return new List<Calendar>();
             }
-            return null;
+            return new List<BaseEvent>();
         }
 
         private IEnumerable<Data.Models.AllData> GetInfinityEvents(int userId, IEnumerable<Data.Models.Calendar> calendarList, DateTime beginning, DateUnit dateUnit, DateTime finish)

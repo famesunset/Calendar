@@ -7,7 +7,7 @@
     {
         int CreateEvent(string loginedUserId, Event @event);
         Event GetEvent(string loginedUserId, int id);
-        IEnumerable<Calendar> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit, int[] calendarIds = null);
+        IEnumerable<BaseEvent> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit, int[] calendarIds = null);
         void DeleteEvent(string loginedUserId, int eventId);
         void UpdateEvent(string loginedUserId, Event @newEvent);
     }

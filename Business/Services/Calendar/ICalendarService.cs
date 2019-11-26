@@ -6,8 +6,9 @@
     {
         IEnumerable<Calendar> GetCalendars(string loginedUserId);
         Calendar GetCalendar(string loginedUserId, int calendarId);
-        int CreateCalendar(string loginedUserId, Calendar calendar);
+        int CreateCalendar(string loginedUserId, string name, int colorId, Access access);
         bool DeleteCalendar(string loginedUserId, int calendaId);
         IEnumerable<Color> GetCalendarColors();
+        Color GetCalendarColor(int id);
     }
 }
