@@ -19,6 +19,16 @@ namespace Data.Repository
             }
         }
 
+        public User GetUserByEmail(string email)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                User user = connection.Query<User>("uspGetUserByEmail", new { email },
+                    commandType: CommandType.StoredProcedure).SingleOrDefault();
+                return user;
+            }
+        }
+
         public User GetUserByIdentityId(string id)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))

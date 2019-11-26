@@ -11,39 +11,5 @@
         public string IdIdentity { get; set; }
         public string Picture { get; set; }
         public string BrowserId { get; set; }
-
-        public User(int idUser, int idCalendarDefault)
-        {
-            this.IdUser = idUser;
-            this.IdCalendarDefault = idCalendarDefault;
-        }
-
-        public User(string name, string mobile, string email, string idIdentity)
-        {
-            this.Name = name;
-            this.Mobile = mobile;
-            this.Email = email;
-            this.IdIdentity = idIdentity;
-        }
-
-        public User(int idUser, string name, string mobile, string email, int idCalendarDefault, string idIdentity)
-        {
-            this.IdUser = idUser;
-            this.Name = name;
-            this.Mobile = mobile;
-            this.Email = email;
-            this.IdCalendarDefault = idCalendarDefault;
-            this.IdIdentity = idIdentity;
-        }
-
-        public User(int idUser)
-        {
-            this.IdUser = idUser;
-        }
-
-        public User()
-        {
-            
-        }
     }
 }

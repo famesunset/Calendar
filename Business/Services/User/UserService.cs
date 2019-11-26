@@ -17,6 +17,11 @@
             userRepos.CreateUser(Map.Map<User, Data.Models.User>(user));
         }
 
+        public User GetUserByEmail(string email)
+        {
+            return Map.Map<Data.Models.User, User>(userRepos.GetUserByEmail(email));
+        }
+
         public User GetUserByIdentityId(string id)
         {            
             return Map.Map<Data.Models.User, User>(userRepos.GetUserByIdentityId(id));

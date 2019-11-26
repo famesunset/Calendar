@@ -7,5 +7,6 @@ namespace Data.Repository.Interfaces
     {
         void CreateUser(User user);
         User GetUserByIdentityId(string id);
+        User GetUserByEmail(string email);
     }
 }

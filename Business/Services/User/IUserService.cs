@@ -5,5 +5,6 @@
     {
         void CreateUser(User user);
         User GetUserByIdentityId(string id);
+        User GetUserByEmail(string email);
     }
 }
