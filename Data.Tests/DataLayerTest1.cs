@@ -7,7 +7,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Tests
 {
-
     [TestClass]
     public class DataLayerTest1
     {
@@ -48,6 +47,5 @@ namespace Data.Tests
             NotificationRepo notificationRepo = new NotificationRepo();
             notificationRepo.DeleteNotificationSchedule(1);
         }
-
     }
 }

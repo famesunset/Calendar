@@ -11,6 +11,39 @@ namespace Data.Repository
 {
     public class NotificationRepo : BaseRepository<Notification>, INotification
     {
+        public IEnumerable<Notification> UpdateNotification(int eventId, int minutesBefore)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                IEnumerable<Notification> s = connection.Query<Notification>("uspUpdateNotification",
+                    new { eventId, minutesBefore },
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
+
+        public IEnumerable<Notification> UpdateNotificationInfinity(int eventId, int minutesBefore)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                IEnumerable<Notification> s = connection.Query<Notification>("uspUpdateNotificationInfinity",
+                    new { eventId, minutesBefore },
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
+
+        public IEnumerable<Notification> UpdateNotificationSchedule(int @eventScheduleId, DateTime @notificationTime)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                IEnumerable<Notification> s = connection.Query<Notification>("uspUpdateNotificationSchedule",
+                    new { @eventScheduleId, @notificationTime },
+                    commandType: CommandType.StoredProcedure);
+                return s;
+            }
+        }
+
         public IEnumerable<Notification> CreateNotification(int eventScheduleId, DateTime notificationTime)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
