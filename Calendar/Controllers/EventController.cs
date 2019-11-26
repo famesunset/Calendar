@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Business.Models;
 using Business.Services.Event;
+using Calendar.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +47,7 @@ namespace Calendar.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult CreateEvent([FromBody] Event @event)
+        public IActionResult CreateEvent([FromBody] Business.Models.Event @event)
         {            
             int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event);
 
@@ -63,6 +64,7 @@ namespace Calendar.Controllers
 
         [HttpGet]
         [Authorize]
+
         public IActionResult DeleteEvent(int id)
         {
             eventService.DeleteEvent(userManager.GetUserId(User), id);
