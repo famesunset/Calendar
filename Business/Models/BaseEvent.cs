@@ -9,7 +9,6 @@
         public DateTime Start { get; set; }
         public DateTime Finish { get; set; }
         public string Color { get; set; }
-        // HEX
         public bool IsAllDay { get; set; }
     }
 }

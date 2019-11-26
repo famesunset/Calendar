@@ -58,7 +58,7 @@
                     .ForMember(baseEvent => baseEvent.Title,
                         expression => expression.MapFrom(data => Encode(data.Title)))
                     .ForMember(baseEvent => baseEvent.Color,
-                        expression => expression.MapFrom(data => Encode(null)));
+                        expression => expression.MapFrom(data => Encode(data.CalendarColor)));
 
                 cfg.CreateMap<Data.Models.AllData, Event>()
                    .ConstructUsing(val => new Event
@@ -73,7 +73,7 @@
                    .ForMember(dest => dest.Title,
                        expression => expression.MapFrom(src => Encode(src.Title)))
                    .ForMember(dest => dest.Color,
-                       expression => expression.MapFrom(src => Encode(null)))
+                       expression => expression.MapFrom(src => Encode(src.CalendarColor)))
                    .ForMember(dest => dest.Description,
                        expression => expression.MapFrom(src => Encode(src.Description)));
 

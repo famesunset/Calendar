@@ -43,17 +43,8 @@ namespace Calendar.Controllers
         [HttpGet]
         public IActionResult CreateCalendar(string name, int colorId)
         {
-            var color = calendarService.GetCalendarColors().Where(c => c.Id == colorId).FirstOrDefault();
-            var calendar = new Business.Models.Calendar()
-            {
-                Name = name,
-                Color = color,
-                Access = Access.Private
-            };
-
             string user = userManager.GetUserId(User);
-            int id = calendarService.CreateCalendar(user, calendar);            
-
+            int id = calendarService.CreateCalendar(user, name, colorId, Access.Private);            
             return Json(id);
         }
     

@@ -42,8 +42,17 @@
             return null;
         }
 
-        public int CreateCalendar(string loginedUserId, Calendar calendar)
+        public int CreateCalendar(string loginedUserId, string name, int colorId, Access access)
         {
+            var color = colorRepos.GetColorById(colorId);
+            var calendar = new Calendar()
+            {
+                Name = name,
+                Color = color,
+                Access = access
+            };
+
+
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if(dataUser != null)
             {
@@ -64,6 +73,11 @@
         public IEnumerable<Color> GetCalendarColors()
         {
             return colorRepos.GetColors().Select(c => Map.Map<Data.Models.Color, Color>(c));
+        }
+
+        public Color GetCalendarColor(int id)
+        {
+            return Map.Map<Data.Models.Color, Color>(colorRepos.GetColorById(id));
         }
     }
 }
