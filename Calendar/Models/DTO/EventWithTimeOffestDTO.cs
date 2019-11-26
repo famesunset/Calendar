@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Calendar.Models.DTO
 {
-    public class EventWithTimeOffestDTO 
+    public class EventWithTimeOffsetDTO 
     {
         public Business.Models.Event Event { get; set; }
         public int Offset { get; set; }

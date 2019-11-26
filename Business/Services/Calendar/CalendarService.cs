@@ -47,8 +47,7 @@
             var color = colorRepos.GetColorById(colorId);
             var calendar = new Calendar()
             {
-                Name = name,
-                Color = color,
+                Name = name,                
                 Access = access
             };
 
