@@ -35,7 +35,7 @@ namespace Calendar.Controllers
         [HttpGet]
         public IActionResult GetEventList(DateTime date, int[] calendars, int timeOffset)
         {
-            var events = eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars);
+            var events = eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars, timeOffset);
             return Json(events);
         }
 

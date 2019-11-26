@@ -29,8 +29,12 @@
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
             if (dataCalendar != null)
             {
-                @event.Start.AddMinutes(timeOffset);
-                @event.Finish.AddMinutes(timeOffset);
+                if(!@event.Start.Kind.Equals(DateTimeKind.Utc))
+                {
+                    @event.Start = @event.Start.AddMinutes(timeOffset);
+                    @event.Finish = @event.Finish.AddMinutes(timeOffset);
+                }
+                
                 Data.Models.Event dataEvent = Map.Map<Event, Data.Models.Event>(@event);
                 int eventId = eventRepos.CreateEvent(dataEvent);
                 return eventId;
@@ -49,20 +53,20 @@
             return null;
         }
 
-        public IEnumerable<BaseEvent> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit, int[] calendarIds = null)
+        public IEnumerable<BaseEvent> GetEvents(string loginedUserId, DateTime beginning, DateUnit dateUnit, int[] calendarIds, int timeOffset)
         {
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
                 DateTime dateStart;
                 DateTime dateFinish;
-                beginning = beginning.ToUniversalTime();
+                beginning = beginning.Date;
                 switch (dateUnit)
                 {
                     case DateUnit.Day:
                     default:
                         {
-                            dateStart = beginning;
+                            dateStart = beginning.ToUniversalTime();
                             dateFinish = dateStart.AddDays(1);
                         }
                         break;
@@ -87,7 +91,12 @@
                 if (userCalendars.Count() > 0)
                 {
                     var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateStart, dateFinish);
-                    events = events.Concat(GetInfinityEvents(dataUser.IdUser, userCalendars, beginning, dateUnit, dateFinish));
+                    foreach(var _event in events)
+                    {
+                        _event.TimeStart = _event.TimeStart.AddMinutes(-timeOffset);
+                        _event.TimeFinish = _event.TimeFinish.AddMinutes(-timeOffset);
+                    }
+                    events = events.Concat(GetInfinityEvents(dataUser.IdUser, userCalendars, beginning, dateUnit, dateFinish, timeOffset));
 
                     var bUserCalendars = userCalendars
                       .Select(c => Map.Map<Data.Models.Calendar, Calendar>(c))
@@ -96,6 +105,8 @@
                     foreach (var e in events)
                     {
                         var bEvent = Map.Map<Data.Models.AllData, BaseEvent>(e);
+                        //bEvent.Start = bEvent.Start.AddMinutes(-timeOffset);
+                        //bEvent.Finish = bEvent.Finish.AddMinutes(-timeOffset);
                         bUserCalendars[e.CalendarId].Events.Add(bEvent);
                     }
 
@@ -105,17 +116,20 @@
             return new List<BaseEvent>();
         }
 
-        private IEnumerable<Data.Models.AllData> GetInfinityEvents(int userId, IEnumerable<Data.Models.Calendar> calendarList, DateTime beginning, DateUnit dateUnit, DateTime finish)
+        private IEnumerable<Data.Models.AllData> GetInfinityEvents(int userId, IEnumerable<Data.Models.Calendar> calendarList, DateTime beginning, DateUnit dateUnit, DateTime finish, int timeOffset)
         {
             var events = bigEventRepos.GetInfinityEvents(userId, calendarList, finish);
             var result = new List<Data.Models.AllData>();
 
             foreach (var _event in events)
             {
+                _event.TimeStart = _event.TimeStart.AddMinutes(-timeOffset);
+                _event.TimeFinish = _event.TimeFinish.AddMinutes(-timeOffset);
                 switch (dateUnit)
                 {
                     case DateUnit.Day:
                     default:
+                        // переписать
                         switch (_event.RepeatId)
                         {
                             case (int)Interval.Day:

@@ -16,7 +16,7 @@ export class EventRepository extends Repository {
     let timeOffset = new Date().getTimezoneOffset();
     let list = [];
 
-    let promise = super.getList({ date: date.toISOString(), calendars: calendars, timeOffset }, '/Event/GetEventList');    
+    let promise = super.getList({ date: date.toDateString(), calendars: calendars, timeOffset }, '/Event/GetEventList');    
     await promise.then(data => {
       list = data;
     });
