@@ -12,21 +12,18 @@ using System;
 namespace Calendar.Controllers
 {
     public class EventViewController : Controller
-    {
-        private readonly SignInManager<IdentityUser> signInManager;
+    {        
         private readonly UserManager<IdentityUser> userManager;
         private readonly IUserService userService;
         private readonly ICalendarService calendarService;
         private readonly IEventService eventService;
 
-        public EventViewController(
-            SignInManager<IdentityUser> signInManager,
+        public EventViewController(            
             UserManager<IdentityUser> userManager,
             [FromServices] IUserService userService,
             [FromServices] ICalendarService calendarService,
             [FromServices] IEventService eventService)
-        {
-            this.signInManager = signInManager;
+        {            
             this.userManager = userManager;
             this.userService = userService;
             this.calendarService = calendarService;

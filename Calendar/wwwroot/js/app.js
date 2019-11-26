@@ -12,7 +12,7 @@ $(function() {
 
       sessionStorage.setItem('currentDate', 
         moment(date).startOf('day').toDate());
-            
+
       Header.run();
       SideBar.run();
       CalendarList.run(() => {

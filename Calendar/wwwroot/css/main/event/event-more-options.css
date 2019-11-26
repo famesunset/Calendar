@@ -6,8 +6,11 @@
 .inline-group {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 13px;
+  align-items: center;  
+}
+
+.repeat-wrapper {
+  margin-bottom: 15px;
 }
 
 .options .replay-icon {
@@ -45,6 +48,78 @@
   color: var(--color-main-gray);
 }
 
+.notify {
+  margin-bottom: 15px;
+}
+
+.notify-toggle {  
+  border-radius: 50%;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
+}
+
+.notify-toggle:hover {
+  cursor: pointer;
+  background-color: var(--color-items-main-gray-bg);
+  transition-property: all;
+  transition-duration: var(--transition-main-duration);
+}
+
+.notify input[name="timeValue"] {
+  font-size: 14px;
+  width: 50px;
+  height: 35px;  
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-left: 10px;
+  margin-right: 5px;
+  margin-bottom: 0;
+  padding-left: 5px;
+  background-color: var(--color-items-main-gray-bg);  
+}
+
+.notify input[name="timeValue"]:focus {
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+  outline: none;
+}
+
+#notify-time-unit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  text-transform: none;  
+  height: 35px;  
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  color: var(--color-main-gray);
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin: 0;
+  margin-right: 10px;
+  padding: 0 10px;
+  background-color: var(--color-items-main-gray-bg);
+}
+
+#time-unit-list {
+  min-width: 50px;
+  width: 65px;
+}
+
+#time-unit-list li a {
+  color: var(--color-main-gray);
+  font-size: 15px;  
+}
+
 .description {
   display: flex;
   justify-content: flex-start;
@@ -59,4 +134,36 @@
 .description textarea {
   font-family: var(--font-main-family) !important;
   color: var(--color-main-gray) !important;
+}
+
+.state-close {      
+  display: none;  
+}
+
+.notify-toggle-add {
+  transform: rotate(45deg);
+  animation: notify-toggle-add 200ms normal forwards ease-in-out;
+}
+
+.notify-toggle-close {
+  transform: rotate(0deg);
+  animation: notify-toggle-close 200ms normal forwards ease-in-out;
+}
+
+@keyframes notify-toggle-add {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes notify-toggle-close {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(45deg);
+  }
 }

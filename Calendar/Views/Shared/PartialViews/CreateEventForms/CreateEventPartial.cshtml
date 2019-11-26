@@ -18,7 +18,7 @@
     @Html.Partial("PartialViews/CreateEventForms/SelectUserCalendarPartial", Model.CalendarDTO)
     <div id="more-options">
       <div id="options" class="options">
-        <div class="inline-group">
+        <div class="inline-group repeat-wrapper">
           <div>
             <i class="replay-icon material-icons">replay</i>
           </div>
@@ -35,7 +35,7 @@
                 <span>Don't repeat</span>
                 <input type="hidden" name="interval" value="@Business.Models.Interval.NoRepeat" />
               </a>
-              <i class="material-icons tiny">arrow_drop_down</i>              
+              <i class="material-icons tiny">arrow_drop_down</i>
             </div>
 
             <!-- Dropdown Structure -->
@@ -48,6 +48,37 @@
               </li>
               }
             </ul>
+          </div>
+        </div>
+        <div class="notify">
+          <div class="inline-group">
+            <i class="replay-icon material-icons">notifications_none</i>
+            <span>Notify</span>
+            <div id="notify-settings" class="inline-group state-close">
+              <input type="number" name="timeValue" value="0" min="0" max="1000">
+              <a id="notify-time-unit" class='dropdown-trigger' data-target='time-unit-list'>
+                <span>Min</span>
+                <i class="material-icons tiny">arrow_drop_down</i>
+                <input type="hidden" name="timeUnit" value="NoNotify">
+              </a>
+              <ul id='time-unit-list' class='dropdown-content'>
+                <li>
+                  <a>Min</a>
+                  <input type="hidden" name="timeUnit" value="Min">
+                </li>
+                <li>
+                  <a>Hour</a>
+                  <input type="hidden" name="timeUnit" value="Hour">
+                </li>
+                <li>
+                  <a>Day</a>
+                  <input type="hidden" name="timeUnit" value="Day">
+                </li>
+              </ul>
+            </div>
+            <div class="notify-toggle" data-target="notify-settings">
+              <i class="material-icons">add</i>
+            </div>
           </div>
         </div>
         <div class="description">
