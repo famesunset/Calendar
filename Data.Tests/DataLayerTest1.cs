@@ -47,5 +47,12 @@ namespace Data.Tests
             NotificationRepo notificationRepo = new NotificationRepo();
             notificationRepo.DeleteNotificationSchedule(1);
         }
+
+        [TestMethod]
+        public void CheckDefaultCalendar()
+        {
+            CalendarRepo calendarRepo = new CalendarRepo();
+            bool a = calendarRepo.CheckDefaultCalendar(3000);
+        }
     }
 }

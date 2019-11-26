@@ -10,5 +10,6 @@ namespace Data.Repository.Interfaces
         IEnumerable<Calendar> GetUserCalendars(int userId);
         IEnumerable<User> GetUsersByCalendarId(int calendarId);
         int? RemoveCalendar(int id);
+        bool CheckDefaultCalendar(int @idCalendar);
     }
 }

@@ -10,6 +10,16 @@ namespace Data.Repository
 {
     public class CalendarRepo : BaseRepository<Calendar>, ICalendar
     {
+        public bool CheckDefaultCalendar(int @idCalendar)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                bool checkCalendar = connection.ExecuteScalar<bool>("uspCheckDefaultCalendar", new { @idCalendar },
+                    commandType: CommandType.StoredProcedure);
+                return checkCalendar;
+            }
+        }
+
         public int CreateCalendar(int userId, Calendar calendar)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
