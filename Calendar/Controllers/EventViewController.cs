@@ -48,7 +48,7 @@ namespace Calendar.Controllers
             var calendars = calendarService.GetCalendars(user);
 
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial",
-                                new EventFormDTO(calendar, @event, new EventScheduleDropdown(DateTime.UtcNow), calendars));
+                                new EventFormDTO(calendar, @event, new EventScheduleDropdown(@event.Start), calendars));
         }
 
         public IActionResult DeleteEventPopUp()
