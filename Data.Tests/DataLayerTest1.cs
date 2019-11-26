@@ -26,5 +26,12 @@ namespace Data.Tests
             Event even = new Event(2, "Description2", "Notification2", "Title2", 30, DateTime.Now, DateTime.Now, true);
             eventRepo.CreateEvent(even);
         }
+
+        [TestMethod]
+        public void TestGetColorById()
+        {
+            ColorRepo colorRepo = new ColorRepo();
+            string a = colorRepo.GetColorById(1);
+        }
     }
 }

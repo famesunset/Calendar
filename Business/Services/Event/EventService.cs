@@ -193,7 +193,7 @@
                                 {
                                     infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
                                         t.Description, t.Title, t.EventId,
-                                        tempStart, tempFinish,
+                                        tempStart, tempFinish, 
                                         t.RepeatId));
 
                                     tempStart = tempStart.AddDays(7);

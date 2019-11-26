@@ -1,4 +1,5 @@
-﻿using Business.Tests.FakeRepositories.Models;
+﻿using System.Threading;
+using Business.Tests.FakeRepositories.Models;
 
 namespace Business.Tests.FakeRepositories
 {
@@ -10,9 +11,9 @@ namespace Business.Tests.FakeRepositories
   
   public class FakeAllDataRepository : IAllData
   {
-      public IEnumerable<Data.Models.AllData> GetInfinityEvents(int userId, IEnumerable<Calendar> @calendarsList)
+      public IEnumerable<Data.Models.AllData> GetInfinityEvents(int userId, IEnumerable<Calendar> @calendarsList, DateTime date)
       {
-          return null;
+          return new List<AllData>();
       }
     public IEnumerable<AllData> GetDataEvents(int userId, IEnumerable<Calendar> calendarsList, DateTime dateTimeStart, DateTime dateTimeFinish)
     {
