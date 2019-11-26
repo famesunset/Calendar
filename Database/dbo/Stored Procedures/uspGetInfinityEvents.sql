@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE uspGetInfinityEvents
+﻿CREATE PROCEDURE [dbo].[uspGetInfinityEvents]
 	@userId int,
 	@id_Calendar idsCalendars null readonly
 AS
@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 	select uc.CalendarId as IdCalendar, ca.Name as CalendarName, a.Name as AccessName, 
 	e.Id, e.Description, e.Notification, e.Title,
-	ei.RepeatId, ei.TimeStart as TimePeriodStart, 
+	ei.RepeatId, ei.TimeStart as TimePeriodStart, ei.EventId,
 	e.TimeStart, e.TimeFinish, e.AllDay,
 	ni.NotificationMinute
 

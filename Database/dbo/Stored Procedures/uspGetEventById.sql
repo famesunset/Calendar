@@ -4,18 +4,16 @@ CREATE PROCEDURE [dbo].[uspGetEventById]
 AS
 BEGIN
 
-SELECT uc.CalendarId AS IdCalendar, ca.Name AS CalendarName, a.Name AS AccessName, 
-e.Id AS EventId, e.Description, e.Notification, e.Title,
-es.Id AS EventSchedule_id, e.TimeStart, e.TimeFInish, 
-ns.NotificationTime, e.AllDay
+SELECT uc.CalendarId, ca.Name as CalendarName, a.Name as AccessName, 
+e.Id as EventId, e.Description, e.Title,
+e.TimeStart, e.TimeFInish, e.AllDay, color.Hex as CalendarColor
 
 FROM Users u
 left join UsersCalendars uc ON u.Id = uc.UserId
 left join Calendars ca ON uc.CalendarId = ca.Id
 left join Access a ON a.id = ca.AccessId
 left join Events e ON e.CalendarId = ca.Id
-left join EventSchedule es ON es.EventId = e.Id
-left join NotificationSchedule ns ON ns.EventScheduleid = es.Id
+left join Color color ON ca.ColorId = color.Id
 
 WHERE
 e.Id = @eventId

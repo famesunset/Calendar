@@ -1,15 +1,14 @@
 ﻿
-CREATE PROCEDURE [dbo].[uspGetDataEvents] 
+CREATE PROCEDURE [dbo].[uspGetDataInfinityEvents] 
 	@IdUser int,
-	@id_Calendar idsCalendars null readonly, 
-	@dateTimeStart datetime,
-	@dateTimeFinish datetime
+	@id_Calendar idsCalendars null readonly,
+	@date datetime
 AS
 BEGIN
 	
 select uc.CalendarId, ca.Name as CalendarName, a.Name as AccessName, 
 e.Id as EventId, e.Description, e.Title,
-e.TimeStart, e.TimeFInish, e.AllDay
+e.TimeStart, e.TimeFInish, e.AllDay, e.RepeatId
 
 from Users u
 left join UsersCalendars uc on u.Id = uc.UserId
@@ -20,10 +19,9 @@ left join [Repeat] r on r.id = e.RepeatId
 
 where 
 u.Id = @IdUser
-and @dateTimeStart <= e.TimeFinish
-and @dateTimeFinish >= e.TimeStart
 and ca.Id IN (select * from @id_Calendar)
 and r.Id != 0
+and e.TimeFinish <= @date
 
 END
 

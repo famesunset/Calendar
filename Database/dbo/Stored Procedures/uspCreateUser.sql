@@ -15,15 +15,13 @@ BEGIN TRANSACTION Transact
 	  order by Id desc)
 
 	  insert into Users(Name, Mobile, Email, CalendarDefaultId, IdentityId, Picture)
-	  values (@name, @mobile, @email, @idCalendarDefault, @identityId, @picture)
+	  values (@name, @mobile, @email, @IdCalendarDefault, @identityId, @picture)
 
 	  set @UserId = (select TOP 1 (Id) from Users
 	  order by Id desc)
 
-	  exec uspCreateCalendar @UserId, 'Default', 1
-
-	  INSERT INTO UsersCalendars (UserId, CalendarId)
-	  VALUES (@UserId, 2)
+	  exec uspCreateCalendar @UserId, 'Default', 1, 1
+	  insert into UsersCalendars values (@UserId, 2)
 
   COMMIT TRANSACTION Transact
   END TRY

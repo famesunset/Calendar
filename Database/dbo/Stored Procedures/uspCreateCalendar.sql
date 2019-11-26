@@ -2,7 +2,8 @@
 CREATE PROCEDURE [dbo].[uspCreateCalendar]
 	@IdUser int,
 	@Name nvarchar(max),
-	@AccessId int
+	@AccessId int,
+	@ColorId int
 AS
 BEGIN
 declare @CalendarsUsers calendarsUsers
@@ -10,8 +11,8 @@ declare @CalendarsUsers calendarsUsers
 BEGIN TRANSACTION Transact
   BEGIN TRY
 
-	insert into Calendars (Name, AccessId, UserOwnerId)
-	values (@Name, @AccessId, @idUser)
+	insert into Calendars (Name, AccessId, UserOwnerId, ColorId)
+	values (@Name, @AccessId, @idUser, @ColorId)
 
 	insert into @CalendarsUsers (id_User, id_Calendar)
 	values(
