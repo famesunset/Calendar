@@ -8719,8 +8719,22 @@ input[type=range]::-ms-thumb {
   margin-top: 4px;
   cursor: pointer;
   background-color: transparent;
-  border: none;
+  border: none;  
+  transition-duration: 50ms;
+  transition-property: all;
 }
+
+.month-prev:focus,
+.month-next:focus {
+  background-color: var(--color-main);
+  transition-duration: 100ms;
+  transition-property: all;
+}
+
+.month-prev:focus svg,
+.month-next:focus svg {
+  fill: #fff !important;
+} 
 
 /* Date Display */
 .datepicker-date-display {
