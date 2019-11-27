@@ -3,6 +3,7 @@ import { CalendarRepository } from '../models/mvc/calendar-repository.js';
 import { CreateCalendar } from '../views/pop-ups/create-calendar.js'
 import { Modal } from "./pop-ups/modal.js";
 import { ShareCalendar } from './pop-ups/share-calendar.js';
+import { PopUp } from "./pop-ups/pop-up.js";
 
 export let CalendarList = {
   data: {
@@ -25,6 +26,7 @@ export let CalendarList = {
     },
 
     url: {
+      u_deleteView: '/PopUp/DeleteCalendarMessage',
       u_loadList: '/CalendarView/GetList',
       u_calendarView: '/CalendarView/GetCalendarView',
       u_loadCalendarForm: 'CalendarView/GetCreateCalendarForm'
@@ -44,8 +46,15 @@ export let CalendarList = {
     $(s.s_unsubscribeCalendar).click(e => this.onUnsubscribeCalendar(e));
     $(s.s_calendar).mouseenter(e => this.onShowAction(e));
     $(s.s_calendar).mouseleave(e => this.onHideAction(e));
-    $(s.s_shareCalendarTrigger).click(e => this.onShareMenu(e))
-    this.data.cache.tooltips = $('.tooltipped').tooltip({ inDuration: 0, outDuration: 0 });
+    $(s.s_shareCalendarTrigger).click(e => this.onShareMenu(e));
+
+    this.data.cache.tooltips = $('.tooltipped').tooltip({
+      inDuration: 0, 
+      outDuration: 0,  
+      enterDelay: 300,
+      margin: 0,
+      transitionMovement: 5
+    });
   },
 
   renderCalendarList(callback) {
@@ -95,20 +104,36 @@ export let CalendarList = {
     let root = e.currentTarget.parentElement.parentElement;
     let id = $(root).find('input[name="calendarId"]').val();
     
-    ViewMode.hideEventsByCalendarId(id);
-    new CalendarRepository().delete(id);
-    this.hideToolTips();   
-    $(root).remove();
+    this.loadDeleteMessage(id, (content) => {
+      PopUp.open(content, (result) => {
+        let response = PopUp.data.response;
+
+        if (result == response.SUBMIT) {
+          ViewMode.hideEventsByCalendarId(id);
+          new CalendarRepository().delete(id);
+          this.hideToolTips();   
+          $(root).remove();
+        }
+      });
+    });
   },
 
   onUnsubscribeCalendar(e) {
     let root = e.currentTarget.parentElement.parentElement;
     let id = $(root).find('input[name="calendarId"]').val();
     
-    ViewMode.hideEventsByCalendarId(id);
-    new CalendarRepository().unsubscribe(id);
-    this.hideToolTips();
-    $(root).remove();
+    this.loadDeleteMessage(id, (content) => {
+      PopUp.open(content, (result) => {
+        let response = PopUp.data.response;
+
+        if (result == response.SUBMIT) {
+          ViewMode.hideEventsByCalendarId(id);
+          new CalendarRepository().unsubscribe(id);
+          this.hideToolTips();   
+          $(root).remove();
+        }
+      });
+    });
   },
 
   onShowAction(e) {
@@ -131,6 +156,13 @@ export let CalendarList = {
     let root = e.currentTarget.parentElement.parentElement;    
     let id = $(root).find('input[name="calendarId"]').val();   
     ShareCalendar.open(id, { x: e.pageX, y: e.pageY }, root);
+  },
+
+  loadDeleteMessage(id, callback) {
+    let url = this.data.url.u_deleteView + `?id=${id}`;
+    $.get(url, (content) => {
+      callback(content);
+    });
   },
 
   hideToolTips() {

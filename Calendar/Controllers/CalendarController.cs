@@ -60,7 +60,8 @@ namespace Calendar.Controllers
         [HttpGet]
         public IActionResult UnsubscribeCalendar(int id)
         {
-            // TODO
+            string user = userManager.GetUserId(User);
+            calendarService.UnsubscribeUser(user, id);
 
             return Json("success");
         }

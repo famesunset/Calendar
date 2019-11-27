@@ -11,6 +11,6 @@
         IEnumerable<Color> GetCalendarColors();
         Color GetCalendarColor(int id);
         void SubscribeUser(int userId, int calendarId);
-        void UnsubscribeUser(int userId, int calendarId);
+        void UnsubscribeUser(string loginedUserId, int calendarId);
     }
 }

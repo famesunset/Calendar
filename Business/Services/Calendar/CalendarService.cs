@@ -70,7 +70,7 @@
 
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if(dataUser != null)
-            {
+            {                
                 var dCalendar = Mapper.Map<Calendar, Data.Models.Calendar>(calendar);
                 var calendarId = calendarRepos.CreateCalendar(dataUser.IdUser, dCalendar);
                 return calendarId;
@@ -100,9 +100,10 @@
             calendarRepos.SubscribeUserToCalendar(userId, calendarId);
         }
 
-        public void UnsubscribeUser(int userId, int calendarId)
+        public void UnsubscribeUser(string loginedUserId, int calendarId)
         {
-            calendarRepos.UnsubscribeUserFromCalendar(userId, calendarId);
+            var user = serviceHelper.GetUserByIdentityId(loginedUserId);
+            calendarRepos.UnsubscribeUserFromCalendar(user.IdUser, calendarId);
         }
     }
 }
