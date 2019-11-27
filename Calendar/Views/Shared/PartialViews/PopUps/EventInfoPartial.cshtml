@@ -1,0 +1,109 @@
+@model Calendar.Models.DTO.EventCalendarDTO
+
+<div class="pop-up event-info">
+  <input type="hidden" name="eventId" value="@Model.Event.Id">
+  <div class="top-case">
+    <div class="edit-event">
+      <i class="material-icons">edit</i>
+    </div>
+    <div class="delete-event">
+      <i class="material-icons">delete</i>
+    </div>
+    <div class="close-form">
+      <i class="material-icons">close</i>
+    </div>
+  </div>
+
+  <div class="main-info">
+    <!-- Main -->
+    <div class="info-row">
+      <div class="info-icon event-color" style="background-color: @Model.Event.Color"></div>
+      <div class="about">
+        <h3 class="title">@Model.Event.Title</h3>
+        <div class="time-info">
+          <div class="daily-range">
+            <span class="time-start">@Model.Event.Start.ToLocalTime().ToString("h:mm tt")</span>
+            <span> &mdash; </span>
+            <span class="time-finish">@Model.Event.Finish.ToLocalTime().ToString("h:mm tt")</span>
+          </div>
+          <div class="repeat">
+            <span>
+              @{
+              var date = Model.Event.Start;
+
+              switch (Model.Event.Repeat)
+              {
+              case Business.Models.Interval.NoRepeat:
+              break;
+              case Business.Models.Interval.Day:
+              <span>Daily</span>
+              break;
+              case Business.Models.Interval.Week:
+              <span>Weekly on @date.ToString("dddd")</span>
+              break;
+              case Business.Models.Interval.Month:
+              <span>Monthly on the @date.ToString("dd")</span>
+              break;
+              case Business.Models.Interval.Year:
+              <span>Annually on @date.ToString("MMMM") @date.ToString("dd")</span>
+              break;
+              }
+              }
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Description -->
+    @if (!string.IsNullOrEmpty(Model.Event.Description))
+    {
+    <div class="info-row">
+      <div class="info-icon">
+        <i class="material-icons">format_align_left</i>
+      </div>
+      <div class="about">
+        <div class="about-description scrollbar">@Model.Event.Description</div>
+      </div>
+    </div>
+    }
+    <!-- Notify -->
+    @*@if (@Model.Event.Notify.TimeUnit != Business.Models.NotifyTimeUnit.NoNotify)
+    {
+    <div class="info-row">
+      <div class="info-icon">
+        <div class="material-icons">notifications_none</div>
+      </div>
+      <div class="about">
+        <span class="notify-info">
+          @Model.Event.Notify.Value
+          @switch (Model.Event.Notify.TimeUnit)
+          {
+          case Business.Models.NotifyTimeUnit.Min:
+          <span>m.</span>
+          break;
+          case Business.Models.NotifyTimeUnit.Hour:
+          <span>h.</span>
+          break;
+          case Business.Models.NotifyTimeUnit.Day:
+          <span>d.</span>
+          break;
+          }
+          before
+        </span>
+      </div>
+    </div>
+    }*@
+    <!-- Calendar info -->
+    <div class="info-row">
+      <div class="info-icon">
+        <i class="material-icons">event</i>
+      </div>
+      <div class="about">
+        <span class="calendar-name">
+          @Model.Calendar.Name
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>

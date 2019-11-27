@@ -1,5 +1,6 @@
 import { Daily } from './view-modes/daily.js';
 import { EventForm } from './event-form.js';
+import { EventInfo } from './pop-ups/event-info.js';
 
 export let ViewMode = {
   data: {
@@ -30,6 +31,10 @@ export let ViewMode = {
 
     this.createEvent();
     EventForm.openCreate(startTime, finishTime);
+  },
+
+  showEventInfo(id) {
+    EventInfo.open(id);
   },
 
   close() {

@@ -28,7 +28,7 @@
 .close {
   user-select: none;
   padding: 5px;
-  border-radius: 100%;
+  border-radius: 50%;
   transition-property: all;
   transition-duration: var(--transition-main-duration);
 }

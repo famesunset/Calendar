@@ -39,6 +39,15 @@ namespace Calendar.Controllers
                 new EventFormDTO(null, new Event(), new EventScheduleDropdown(date), calendars));
         }
 
+        public IActionResult EventInfo(int id)
+        {
+            string user = userManager.GetUserId(User);
+            var @event = eventService.GetEvent(user, id);
+            var calendar = calendarService.GetCalendar(user, @event.CalendarId);
+
+            return PartialView("PartialViews/PopUps/EventInfoPartial", new EventCalendarDTO(@event, calendar));
+        }
+
         [Authorize]
         public IActionResult EditEventForm(int id)
         {

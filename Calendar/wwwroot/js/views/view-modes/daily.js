@@ -4,6 +4,8 @@ import { EventRepository } from '../../models/mvc/event-repository.js';
 import { DeleteEvent } from '../pop-ups/delete-event.js';
 import { CalendarRepository } from '../../models/mvc/calendar-repository.js';
 import { CalendarList } from '../calendar-list.js';
+import { ViewMode } from '../view-mode.js';
+import { EventInfo } from '../pop-ups/event-info.js';
 
 export let Daily = {
   data: {
@@ -108,7 +110,7 @@ export let Daily = {
     this.cacheColor(color);
   },
 
-  onEditEvent(e) {  
+  onShowEventInfo(e) {  
     e.stopPropagation();
     if (e.which != this.data.ux.leftMouseBtn)
       return;
@@ -118,7 +120,7 @@ export let Daily = {
     
     if (id != 0 && EventForm.formCanOpen()) {
       let color = $(target).css('background-color');
-      EventForm.openEdit(id);    
+      EventInfo.open(id);
       this.cacheEvent(target.id);      
       this.cacheColor(color);
     }        
@@ -177,7 +179,7 @@ export let Daily = {
       this.data.cache.timeStart,
       this.data.cache.timeFinish,
       allDay,
-      () => $(target).mouseup((e) => this.onEditEvent(e))
+      () => $(target).mouseup((e) => this.onShowEventInfo(e))
     );
 
     $(s.s_table).unbind('mousemove');
@@ -346,7 +348,7 @@ export let Daily = {
       if (this.data.cache.state == 'create')
         this.onOpenCreateForm(e);
       else 
-        this.onEditEvent(e)
+        this.onShowEventInfo(e);
     });
   },
 
@@ -368,7 +370,7 @@ export let Daily = {
     this.cacheEvent(selector); 
     $(`#${selector}`).css('background-color', color);
     $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
-    $(`#${selector}`).mouseup(e => this.onEditEvent(e));
+    $(`#${selector}`).mouseup(e => this.onShowEventInfo(e));
   },
 
   async hideEventsByCalendarId(calendarId) {

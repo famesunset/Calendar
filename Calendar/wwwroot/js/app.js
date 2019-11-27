@@ -2,6 +2,7 @@ import { Header } from './views/header.js';
 import { SideBar } from './views/side-bar.js';
 import { ViewMode } from './views/view-mode.js';
 import { CalendarList } from './views/calendar-list.js';
+import { EventInfo } from './views/pop-ups/event-info.js';
 
 $(function() {
   let app = {
@@ -16,7 +17,7 @@ $(function() {
       SideBar.run();
       CalendarList.run(() => {
         ViewMode.run();         
-      });   
+      });  
     }
   };
 
