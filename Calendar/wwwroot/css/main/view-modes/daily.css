@@ -204,3 +204,18 @@
   width: calc(100% - 64px);
   z-index: 100000;
 }
+
+.create-event-btn {
+  width: 100px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #fff;  
+  border-radius: 100px;
+  padding: 8px 16px;
+  margin-top: 15px;
+  margin-left: 20px;
+}

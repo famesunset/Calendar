@@ -1,7 +1,6 @@
 import { Header } from './views/header.js';
 import { SideBar } from './views/side-bar.js';
 import { ViewMode } from './views/view-mode.js';
-import { EventRepository } from './models/mvc/event-repository.js';
 import { CalendarList } from './views/calendar-list.js';
 
 $(function() {

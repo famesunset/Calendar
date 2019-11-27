@@ -1,15 +1,37 @@
 import { Daily } from './view-modes/daily.js';
+import { EventForm } from './event-form.js';
 
 export let ViewMode = {
   data: {
     current: null,
+    selectors: {
+      s_createEventBtn: '.create-event-btn'      
+    }
   },
 
   run() {
     Daily.run();
     this.data.current = Daily;
+    this.setUpListeners();
+  },
+
+  setUpListeners() {
+    let s = this.data.selectors;
+
+    $(s.s_createEventBtn).click(() => this.onCreateEvent());
   },
   
+  onCreateEvent() {
+    let startTime = moment(new Date(sessionStorage.getItem('currentDate')))
+                    .startOf('hour')
+                    .toDate();
+    
+    let finishTime = moment(startTime).add(1, 'hours').toDate();
+
+    this.createEvent();
+    EventForm.openCreate(startTime, finishTime);
+  },
+
   close() {
     this.data.current.close();
   },

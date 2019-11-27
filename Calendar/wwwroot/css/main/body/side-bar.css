@@ -4,20 +4,6 @@
   padding: 15px 10px;
 }
 
-.create-event-btn {
-  width: calc(100% - 20px);
-  height: auto !important;
-  text-align: center;
-  font-size: 18px;
-  text-transform: uppercase;
-  color: #fff;  
-  border-radius: 100px;
-  padding: 8px 25px;
-  margin-top: 4px;
-  margin-left: 20px;
-  margin-bottom: 20px;
-}
-
 .mini-calendar {  
   z-index: 98 !important;
 }
@@ -38,7 +24,7 @@
   margin: 0;
   box-shadow: none !important;
   background-color: #fff;
-  margin-top: 25px;
+  margin-top: 0px;
   z-index: 98 !important;
 }
 
