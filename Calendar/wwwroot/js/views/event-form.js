@@ -67,7 +67,9 @@ export let EventForm = {
     },
 
     cache: {
-      formCallback: null
+      formCallback: null,
+      eventId: null,
+      eventColor: null
     }
   },
 
@@ -84,8 +86,10 @@ export let EventForm = {
     $(s.s_submitEdit).click(() => this.onEdit());
     $(s.s_title).focusout(e => this.onTitleFocusOut(e));
     $(s.s_isAllDay).change(e => this.onAllDayChanged(e));
-    $(s.s_timeStart).focusout(e => this.onTimeFocusOut(e));
-    $(s.s_timeFinish).focusout(e => this.onTimeFocusOut(e));
+    $(s.s_timeStart).on('input', e => this.onTimeChanged(e));
+    $(s.s_timeFinish).on('input', e => this.onTimeChanged(e));
+    $(s.s_timeStart).change(e => this.onTimeChanged(e));
+    $(s.s_timeFinish).change(e => this.onTimeChanged(e));
   },
 
   openCreate(start, finish, allDay = false, callback = null) {    
@@ -225,7 +229,7 @@ export let EventForm = {
       let start = moment($(s.s_timeStart).val(), ['h:m a', 'H:m']).toDate();
       let finish = moment($(s.s_timeFinish).val(), ['h:m a', 'H:m']).toDate();
       
-      ViewMode.renderDefaultEvent(selector, id, title, start, finish, color);
+      ViewMode.renderEvent(selector, id, title, start, finish, color);
     }    
   },
 
@@ -306,33 +310,85 @@ export let EventForm = {
     ViewMode.setEventTitle(title, id);
   },
 
-  onTimeFocusOut(e) {   
-    let event = ViewMode.getCachedEvent();
-    if ($(`#${event}`).hasClass('all-day-event'))
+  onTimeChanged(e) {       
+    let event = '#' + ViewMode.getCachedEvent();
+    if ($(event)[0] == undefined ||
+        $(event).hasClass('all-day-event'))
       return;
     
     let s = this.data.selectors;
 
     let timeStart = $(s.s_timeStart).val();
     let timeFinish = $(s.s_timeFinish).val();
-
-    let id = ViewMode.getCachedEvent();    
-    let title = $(s.s_title).val();
     
     let time = this.validateTime(      
       moment(timeStart, ['h:m a', 'H:m']).toDate(),
       moment(timeFinish, ['h:m a', 'H:m']).toDate(),
       e.target.id
     );
-  
-    ViewMode.changeEventPosition(id, title, time.start, time.finish);
+    
+    if (time != null) {
+      let id = ViewMode.getCachedEvent();    
+      let title = $(s.s_title).val();
+    
+      ViewMode.changeEventPosition(id, title, time.start, time.finish);
+    }
   },
 
-  onDateSelect(date) {
-    this.validateDate(
-      this.data.form.datePickers['date-start'].getDate(),
-      this.data.form.datePickers['date-finish'].getDate()      
-    )
+  onDateChanged(date) {
+    let current = new Date(sessionStorage.getItem('currentDate'));
+    let start = this.data.form.datePickers['date-start'].getDate();
+    let finish = this.data.form.datePickers['date-finish'].getDate();
+
+    this.validateDate(start, finish);
+    
+    let m_current = moment(current);
+    let validRange = m_current.isSameOrAfter(start) && m_current.isSameOrBefore(finish);    
+
+    if (!validRange) {
+      this.inValidDateRange();
+    } else {
+      this.validDateRange();
+    }
+  },
+
+  inValidDateRange() {
+    let el = '#' + ViewMode.getCachedEvent();   
+
+    if ($(el)[0] != undefined) {
+      let id = $(el).find('input[name="id"]').val();      
+      this.data.cache.eventId = id;
+
+      $(el).remove();    
+    }      
+  },
+
+  validDateRange() {    
+    let el = '#' + ViewMode.getCachedEvent();    
+    if ($(el)[0] != undefined)
+      return;
+
+    let event = this.getEvent().event;
+    let color = ViewMode.getCachedColor();
+    let eventSelector = ViewMode.getCachedEvent();
+
+    if (event.isAllDay)  {
+      ViewMode.renderAllDayEvent(
+        eventSelector,
+        event.id,
+        event.title,
+        color
+      );
+    } else {
+      ViewMode.renderEvent(
+        eventSelector,
+        event.id,
+        event.title,
+        event.start,
+        event.finish,
+        color
+      );
+    }     
   },
 
   formState(value) {
@@ -401,7 +457,10 @@ export let EventForm = {
     };
   },
 
-  validateTime(start, finish, target) {      
+  validateTime(start, finish, target) {
+    if (!moment(start).isValid() ||
+        !moment(finish).isValid()) return null;
+        
     let startDuration = start.getTime() / 1000;
     let finishDuration = finish.getTime() / 1000;
 
@@ -467,14 +526,14 @@ export let EventForm = {
         setDefaultDate: true, 
         defaultDate: dateStart,
         firstDay: 1,
-        onSelect: (date) => _this.onDateSelect(date)
+        onSelect: (date) => _this.onDateChanged(date)
       }, s.s_dateStart),
 
       "date-finish": new DatePicker({
         setDefaultDate: true,
         defaultDate: dateFinish,
         firstDay: 1,
-        onSelect: (date) => _this.onDateSelect(date)
+        onSelect: (date) => _this.onDateChanged(date)
       }, s.s_dateFinish)
     };
 
@@ -485,19 +544,21 @@ export let EventForm = {
 
   renderTimePickers(dateStart, dateFinish) {  
     const HOUR = 1000 * 60 * 60; // hour in ms
+    let _this = this;
     let s = this.data.selectors;
+    let c = this.data.css;
 
     let timeStart = moment(dateStart).format('h:mm');
     let timeFinish = moment(dateStart).format('h:mm');
 
     this.data.form.timePickers = {
       'time-start': new TimePicker(dateStart, {            
-        defaultTime: timeStart,
+        defaultTime: timeStart,        
       }, s.s_timeStart),
 
       'time-finish': new TimePicker(dateFinish, {
         defaultTime: timeFinish,
-        fromNow: HOUR
+        fromNow: HOUR,        
       }, s.s_timeFinish)
     };
 

@@ -22,7 +22,7 @@ export let ViewMode = {
     this.data.current.renderAllDayEvent(selector, id, title, color);
   },
 
-  renderDefaultEvent(selector, id, title, start, finish, color) {    
+  renderEvent(selector, id, title, start, finish, color) {    
     let container = this.data.current.findCellByTime(start); 
 
     this.data.current.renderEvent(container, selector, id, title, start, finish, color);    
@@ -74,7 +74,7 @@ export let ViewMode = {
     return this.data.current.getCachedEvent();
   },
 
-  getCachedColor() {
+  getCachedColor() {    
     return this.data.current.getCachedColor();
   },
 

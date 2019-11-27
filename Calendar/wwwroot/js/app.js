@@ -17,7 +17,7 @@ $(function() {
       SideBar.run();
       CalendarList.run(() => {
         ViewMode.run();         
-      });      
+      });   
     }
   };
 
