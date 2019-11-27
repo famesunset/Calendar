@@ -19,7 +19,8 @@ export let Daily = {
         color: null,
         title: null,
         start: null,
-        finish: null
+        finish: null,
+        isAllDay: null
       } 
     },
 
@@ -481,14 +482,23 @@ export let Daily = {
 
     let container = this.findCellByTime(settings.start);    
 
-    this.renderEvent(
-      container, 
-      target, 
-      settings.id, 
-      settings.title,
-      settings.start,
-      settings.finish,
-      settings.color);
+    if (settings.isAllDay) {
+      this.renderAllDayEvent(
+        target,
+        settings.id,
+        settings.title,
+        settings.color
+      )
+    } else {
+      this.renderEvent(
+        container, 
+        target, 
+        settings.id, 
+        settings.title,
+        settings.start,
+        settings.finish,
+        settings.color);
+    }
   },
 
   eventExists(id) {

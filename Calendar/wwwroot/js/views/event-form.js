@@ -139,6 +139,7 @@ export let EventForm = {
       Modal.open(this.onCancelCreation);
 
       let title = $(s.s_title).val();
+      let isAllDay = $(s.s_isAllDay).is(":checked");
       let color = ViewMode.getCachedColor();
 
       let rollback = {
@@ -146,6 +147,7 @@ export let EventForm = {
         start,
         finish,
         title,
+        isAllDay,
         color
       };
 

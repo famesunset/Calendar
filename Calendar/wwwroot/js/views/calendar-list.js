@@ -127,8 +127,7 @@ export let CalendarList = {
     $(actions).css('display', 'none');
   },
 
-  onShareMenu(e) {
-    console.log(e);
+  onShareMenu(e) {    
     let root = e.currentTarget.parentElement.parentElement;    
     let id = $(root).find('input[name="calendarId"]').val();   
     ShareCalendar.open(id, { x: e.pageX, y: e.pageY }, root);
