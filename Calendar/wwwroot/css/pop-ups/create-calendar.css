@@ -33,6 +33,7 @@
 }
 
 .create-calendar .top-case i:hover,
+#share-calendar-submit:hover,
 .color:hover {
   cursor: pointer;
   transform: scale(1.2, 1.2);

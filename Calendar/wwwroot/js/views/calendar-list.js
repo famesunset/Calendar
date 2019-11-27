@@ -2,18 +2,26 @@ import { ViewMode } from "./view-mode.js";
 import { CalendarRepository } from '../models/mvc/calendar-repository.js';
 import { CreateCalendar } from '../views/pop-ups/create-calendar.js'
 import { Modal } from "./pop-ups/modal.js";
+import { ShareCalendar } from './pop-ups/share-calendar.js';
 
 export let CalendarList = {
   data: {
+    cache: {
+      tooltips: []
+    },
+
     selectors: {
       s_calendarList: '#calendar-list',
       s_calendars: '.calendar-list',
       s_calendar: '.calendar',
+      s_calendarActions: '.calendar-actions',
       s_displayCalendar: '.calendar-events-checkbox',
-      s_deleteCalendar: '.delete-calendar',
+      s_unsubscribeCalendar: '.unsubscribe-calendar',
+      s_deleteCalendar: '.delete-calendar',      
       s_calendarFormTarget: '#create-calendar-target',
       s_calendarFormContainer: '#create-calendar',    
-      s_calendarFormContent: '.create-calendar',      
+      s_calendarFormContent: '.create-calendar', 
+      s_shareCalendarTrigger: '.share-calendar',
     },
 
     url: {
@@ -33,8 +41,11 @@ export let CalendarList = {
     $(s.s_calendarFormTarget).click(() => this.onOpenCreationMenu())
     $(s.s_displayCalendar).change(e => this.onShowCalendarEvents(e));
     $(s.s_deleteCalendar).click(e => this.onDeleteCalendar(e));
-    $(s.s_calendar).mouseenter(e => this.onShowDeleteBtn(e));
-    $(s.s_calendar).mouseleave(e => this.onHideDeleteBtn(e));
+    $(s.s_unsubscribeCalendar).click(e => this.onUnsubscribeCalendar(e));
+    $(s.s_calendar).mouseenter(e => this.onShowAction(e));
+    $(s.s_calendar).mouseleave(e => this.onHideAction(e));
+    $(s.s_shareCalendarTrigger).click(e => this.onShareMenu(e))
+    this.data.cache.tooltips = $('.tooltipped').tooltip({ inDuration: 0, outDuration: 0 });
   },
 
   renderCalendarList(callback) {
@@ -81,28 +92,53 @@ export let CalendarList = {
   },
 
   onDeleteCalendar(e) {
-    let root = e.currentTarget.parentElement;
+    let root = e.currentTarget.parentElement.parentElement;
     let id = $(root).find('input[name="calendarId"]').val();
     
     ViewMode.hideEventsByCalendarId(id);
     new CalendarRepository().delete(id);
+    this.hideToolTips();   
     $(root).remove();
   },
 
-  onShowDeleteBtn(e) {
-    let s = this.data.selectors;
-    let target = e.currentTarget;
-    let deleteBtn = $(target).find(s.s_deleteCalendar);
+  onUnsubscribeCalendar(e) {
+    let root = e.currentTarget.parentElement.parentElement;
+    let id = $(root).find('input[name="calendarId"]').val();
     
-    $(deleteBtn).css('display', 'flex');
+    ViewMode.hideEventsByCalendarId(id);
+    new CalendarRepository().unsubscribe(id);
+    this.hideToolTips();
+    $(root).remove();
   },
 
-  onHideDeleteBtn(e) {
+  onShowAction(e) {
     let s = this.data.selectors;
     let target = e.currentTarget;
-    let deleteBtn = $(target).find(s.s_deleteCalendar);
+    let actions = $(target).find(s.s_calendarActions);
     
-    $(deleteBtn).css('display', 'none');
+    $(actions).css('display', 'flex');
+  },
+
+  onHideAction(e) {
+    let s = this.data.selectors;
+    let target = e.currentTarget;
+    let actions = $(target).find(s.s_calendarActions);
+    
+    $(actions).css('display', 'none');
+  },
+
+  onShareMenu(e) {
+    console.log(e);
+    let root = e.currentTarget.parentElement.parentElement;    
+    let id = $(root).find('input[name="calendarId"]').val();   
+    ShareCalendar.open(id, { x: e.pageX, y: e.pageY }, root);
+  },
+
+  hideToolTips() {
+    for (let tooltip of this.data.cache.tooltips) {
+      var instance = M.Tooltip.getInstance(tooltip);
+      instance.close();
+    }
   },
 
   getSelectedCalendars() {

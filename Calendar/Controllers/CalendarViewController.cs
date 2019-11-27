@@ -55,5 +55,14 @@ namespace Calendar.Controllers
 
             return PartialView("PartialViews/PopUps/CreateCalendarPartial", colors);
         }
+
+        [HttpGet]
+        public IActionResult ShareCalendarForm(int id)
+        {
+            string user = userManager.GetUserId(User);
+            Business.Models.Calendar calendar = calendarService.GetCalendar(user, id);
+
+            return PartialView("PartialViews/PopUps/ShareCalendarPartial", calendar);
+        }
     }
 }

@@ -56,5 +56,13 @@ namespace Calendar.Controllers
 
             return Json("success");
         }
+
+        [HttpGet]
+        public IActionResult UnsubscribeCalendar(int id)
+        {
+            // TODO
+
+            return Json("success");
+        }
     }
 }

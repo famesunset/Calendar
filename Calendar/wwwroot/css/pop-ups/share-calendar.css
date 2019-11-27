@@ -1,0 +1,36 @@
+.share-calendar-form {
+  z-index: 10005;  
+  position: absolute;
+  animation-name: pop-up;
+  animation-duration: var(--animation-duration);
+}
+
+.share-calendar-form .top-case {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.share-calendar-form .top-case input[type="email"] {
+  font-size: 15px;
+  color: var(--color-minor-gray);  
+  font-weight: 500;
+  margin-right: 10px;
+  width: 250px;
+}
+
+#share-calendar-submit {
+  background-color: var(--color-main);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: var(--transition-main-duration);
+  transition-property: all;
+}
+
+#share-calendar-submit i {
+  color: #fff;
+  transform: scale(.6, .6);
+}

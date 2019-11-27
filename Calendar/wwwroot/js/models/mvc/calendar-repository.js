@@ -39,4 +39,8 @@ export class CalendarRepository extends Repository {
     promise.then();
   }
 
+  unsubscribe(id) {
+    let promise = super.delete({ id }, '/Calendar/UnsubscribeCalendar');    
+    promise.then();
+  }
 }
