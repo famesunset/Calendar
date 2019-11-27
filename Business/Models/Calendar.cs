@@ -12,5 +12,6 @@ namespace Business.Models
         public Color Color { get; set; }
         public bool IsOwner { get; set; }
         public int OwnerId { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

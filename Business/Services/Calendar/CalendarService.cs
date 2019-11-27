@@ -32,7 +32,9 @@
 
                 for (int i = 0; i < calendars.Count(); ++i)
                 {
-                    calendars[i].IsOwner = calendars[i].OwnerId.Equals(dataUser.IdUser);
+                    var calendar = calendars[i];
+                    calendar.IsOwner = calendar.OwnerId.Equals(dataUser.IdUser);
+                    calendar.IsDefault = calendarRepos.CheckDefaultCalendar(calendar.Id);
                 }
 
                 return calendars;
@@ -48,6 +50,7 @@
             {
                 var calendar = Mapper.Map<Data.Models.Calendar, Calendar>(dataCalendar);
                 calendar.IsOwner = calendar.OwnerId.Equals(dataUser.IdUser);
+                calendar.IsDefault = calendarRepos.CheckDefaultCalendar(calendar.Id);
                 return calendar;
             }
             return null;
