@@ -69,6 +69,10 @@
   margin-right: 23px;
 }
 
+.about {
+  width: 100%;
+}
+
 .about * {
   font-weight: normal;
   font-size: 14px;
