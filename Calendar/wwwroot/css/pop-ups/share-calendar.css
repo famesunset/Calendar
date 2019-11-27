@@ -34,3 +34,33 @@
   color: #fff;
   transform: scale(.6, .6);
 }
+
+.confirm-wrapper {
+ max-width: 440px; 
+}
+
+.confirm-wrapper p {
+  font-size: 15px;
+  font-weight: normal;
+}
+
+.confirm-wrapper p span {
+  font-weight: 500;
+}
+
+.confirm-wrapper .user-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.confirm-wrapper .user-info img {
+  height: 50px;
+  margin-right: 20px;
+}
+
+.confirm-wrapper .user-info .username {
+  font-size: 18px;
+}
+

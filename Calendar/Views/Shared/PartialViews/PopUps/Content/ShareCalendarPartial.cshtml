@@ -1,0 +1,11 @@
+@model Calendar.Models.DTO.ShareCalendarDTO
+
+<div class="confirm-wrapper">
+  <p class="message">
+    Are you sure you want to share <span>@Model.Calendar.Name</span> with this user?
+  </p>
+  <div class="user-info">
+    <img src="@Model.User.Picture" alt="user icon">
+    <span class="username">@Model.User.Name</span>
+  </div>
+</div>

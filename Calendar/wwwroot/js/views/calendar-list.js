@@ -22,7 +22,7 @@ export let CalendarList = {
       s_calendarFormTarget: '#create-calendar-target',
       s_calendarFormContainer: '#create-calendar',    
       s_calendarFormContent: '.create-calendar', 
-      s_shareCalendarTrigger: '.share-calendar',
+      s_shareCalendarTrigger: '.share-calendar'
     },
 
     url: {
@@ -46,7 +46,7 @@ export let CalendarList = {
     $(s.s_unsubscribeCalendar).click(e => this.onUnsubscribeCalendar(e));
     $(s.s_calendar).mouseenter(e => this.onShowAction(e));
     $(s.s_calendar).mouseleave(e => this.onHideAction(e));
-    $(s.s_shareCalendarTrigger).click(e => this.onShareMenu(e));
+    $(s.s_shareCalendarTrigger).click(e => this.onShareMenu(e));    
 
     this.data.cache.tooltips = $('.tooltipped').tooltip({
       inDuration: 0, 
@@ -155,7 +155,7 @@ export let CalendarList = {
   onShareMenu(e) {    
     let root = e.currentTarget.parentElement.parentElement;    
     let id = $(root).find('input[name="calendarId"]').val();   
-    ShareCalendar.open(id, { x: e.pageX, y: e.pageY }, root);
+    ShareCalendar.openForm(id, { x: e.pageX, y: e.pageY }, root);
   },
 
   loadDeleteMessage(id, callback) {

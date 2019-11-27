@@ -62,7 +62,7 @@ namespace Calendar.Controllers
             string user = userManager.GetUserId(User);
             Business.Models.Calendar calendar = calendarService.GetCalendar(user, id);
 
-            return PartialView("PartialViews/PopUps/ShareCalendarPartial", calendar);
+            return PartialView("PartialViews/PopUps/ShareCalendarFormPartial", calendar);
         }
     }
 }

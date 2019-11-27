@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Services.Calendar;
 using Business.Services.User;
+using Calendar.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,12 +38,28 @@ namespace Calendar.Controllers
         }
 
         [HttpGet]
+        public IActionResult ShareCalendar(int calendarId, string email)
+        {
+            return Json("Success");
+        }
+
+        [HttpGet]
         public IActionResult DeleteCalendarMessage(int id)
         {
             string user = userManager.GetUserId(User);
             var calendar = calendarService.GetCalendar(user, id);
 
             return PartialView("PartialViews/PopUps/Content/DeleteCalendarPartial", calendar);
+        }
+
+        [HttpGet]
+        public IActionResult ShareCalendarConfirm(string email, int calendarId)
+        {
+            var loginedUser = userManager.GetUserId(User);
+            var user = userService.GetUserByEmail(email);
+            var calendar = calendarService.GetCalendar(loginedUser, calendarId);
+
+            return PartialView("PartialViews/PopUps/Content/ShareCalendarPartial", new ShareCalendarDTO(user, calendar));
         }
     }
 }

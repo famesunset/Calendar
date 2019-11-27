@@ -39,6 +39,11 @@ export class CalendarRepository extends Repository {
     promise.then();
   }
 
+  subscribe(email, calendarId) {
+    let promise = super.get({ email, calendarId }, '/Calendar/SubscribeCalendar');    
+    promise.then();
+  }
+
   unsubscribe(id) {
     let promise = super.delete({ id }, '/Calendar/UnsubscribeCalendar');    
     promise.then();

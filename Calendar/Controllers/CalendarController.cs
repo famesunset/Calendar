@@ -14,13 +14,16 @@ namespace Calendar.Controllers
     {        
         private readonly UserManager<IdentityUser> userManager;        
         private readonly ICalendarService calendarService;
+        private readonly IUserService userService;
 
         public CalendarController(            
             UserManager<IdentityUser> userManager,            
-            [FromServices] ICalendarService calendarService)
+            [FromServices] ICalendarService calendarService,
+            [FromServices] IUserService userService)
         {            
             this.userManager = userManager;            
             this.calendarService = calendarService;
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -64,6 +67,17 @@ namespace Calendar.Controllers
             calendarService.UnsubscribeUser(user, id);
 
             return Json("success");
+        }
+
+        [HttpGet]
+        public IActionResult SubscribeCalendar(string email, int calendarId)
+        {
+            var user = userService.GetUserByEmail(email);
+            if (user != null)
+            {
+                calendarService.SubscribeUser(user.Id, calendarId);
+            }
+            return Json("Success");
         }
     }
 }
