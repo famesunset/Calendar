@@ -48,7 +48,7 @@ export let ShareCalendar = {
     $.get(url, (content) => {
       PopUp.open(content, (result) => {
         let response = PopUp.data.response;
-        
+
         if (result == response.SUBMIT) {
           new CalendarRepository().subscribe(email, calendarId);
         }
@@ -62,6 +62,7 @@ export let ShareCalendar = {
     let form = _this.data.selectors.s_calendarForm;
     $(form).remove();
     $(calendar).css('background-color', 'transparent');
+    Modal.close();
   },
 
   setUpListeners() {
