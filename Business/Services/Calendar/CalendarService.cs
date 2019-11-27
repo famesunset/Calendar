@@ -27,12 +27,14 @@
                 var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
                 var calendars = userCalendars
                     .Select(c => Mapper.Map<Data.Models.Calendar, Calendar>(c))
-                    .OrderBy(c => c.Id);
+                    .OrderBy(c => c.Id)
+                    .ToList();
 
-                foreach (var calendar in calendars)
+                for (int i = 0; i < calendars.Count(); ++i)
                 {
-                    calendar.IsOwner = calendar.OwnerId.Equals(dataUser.IdUser);
+                    calendars[i].IsOwner = calendars[i].OwnerId.Equals(dataUser.IdUser);
                 }
+
                 return calendars;
             }
             return new List<Calendar>();
