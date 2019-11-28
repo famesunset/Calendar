@@ -18,7 +18,7 @@
         static AMapper()
         {
             htmlEncoder = HtmlEncoder.Create(UnicodeRanges.Cyrillic, UnicodeRanges.BasicLatin);
-
+            // TODO: rework with resolvers
             var config = new MapperConfiguration(cfg =>
             {
                 // Calendar
@@ -133,7 +133,6 @@
 
                 cfg.CreateMap<Browser, Data.Models.Browser>();
                 cfg.CreateMap<Data.Models.Browser, Browser>();
-                // resolver
             });
             Mapper = config.CreateMapper();
         }

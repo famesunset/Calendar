@@ -34,9 +34,16 @@ namespace Calendar.Controllers
         {
             string user = userManager.GetUserId(User);
             var calendars = calendarService.GetCalendars(user);
+            var _event = new Event 
+            {
+                Notify = new NotificationSchedule
+                {
+                    TimeUnit = NotifyTimeUnit.NoNotify,
+                },
+            };
 
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial",
-                new EventFormDTO(null, new Event(), new EventScheduleDropdown(date), calendars));
+                new EventFormDTO(null, _event, new EventScheduleDropdown(date), calendars));
         }
 
         public IActionResult EventInfo(int id)

@@ -21,6 +21,7 @@ using Hangfire.SqlServer;
 
 namespace Calendar
 {
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -34,7 +35,7 @@ namespace Calendar
         public void ConfigureServices(IServiceCollection services)
         {
             // Dependency Injection
-            services.AddSingleton<ICalendarService>(provider => 
+            services.AddSingleton<ICalendarService>(provider =>
                 new CalendarService(
                     new CalendarRepo(),
                     new UserRepo(),
@@ -43,7 +44,7 @@ namespace Calendar
                     )
                 );
 
-            services.AddSingleton<IEventService>(provider => 
+            services.AddSingleton<IEventService>(provider =>
                 new EventService(
                     new EventRepo(),
                     new CalendarRepo(),
@@ -53,7 +54,7 @@ namespace Calendar
                     )
                 );
 
-            services.AddSingleton<IUserService>(provider => 
+            services.AddSingleton<IUserService>(provider =>
                 new UserService(
                     new UserRepo(),
                     new CalendarRepo(),
@@ -70,21 +71,22 @@ namespace Calendar
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddNewtonsoftJson(options =>  
-                {  
+                .AddNewtonsoftJson(options =>
+                {
                     // options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;  
-                }); 
+                });
 
             var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
             var config = builder.Build();
             services.AddAuthentication()
-                .AddCookie(options => {
+                .AddCookie(options =>
+                {
                     options.SlidingExpiration = true;
                     options.ExpireTimeSpan = System.TimeSpan.FromDays(14);
                 })
                 .AddGoogle(options =>
                 {
-                   
+
                     options.ClientId = config["Authentication:Google:CI"] + ".apps.google" + "usercontent.com";
                     options.ClientSecret = config["Authentication:Google:CS"];
                     options.SaveTokens = true;
@@ -105,7 +107,7 @@ namespace Calendar
                 options.Providers.Add<BrotliCompressionProvider>();
                 options.EnableForHttps = true;
             });
-            
+
             // Add Hangfire services.
             services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -147,9 +149,10 @@ namespace Calendar
 
             app.UseResponseCompression();
 
-             // hangfire
+            // hangfire
             app.UseHangfireDashboard();
 
+            app.UseMiddleware<ErrorLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

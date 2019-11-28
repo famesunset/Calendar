@@ -27,10 +27,6 @@ namespace Calendar.Controllers
             this.userService = userService;
         }
 
-        public string LoginProvider { get; set; }
-
-        public string ReturnUrl { get; set; }
-
         [TempData]
         public string ErrorMessage { get; set; }
 
@@ -42,6 +38,7 @@ namespace Calendar.Controllers
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await signInManager.SignOutAsync();
+            // TODO: удалить browserId из бд
             return Redirect(returnUrl);
         }
 
@@ -67,6 +64,7 @@ namespace Calendar.Controllers
             }
 
             var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            // есть ли пользователь в бд
             if (result.Succeeded)
             {
                 var user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
@@ -78,6 +76,7 @@ namespace Calendar.Controllers
             }
             else
             {
+                // если нет - регистрируем 
                 var userInfo = info.Principal.Identities.First();
                 var email = userInfo.FindFirst(ClaimTypes.Email);
                 var picture = userInfo.FindFirst("picture");
