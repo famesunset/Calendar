@@ -433,10 +433,11 @@ export let Daily = {
     let $wrapper = $(`#${selector} ${s.s_eventContentWrapper}`);  
 
     // Convert start and finish to the same date
+
     finish = moment(start).set({hour: finish.getHours(), minute: finish.getMinutes()}).toDate();
     if (finish.getHours() == 0 &&
         finish.getMinutes() == 0) {
-      finish = moment(finish).add(1, 'days');
+      finish = moment(finish).add(1, 'days').toDate();
     }
 
     let minutesDiff = Math.abs(start.getTime() - finish.getTime()) / 1000.0 / 60.0;
