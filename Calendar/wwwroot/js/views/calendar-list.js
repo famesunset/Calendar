@@ -44,8 +44,6 @@ export let CalendarList = {
     $(s.s_displayCalendar).change(e => this.onShowCalendarEvents(e));
     $(s.s_deleteCalendar).click(e => this.onDeleteCalendar(e));
     $(s.s_unsubscribeCalendar).click(e => this.onUnsubscribeCalendar(e));
-    $(s.s_calendar).mouseenter(e => this.onShowAction(e));
-    $(s.s_calendar).mouseleave(e => this.onHideAction(e));
     $(s.s_shareCalendarTrigger).click(e => this.onShareMenu(e));    
 
     this.data.cache.tooltips = $('.tooltipped').tooltip({
