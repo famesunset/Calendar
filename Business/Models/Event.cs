@@ -8,5 +8,10 @@ namespace Business.Models
         public string Description { get; set; }
         public Interval Repeat { get; set; }
         public NotificationSchedule Notify { get; set; }
+
+        public Event()
+        {
+            Notify = new NotificationSchedule();
+        }
     }
 }
