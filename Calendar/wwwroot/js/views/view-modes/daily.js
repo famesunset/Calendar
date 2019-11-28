@@ -4,7 +4,6 @@ import { EventRepository } from '../../models/mvc/event-repository.js';
 import { DeleteEvent } from '../pop-ups/delete-event.js';
 import { CalendarRepository } from '../../models/mvc/calendar-repository.js';
 import { CalendarList } from '../calendar-list.js';
-import { ViewMode } from '../view-mode.js';
 import { EventInfo } from '../pop-ups/event-info.js';
 
 export let Daily = {
@@ -139,6 +138,7 @@ export let Daily = {
     DeleteEvent.open(eventId, pos);
   },
 
+  // Stretch mouse down
   onCellMouseDown(e) {     
     if (e.which != this.data.ux.leftMouseBtn) 
       return;
@@ -168,12 +168,13 @@ export let Daily = {
     this.data.cache.cachedColor = color;
   },
 
+  // Stretch mouse up
   onOpenCreateForm(event, allDay = false) {  
     if (event.which != this.data.ux.leftMouseBtn) 
       return;
 
     let s = this.data.selectors;
-    let target = event.currentTarget;
+    let target = this.getCachedEvent();;
 
     EventForm.openCreate(      
       this.data.cache.timeStart,
@@ -521,16 +522,19 @@ export let Daily = {
   },
 
   setEventTitle(title, id) {
+    if (id == undefined)
+      return;
+
     if (!title || title.trim() === "") 
       title = "(No title)";
-
+    
     let selector = `#${id} .title`;
     $(selector).text(title);
   },
 
-  setEventTime(start, finish, guid) {
-    let s_start = `#${guid} .start`;
-    let s_finish = `#${guid} .end`;
+  setEventTime(start, finish, selector) {
+    let s_start = `#${selector} .start`;
+    let s_finish = `#${selector} .end`;
 
     $(s_start).text(start);
     $(s_finish).text(finish);
