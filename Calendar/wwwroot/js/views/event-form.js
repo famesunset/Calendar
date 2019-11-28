@@ -117,7 +117,7 @@ export let EventForm = {
   },
 
   openEdit(id) {
-    if (!this.formCanOpen())
+    if (!this.formCanOpen() || isNaN(id))
       return;
 
     let s = this.data.selectors;
@@ -182,11 +182,13 @@ export let EventForm = {
     let event = this.getEvent();
     let id = await new EventRepository().insert(event);    
     
-    let selector = ViewMode.getCachedEvent();
-    $(`#${selector}`).find('input[name="id"]').val(id);
-
-    this.close();
-    this.execFormCallback();
+    if (id != -1) {
+      let selector = ViewMode.getCachedEvent();
+      $(`#${selector}`).find('input[name="id"]').val(id);
+  
+      this.close();
+      this.execFormCallback();
+    }
   },
 
   onEdit() {

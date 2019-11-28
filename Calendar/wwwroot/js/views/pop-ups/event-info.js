@@ -27,6 +27,9 @@ export let EventInfo = {
   },
 
   open(id) {
+    if (isNaN(id))
+      return;
+
     let container = 'body';
     let url = this.data.url.u_loadView + `?id=${id}`;
 

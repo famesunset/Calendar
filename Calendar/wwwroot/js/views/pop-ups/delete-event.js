@@ -36,12 +36,15 @@ export let DeleteEvent = {
     Modal.close();
   },
 
-  open(eventId, pos) {    
+  open(id, pos) {    
+    if (isNaN(id))
+      return;
+
     let container = this.data.selectors.s_loadDeleteEvent;
     let url = this.data.url.u_windowLoad;
 
     $(container).load(url, () => {
-      this.data.cache.eventId = eventId;          
+      this.data.cache.eventId = id;          
       this.setUpListeners();   
       this.openAnimation(pos);
       Modal.open(this.onClose);

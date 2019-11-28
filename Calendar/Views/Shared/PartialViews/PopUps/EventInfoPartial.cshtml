@@ -19,7 +19,7 @@
     <div class="info-row">
       <div class="info-icon event-color" style="background-color: @Model.Calendar.Color.Hex"></div>
       <div class="about">
-        <h3 class="title">@Model.Event.Title</h3>
+        <h3 class="title">@(string.IsNullOrWhiteSpace(Model.Event.Title) ? "(No title)" : Model.Event.Title) </h3>
         <div class="time-info">
           <div class="daily-range">
             <span class="time-start">@Model.Event.Start.ToLocalTime().ToString("h:mm tt")</span>
