@@ -7,6 +7,7 @@
     using Data.Repository.Interfaces;
 
     using static AMapper;
+    using Newtonsoft.Json;
 
     public partial class EventService : IEventService
     {
@@ -112,6 +113,19 @@
                     notificationRepos.UpdateNotification(dataBigEvent.EventId, newEvent.Notify.Value, (int)newEvent.Notify.TimeUnit);
                 }
             }
+        }
+
+        public string GetEventLink(string loginedUserId, int eventId, string domain)
+        {
+            var _event = GetEvent(loginedUserId, eventId);
+            return $"{domain}/?event={JsonConvert.SerializeObject(_event)}";
+        }
+
+        public Event GetEventByLink(string link)
+        {
+            const string attr = "event=";
+            var json = link.Substring(link.IndexOf(attr) + attr.Length);
+            return JsonConvert.DeserializeObject<Event>(json);
         }
     }
 }
