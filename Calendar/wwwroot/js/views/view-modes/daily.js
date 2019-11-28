@@ -75,7 +75,7 @@ export let Daily = {
 
   setUpListeners() {
     let s = this.data.selectors;    
-    
+
     $(s.s_cell).mousedown(e => {
       this.onCellMouseDown(e);
       $(s.s_table).mousemove(async (e) => this.onStretchEvent(e));
@@ -182,9 +182,11 @@ export let Daily = {
       allDay,
       () => $(target).mouseup((e) => this.onShowEventInfo(e))
     );
-
-    $(s.s_table).unbind('mousemove');
+    
     $(target).unbind('mouseup');
+    $(s.s_table).unbind('mouseup');
+    $(s.s_table).unbind('mousemove');
+
     this.data.cache.state = '';
   },
   
