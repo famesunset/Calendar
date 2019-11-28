@@ -39,7 +39,7 @@ namespace Data.Repository
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 AllData s = connection.Query<AllData>("uspGetEventById", new { eventId },
-                    commandType: CommandType.StoredProcedure).First();
+                    commandType: CommandType.StoredProcedure).SingleOrDefault();
                 return s;
             }
         }

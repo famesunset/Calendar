@@ -103,6 +103,7 @@
   display: flex;
   height: 50px;
   width: calc(100% - 10px);
+  padding-right: 20px;
   position: relative;
   border-top: 1px solid var(--color-main-border);
 }
@@ -129,13 +130,12 @@
   user-select: none;
   -moz-user-select: none;
   z-index: 200;
-  position: absolute;
   background-color: var(--displayed-event-bg);
-  width: calc(100% - 20px);
+  width: 100%;
   height: 46px;
   min-height: 28px;
   border-radius: 4px;
-  left: 10px;
+  margin-left: 10px;
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
     0 1px 18px 0 rgba(0, 0, 0, 0.12),
     0 3px 5px -1px rgba(0, 0, 0, 0.2);
