@@ -37,6 +37,17 @@ export class EventRepository extends Repository {
     return id;
   }
 
+  async generateLink(id) {
+    let link = {};
+    
+    let promise = super.get({ id }, '/Event/GenerateEventLink');    
+    await promise.then(data => {
+      link = data;
+    });
+
+    return link;
+  }
+
   update(item) {
     let promise = super.update(item, '/Event/EditEvent');    
     promise.then();

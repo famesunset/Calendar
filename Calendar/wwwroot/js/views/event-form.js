@@ -14,6 +14,7 @@ export let EventForm = {
       userCalendars: null,
       state: 'close',
       states: {
+        share: 'share',
         create: 'create',
         edit: 'edit',
         close: 'close'
@@ -63,7 +64,8 @@ export let EventForm = {
 
     url: {
       createEventForm: '/EventView/CreateEventForm',
-      editEventForm: '/EventView/EditEventForm'
+      editEventForm: '/EventView/EditEventForm',
+      sharedEventForm: '/EventView/OpenSharedEventForm'
     },
 
     cache: {
@@ -169,13 +171,52 @@ export let EventForm = {
   onCancelCreation() {  
     let _this = EventForm;
     let selector = ViewMode.getCachedEvent();
+    
+    let state = _this.getFormState();
+    let states = _this.data.form.states;
 
-    if (_this.getFormState() == _this.data.form.states.create) {
+    if (state == states.create) {
       ViewMode.deleteEvent(selector);      
-    } else {
+    } else if (state == states.edit) {
       ViewMode.eventRollback();
     }    
     _this.close();
+  },
+
+  onCreateSharedEvent(event) {
+    if (!this.formCanOpen())
+      return;
+
+    let s = this.data.selectors;
+    let container = s.s_formLoad;
+    let url = this.data.url.sharedEventForm;
+
+    let _data = JSON.stringify(event);
+
+    $.ajax({
+      url: url,
+      type: 'POST',
+      data: _data,
+      dataType: 'json',
+      contentType: "application/json; charset=utf-8",
+      traditional: true,      
+      error: (resp) => {      
+        let content = resp.responseText;        
+
+        $(container).html(content);      
+        let start = new Date($(s.s_dateStart).val());
+        let finish = new Date($(s.s_dateFinish).val());
+        
+        this.runUserCalendars();
+        this.renderDatePickers(start, finish);
+        this.renderTimePickers(start, finish);             
+        this.formState('share');
+        this.setUpListeners();
+        this.onOptionsOpen(0);
+  
+        Modal.open(this.onCancelCreation);
+      }
+    });
   },
 
   async onCreate() {    

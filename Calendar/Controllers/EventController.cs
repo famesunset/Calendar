@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Calendar.Controllers
 {
+    [Authorize]
     public class EventController : Controller
     {
         private readonly SignInManager<IdentityUser> signInManager;
@@ -30,14 +31,13 @@ namespace Calendar.Controllers
             this.hangfire = new HangfireEvent(userService);
         }
 
-        [Authorize]
+
         public IActionResult GetEvent(int id)
         {
             Event @event = eventService.GetEvent(userManager.GetUserId(User), id);
             return Json(@event);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult GetEventList(DateTime date, int[] calendars, int timeOffset)
         {
@@ -46,7 +46,6 @@ namespace Calendar.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult CreateEvent([FromBody] EventWithTimeOffsetDTO @event)
         {   
             int eventId = eventService.CreateEvent(userManager.GetUserId(User), @event.Event, @event.Offset);
@@ -58,8 +57,16 @@ namespace Calendar.Controllers
             return Json(eventId);
         }
 
+        [HttpGet]
+        public IActionResult GenerateEventLink(int id)
+        {
+            string domainName = $"{Request.Scheme}://{Request.Host}";
+            var link = eventService.GetEventLink(userManager.GetUserId(User), id, domainName);
+
+            return Json(link);
+        }
+
         [HttpPost]
-        [Authorize]
         public IActionResult EditEvent([FromBody] EventWithTimeOffsetDTO @event)
         {
             eventService.UpdateEvent(userManager.GetUserId(User), @event.Event);
@@ -67,7 +74,6 @@ namespace Calendar.Controllers
         }
 
         [HttpGet]
-        [Authorize]
 
         public IActionResult DeleteEvent(int id)
         {

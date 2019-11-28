@@ -11,6 +11,7 @@ using System;
 
 namespace Calendar.Controllers
 {
+    [Authorize]
     public class EventViewController : Controller
     {        
         private readonly UserManager<IdentityUser> userManager;
@@ -55,7 +56,17 @@ namespace Calendar.Controllers
             return PartialView("PartialViews/PopUps/EventInfoPartial", new EventCalendarDTO(@event, calendar));
         }
 
-        [Authorize]
+        [HttpPost]
+        public IActionResult OpenSharedEventForm([FromBody] Event @event)
+        {
+            string user = userManager.GetUserId(User);
+            var calendar = calendarService.GetCalendar(user, @event.CalendarId);
+            var calendars = calendarService.GetCalendars(user);
+
+            return PartialView("PartialViews/CreateEventForms/CreateEventPartial",
+                                new EventFormDTO(calendar, @event, new EventScheduleDropdown(@event.Start, @event.Repeat), calendars));
+        }
+        
         public IActionResult EditEventForm(int id)
         {
             string user = userManager.GetUserId(User);

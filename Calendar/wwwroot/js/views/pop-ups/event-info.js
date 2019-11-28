@@ -8,22 +8,32 @@ export let EventInfo = {
     selectors: {
       s_info: '.event-info',
       s_eventId: '.event-info input[name="eventId"]',
+      s_shareTrigger: '.event-info .share-event',
       s_editTrigger: '.event-info .edit-event',
       s_deleteTrigger: '.event-info .delete-event',
       s_closeTrigger: '.event-info .close-form'
     },
 
     url: {
-      u_loadView: '/EventView/EventInfo'
+      u_loadView: '/EventView/EventInfo',
+      u_generateLink: '/Event/GenerateLink'
     }
   },
   
   setUpListeners() {
     let s = this.data.selectors;
 
+    $(s.s_shareTrigger).click(() => this.onShare());
     $(s.s_editTrigger).click(() => this.onEdit());
     $(s.s_deleteTrigger).click(() => this.onDelete());
     $(s.s_closeTrigger).click(() => this.close());
+    $('.tooltipped').tooltip({
+      inDuration: 0, 
+      outDuration: 0,  
+      enterDelay: 300,
+      margin: 0,
+      transitionMovement: 5
+    });
   },
 
   open(id) {
@@ -46,6 +56,15 @@ export let EventInfo = {
 
     $(info).remove();
     Modal.close();
+  },
+
+  async onShare() {
+    let s = this.data.selectors;
+    let id = $(s.s_eventId).val();
+
+    let link = await new EventRepository().generateLink(id);
+
+    console.log(link);
   },
 
   onEdit() {
