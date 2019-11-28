@@ -48,3 +48,9 @@ textarea.materialize-textarea:focus:not([readonly]) {
           box-shadow: none !important;
 }
 
+#toast-container {
+  top: auto !important;
+  right: auto !important;
+  bottom: 0px;  
+  left: 45%;
+}

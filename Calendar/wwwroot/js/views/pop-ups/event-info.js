@@ -83,5 +83,6 @@ export let EventInfo = {
     this.close();
     ViewMode.deleteEvent(selector);
     new EventRepository().delete(id);
+    M.toast({html: 'Event deleted'});
   }
 }

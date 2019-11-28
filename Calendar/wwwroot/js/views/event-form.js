@@ -229,12 +229,14 @@ export let EventForm = {
   
       this.close();
       this.execFormCallback();
+      M.toast({html: 'Event added'});
     }
   },
 
   onEdit() {
     let event = this.getEvent();
     new EventRepository().update(event);
+    M.toast({html: 'Event changed'});
     this.close();
   },
 

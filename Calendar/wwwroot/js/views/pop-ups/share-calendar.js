@@ -25,6 +25,12 @@ export let ShareCalendar = {
     }
   },
 
+  setUpListeners() {
+    let s = this.data.selectors;
+
+    $(s.s_shareCalendarSubmit).click(() => this.onShareCalendar())
+  },
+
   openForm(id, point, root) {
     let s = this.data.selectors;
     let u = this.data.url;
@@ -65,13 +71,7 @@ export let ShareCalendar = {
     Modal.close();
   },
 
-  setUpListeners() {
-    let s = this.data.selectors;
-
-    $(s.s_shareCalendarSubmit).click(() => this.onShareCalendar())
-  },
-
-  async onShareCalendar() {
+  async onShareCalendar() {    
     let s = this.data.selectors;
     let email = $(s.s_shareCalendarEmail).val();
     let calendarId = $(s.s_shareCalendarId).val();

@@ -34,6 +34,7 @@ export let DeleteEvent = {
     this.deleteEvent();
     this.close();
     Modal.close();
+    M.toast({html: 'Event deleted'});
   },
 
   open(id, pos) {    

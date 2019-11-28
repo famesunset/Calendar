@@ -22,7 +22,7 @@ $(function() {
       });  
 
       // let event = await new EventRepository().get(306);      
-      // EventForm.onCreateSharedEvent(event);      
+      // EventForm.onCreateSharedEvent(event);            
     }
   };
 
