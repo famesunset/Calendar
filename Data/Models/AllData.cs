@@ -15,24 +15,7 @@ namespace Data.Models
         public bool AllDay { get; set; }
         public int RepeatId { get; set; }
         public string CalendarColor { get; set; }
-
-        public AllData(int calendarId, string calendarName, string accessName, int eventId, string description,
-            string title, int eventScheduleId, DateTime timeStart, DateTime timeFinish, int repeatId)
-        {
-            this.CalendarId = calendarId;
-            this.CalendarName = calendarName;
-            this.AccessName = accessName;
-            this.EventId = eventId;
-            this.Description = description;
-            this.Title = title;
-            this.TimeStart = timeStart;
-            this.TimeFinish = timeFinish;
-            this.RepeatId = repeatId;
-        }
-
-        public AllData()
-        {
-
-        }
+        public int NotificationValue { get; set; }
+        public int NotificationTimeUnitId { get; set; }
     }
 }

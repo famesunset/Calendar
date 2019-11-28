@@ -48,12 +48,18 @@ namespace Calendar
                     new EventRepo(),
                     new CalendarRepo(),
                     new AllDataRepo(),
-                    new UserRepo()
+                    new UserRepo(),
+                    new NotificationRepo()
                     )
                 );
 
             services.AddSingleton<IUserService>(provider => 
-                new UserService(new UserRepo()));
+                new UserService(
+                    new UserRepo(),
+                    new CalendarRepo(),
+                    new AllDataRepo()
+                    )
+                );
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

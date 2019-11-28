@@ -104,86 +104,86 @@
         }
 
         #region unused
-        private IEnumerable<Data.Models.AllData> BuildInfinityEvents(int idUser, IEnumerable<Data.Models.Calendar> @calendarsList, DateTime dateStart, DateTime dateFinish)
-        {
-            IEnumerable<Data.Models.AllData> s = bigEventRepos.GetInfinityEvents(idUser, @calendarsList, dateFinish);
-            var infinity = new List<Data.Models.AllData>();
-            foreach (var t in s)
-            {
-                if (t.TimeStart < dateStart)
-                {
-                    DateTime tempStart = t.TimeStart;
-                    DateTime tempFinish = t.TimeFinish;
-                    switch (t.RepeatId)
-                    {
-                        case 1:
-                            {
-                                do
-                                {
-                                    infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
-                                        t.Description, t.Title, t.EventId,
-                                        tempStart, tempFinish,
-                                        t.RepeatId));
+        //private IEnumerable<Data.Models.AllData> BuildInfinityEvents(int idUser, IEnumerable<Data.Models.Calendar> @calendarsList, DateTime dateStart, DateTime dateFinish)
+        //{
+        //    IEnumerable<Data.Models.AllData> s = bigEventRepos.GetInfinityEvents(idUser, @calendarsList, dateFinish);
+        //    var infinity = new List<Data.Models.AllData>();
+        //    foreach (var t in s)
+        //    {
+        //        if (t.TimeStart < dateStart)
+        //        {
+        //            DateTime tempStart = t.TimeStart;
+        //            DateTime tempFinish = t.TimeFinish;
+        //            switch (t.RepeatId)
+        //            {
+        //                case 1:
+        //                    {
+        //                        do
+        //                        {
+        //                            infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+        //                                t.Description, t.Title, t.EventId,
+        //                                tempStart, tempFinish,
+        //                                t.RepeatId));
 
-                                    tempStart = tempStart.AddDays(1);
-                                    tempFinish = tempFinish.AddDays(1);
-                                } while (dateFinish.AddDays(1)! > tempStart);
+        //                            tempStart = tempStart.AddDays(1);
+        //                            tempFinish = tempFinish.AddDays(1);
+        //                        } while (dateFinish.AddDays(1)! > tempStart);
 
-                                break;
-                            }
+        //                        break;
+        //                    }
 
-                        case 7:
-                            {
-                                do
-                                {
-                                    infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
-                                        t.Description, t.Title, t.EventId,
-                                        tempStart, tempFinish,
-                                        t.RepeatId));
+        //                case 7:
+        //                    {
+        //                        do
+        //                        {
+        //                            infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+        //                                t.Description, t.Title, t.EventId,
+        //                                tempStart, tempFinish,
+        //                                t.RepeatId));
 
-                                    tempStart = tempStart.AddDays(7);
-                                    tempFinish = tempFinish.AddDays(7);
-                                } while (dateFinish.AddDays(1)! > tempStart);
+        //                            tempStart = tempStart.AddDays(7);
+        //                            tempFinish = tempFinish.AddDays(7);
+        //                        } while (dateFinish.AddDays(1)! > tempStart);
 
-                                break;
-                            }
+        //                        break;
+        //                    }
 
-                        case 30:
-                            {
-                                do
-                                {
-                                    infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
-                                        t.Description, t.Title, t.EventId,
-                                        tempStart, tempFinish,
-                                        t.RepeatId));
+        //                case 30:
+        //                    {
+        //                        do
+        //                        {
+        //                            infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+        //                                t.Description, t.Title, t.EventId,
+        //                                tempStart, tempFinish,
+        //                                t.RepeatId));
 
-                                    tempStart = tempStart.AddDays(30);
-                                    tempFinish = tempFinish.AddDays(30);
-                                } while (dateFinish.AddDays(1)! > tempStart);
+        //                            tempStart = tempStart.AddDays(30);
+        //                            tempFinish = tempFinish.AddDays(30);
+        //                        } while (dateFinish.AddDays(1)! > tempStart);
 
-                                break;
-                            }
+        //                        break;
+        //                    }
 
-                        case 365:
-                            {
-                                do
-                                {
-                                    infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
-                                        t.Description, t.Title, t.EventId,
-                                        tempStart, tempFinish,
-                                        t.RepeatId));
+        //                case 365:
+        //                    {
+        //                        do
+        //                        {
+        //                            infinity.Add(new Data.Models.AllData(t.CalendarId, t.CalendarName, t.AccessName, t.EventId,
+        //                                t.Description, t.Title, t.EventId,
+        //                                tempStart, tempFinish,
+        //                                t.RepeatId));
 
-                                    tempStart = tempStart.AddDays(365);
-                                    tempFinish = tempFinish.AddDays(365);
-                                } while (dateFinish.AddDays(1)! > tempStart);
+        //                            tempStart = tempStart.AddDays(365);
+        //                            tempFinish = tempFinish.AddDays(365);
+        //                        } while (dateFinish.AddDays(1)! > tempStart);
 
-                                break;
-                            }
-                    }
-                }
-            }
-            return infinity;
-        }
+        //                        break;
+        //                    }
+        //            }
+        //        }
+        //    }
+        //    return infinity;
+        //}
 
         #endregion
     }

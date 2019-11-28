@@ -7,32 +7,17 @@
 
     public class FakeNotificationRepository : INotification
     {
-        public IEnumerable<Notification> CreateNotification(int eventScheduleId, DateTime notificationTime)
+        public void CreateNotification(int eventId, int before, int timeUnitId)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeleteNotificationInfinity(int eventId)
+        public void DeleteNotification(int eventId)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeleteNotificationSchedule(int eventScheduleId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Notification> UpdateNotification(int eventId, int minutesBefore)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Notification> UpdateNotificationInfinity(int eventId, int minutesBefore)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Notification> UpdateNotificationSchedule(int eventScheduleId, DateTime notificationTime)
+        public void UpdateNotification(int eventId, int before, int timeUnitId)
         {
             throw new NotImplementedException();
         }

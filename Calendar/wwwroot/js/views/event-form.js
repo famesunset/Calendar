@@ -432,7 +432,6 @@ export let EventForm = {
     let finish = datePickers['date-finish'].getDate();
 
     let offset = new Date().getTimezoneOffset();
-    let saveDate = currentDate;    
     let timeStart = timePickers['time-start'].getDate();
     let timeFinish = timePickers['time-finish'].getDate();
 
@@ -449,8 +448,7 @@ export let EventForm = {
         title,
         description,
         start,
-        finish,     
-        saveDate: saveDate.toISOString(),   
+        finish,
         isAllDay,   
         repeat,
         notify

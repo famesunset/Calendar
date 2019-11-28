@@ -10,12 +10,31 @@ namespace Data.Repository
 {
     public class UserRepo : BaseRepository<User>, IUser
     {
+        public void AddBrowser(Browser browser)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Query("uspSetBrowserToUser", new { userId = browser.UserId, browser = browser.BrowserId },
+                        commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public void CreateUser(User user)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Query("uspCreateUser", new { name = user.Name, mobile = user.Mobile, email = user.Email, identityId = user.IdIdentity, picture = user.Picture },
                     commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public IEnumerable<Browser> GetBrowsers(int calendarId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var browsers = connection.Query<Browser>("uspGetBrowsersByCalendar", new { calendarId },
+                    commandType: CommandType.StoredProcedure);
+                return browsers;
             }
         }
 

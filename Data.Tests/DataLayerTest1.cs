@@ -38,14 +38,14 @@ namespace Data.Tests
         public void TestDeleteNotificationInfinity()
         {
             NotificationRepo notificationRepo = new NotificationRepo();
-            notificationRepo.DeleteNotificationInfinity(1);
+            //notificationRepo.DeleteNotificationInfinity(1);
         }
 
         [TestMethod]
         public void DeleteNotificationSchedule()
         {
             NotificationRepo notificationRepo = new NotificationRepo();
-            notificationRepo.DeleteNotificationSchedule(1);
+           //  notificationRepo.DeleteNotificationSchedule(1);
         }
 
         [TestMethod]

@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using Data.Repository.Interfaces;
-    
+
     using static AMapper;
 
     public partial class EventService : IEventService
@@ -13,16 +13,19 @@
         private readonly IEvent eventRepos;
         private readonly ICalendar calendarRepos;
         private readonly IAllData bigEventRepos;
+        private readonly INotification notificationRepos;
 
         private readonly ServiceHelper serviceHelper;
 
-        public EventService(IEvent eventRepository, ICalendar calendarRepository, IAllData bigEventRepository, IUser userRepository)
+        public EventService(IEvent eventRepository, ICalendar calendarRepository,
+            IAllData bigEventRepository, IUser userRepository, INotification notificationRepository)
         {
-            eventRepos = eventRepository;
-            calendarRepos = calendarRepository;
-            bigEventRepos = bigEventRepository;
+            this.eventRepos = eventRepository;
+            this.calendarRepos = calendarRepository;
+            this.bigEventRepos = bigEventRepository;
+            this.notificationRepos = notificationRepository;
 
-            serviceHelper = new ServiceHelper(userRepository, calendarRepository, bigEventRepository);
+            this.serviceHelper = new ServiceHelper(userRepository, calendarRepository, bigEventRepository);
         }
 
         public int CreateEvent(string loginedUserId, Event @event, int timeOffset)
@@ -38,6 +41,11 @@
 
                 Data.Models.Event dataEvent = Mapper.Map<Event, Data.Models.Event>(@event);
                 int eventId = eventRepos.CreateEvent(dataEvent);
+                if (@event.Notify != null && @event.Notify.Value > 0)
+                {
+                    notificationRepos.CreateNotification(eventId, @event.Notify.Value, (int)@event.Notify.TimeUnit);
+                }
+
                 return eventId;
             }
             return -1;
@@ -87,6 +95,7 @@
             if (dataBigEvent != null)
             {
                 eventRepos.Delete(dataBigEvent.EventId);
+                notificationRepos.DeleteNotification(dataBigEvent.EventId);
             }
 
         }
@@ -98,6 +107,10 @@
             {
                 Data.Models.Event dataEvent = Mapper.Map<Event, Data.Models.Event>(newEvent);
                 eventRepos.UpdateEvent(dataEvent);
+                if (newEvent.Notify != null)
+                {
+                    notificationRepos.UpdateNotification(dataBigEvent.EventId, newEvent.Notify.Value, (int)newEvent.Notify.TimeUnit);
+                }
             }
         }
     }

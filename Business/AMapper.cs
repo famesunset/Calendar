@@ -69,7 +69,13 @@
                        Finish = val.TimeFinish,
                        Start = val.TimeStart,
                        IsAllDay = val.AllDay,
-                       Repeat = (Interval)Enum.ToObject(typeof(Interval), val.RepeatId)
+                       Repeat = (Interval)Enum.ToObject(typeof(Interval), val.RepeatId),
+                       Notify = new NotificationSchedule 
+                       { 
+                           EventId = val.EventId, 
+                           TimeUnit = (NotifyTimeUnit)Enum.ToObject(typeof(NotifyTimeUnit), val.NotificationTimeUnitId),
+                           Value = val.NotificationValue,
+                       },
                    })
                    .ForMember(dest => dest.Title,
                        expression => expression.MapFrom(src => Encode(src.Title)))
@@ -124,7 +130,10 @@
                         expression => expression.MapFrom(src => Encode(src.Hex)));
 
                 cfg.CreateMap<Color, Data.Models.Color>();
-                //resolver
+
+                cfg.CreateMap<Browser, Data.Models.Browser>();
+                cfg.CreateMap<Data.Models.Browser, Browser>();
+                // resolver
             });
             Mapper = config.CreateMapper();
         }

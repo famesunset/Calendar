@@ -2,9 +2,9 @@
 {
     public enum NotifyTimeUnit
     {
-        NoNotify,
-        Min,
-        Hour,
-        Day
+        NoNotify = 0,
+        Min = 1,
+        Hour = 2,
+        Day = 3
     }
 }

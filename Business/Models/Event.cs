@@ -6,7 +6,6 @@ namespace Business.Models
     {
         public int CalendarId { get; set; }
         public string Description { get; set; }
-        public DateTime SaveDate { get; set; }
         public Interval Repeat { get; set; }
         public NotificationSchedule Notify { get; set; }
     }
