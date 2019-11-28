@@ -280,6 +280,7 @@ export let EventForm = {
     $target.removeClass('notify-toggle-add');            
     $target.addClass('notify-toggle-close');      
     $(s.s_notifyTimeUnitValue).val('Min');
+    $(s.s_notifyTimeUnitText).text('Min');
   },
 
   notifyClose(target, menu) {
