@@ -350,4 +350,7 @@
     <Build Include="dbo\User Defined Types\CalendarsUsers.sql" />
     <Build Include="dbo\User Defined Types\Schedule.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment1.sql" />
+  </ItemGroup>
 </Project>

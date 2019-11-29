@@ -14,6 +14,9 @@ BEGIN TRANSACTION Transact
 	  set @IdCalendarDefault = (select TOP 1 (Id) + 1 from Calendars
 	  order by Id desc)
 
+	  IF @IdCalendarDefault IS NULL
+		set @IdCalendarDefault = 1
+
 	  insert into Users(Name, Mobile, Email, CalendarDefaultId, IdentityId, Picture)
 	  values (@name, @mobile, @email, @IdCalendarDefault, @identityId, @picture)
 

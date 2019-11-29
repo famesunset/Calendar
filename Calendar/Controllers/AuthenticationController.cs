@@ -50,7 +50,7 @@ namespace Calendar.Controllers
             return new ChallengeResult(provider, properties);
         }
 
-        public async Task<IActionResult> GetCallback([FromServices]IUserService userService, string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> GetCallback(string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
             {
@@ -74,25 +74,26 @@ namespace Calendar.Controllers
 
                 return Redirect(returnUrl);
             }
-            else
+            return await Register(returnUrl, info);
+        }
+
+        private async Task<IActionResult> Register(string returnUrl, ExternalLoginInfo info)
+        {
+            var userInfo = info.Principal.Identities.First();
+            var email = userInfo.FindFirst(ClaimTypes.Email);
+            var picture = userInfo.FindFirst("picture");
+            var user = new IdentityUser { UserName = email.Value, Email = email.Value };
+            userService.CreateUser(new User { IdentityId = user.Id, Name = userInfo.Name, Email = email.Value, Picture = picture.Value });
+            var identityResult = await userManager.CreateAsync(user);
+            if (identityResult.Succeeded)
             {
-                // если нет - регистрируем 
-                var userInfo = info.Principal.Identities.First();
-                var email = userInfo.FindFirst(ClaimTypes.Email);
-                var picture = userInfo.FindFirst("picture");
-                var user = new IdentityUser { UserName = email.Value, Email = email.Value};
-                userService.CreateUser(new User { IdentityId =  user.Id, Name = userInfo.Name, Email = email.Value, Picture = picture.Value });
-                var identityResult = await userManager.CreateAsync(user);
+                identityResult = await userManager.AddLoginAsync(user, info);
                 if (identityResult.Succeeded)
                 {
-                    identityResult = await userManager.AddLoginAsync(user, info);
-                    if (identityResult.Succeeded)
-                    {
-                        var props = new AuthenticationProperties();
-                        props.StoreTokens(info.AuthenticationTokens);
-                        await signInManager.SignInAsync(user, props, authenticationMethod: info.LoginProvider);
-                        return Redirect(returnUrl);
-                    }
+                    var props = new AuthenticationProperties();
+                    props.StoreTokens(info.AuthenticationTokens);
+                    await signInManager.SignInAsync(user, props, authenticationMethod: info.LoginProvider);
+                    return Redirect(returnUrl);
                 }
             }
             return Redirect("/");

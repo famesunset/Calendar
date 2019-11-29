@@ -15,6 +15,7 @@ namespace Calendar.Models
     public class HangfireEvent
     {
         private readonly IUserService userService;
+        private readonly string logSeparator = "-----------------------------------------------------------------------------------";
         public HangfireEvent(IUserService userService)
         {
             this.userService = userService;
@@ -69,7 +70,7 @@ namespace Calendar.Models
                 browsers.Select(b => b.BrowserId).ToArray(),
                 time.TotalSeconds
                 );
-            Console.WriteLine($"Event {_event.Id}\n-----------------------------------------------------------------------------------");
+            Console.WriteLine($"Event {_event.Id}\n{logSeparator}");
         }
 
         public void CreateReccutingJob(int eventId)
@@ -108,7 +109,7 @@ namespace Calendar.Models
             client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", authHeaderValue);
             var response = await client.PostAsync(host, new StringContent(data, Encoding.UTF8, "application/json"));
             var respText = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(respText + "\n-----------------------------------------------------------------------------------");
+            Console.WriteLine($"{respText}\n{logSeparator}");
 
         }
     }

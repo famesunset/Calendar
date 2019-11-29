@@ -5,9 +5,8 @@
     using System.Linq;
     using System.Collections.Generic;
     using Data.Repository.Interfaces;
-
-    using static AMapper;
     using Newtonsoft.Json;
+    using static AMapper;
 
     public partial class EventService : IEventService
     {

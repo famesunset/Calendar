@@ -1,13 +1,11 @@
 ﻿namespace Business.Services.User
 {
-    using System.Linq;
     using Models;
+    using System.Linq;
     using System.Collections.Generic;
     using Data.Repository.Interfaces;
-
     using static Business.AMapper;
     
-
     public class UserService : IUserService
     {
         private IUser userRepos;
@@ -16,18 +14,19 @@
         public UserService(IUser userRepository, ICalendar calendarRepository, IAllData bigDataRepository)
         {
             userRepos = userRepository;
-
             serviceHelper = new ServiceHelper(userRepository, calendarRepository, bigDataRepository);
         }
 
-        public void AddBrowser(string identityId, string browser)
+        public bool AddBrowser(string identityId, string browser)
         {
             var dataUser = serviceHelper.GetUserByIdentityId(identityId);
             if(dataUser != null)
             {
                 userRepos.AddBrowser(Mapper.Map<Browser, Data.Models.Browser>
                 (new Browser { UserId=dataUser.IdUser, BrowserId = browser }));
+                return true;
             }
+            return false;
         }
 
         public void CreateUser(User user)

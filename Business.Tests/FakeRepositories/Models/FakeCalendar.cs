@@ -7,7 +7,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public FakeAccess Access { get; set; }
+        public Business.Models.Access Access { get; set; }
         public FakeUser Owner { get; set; }
         public List<FakeUser> Users { get; set; }
         public List<FakeEvent> Events { get; set; }
