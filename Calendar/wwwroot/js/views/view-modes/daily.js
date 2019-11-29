@@ -455,7 +455,7 @@ export let Daily = {
       $wrapper.removeClass(c.s_eventWrapperTiny);
     }
     
-    $event.css('top', `${margin}px`);    
+    $event.css('margin-top', `${margin}px`);    
     $event.css('height', `${height}px`);   
   },
 
