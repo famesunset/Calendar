@@ -92,7 +92,9 @@
 }
 
 .about-description {
-  width: calc(100% - 15px);
+  max-width: calc(100% - 15px);
+  padding-right: 10px;
+  word-wrap: normal;
   max-height: 60px;
   overflow-y: auto;
 }
