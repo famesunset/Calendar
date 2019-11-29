@@ -6,7 +6,6 @@
     [CalendarDefaultId] INT            NOT NULL,
     [IdentityId]        NVARCHAR (MAX) NOT NULL,
     [Picture]           NVARCHAR (MAX) NULL,
-    [BrowserId]         NVARCHAR (MAX) NULL,
     CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

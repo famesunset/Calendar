@@ -1,20 +1,19 @@
-﻿using System.Linq;
-using Business.Tests.FakeRepositories.Models;
-
-namespace Business.Tests.FakeRepositories
+﻿namespace Business.Tests.FakeRepositories
 {
-    using System;
+    using System.Linq;
+    using Business.Tests.FakeRepositories.Models;
     using System.Collections.Generic;
     using Data.Models;
     using Data.Repository.Interfaces;
-
     public class FakeCalendarRepository : ICalendar
     {
-        private static int _fakeCalendarId;
+        private static int fakeCalendarId = 0;
 
         public bool CheckDefaultCalendar(int idCalendar)
         {
-            throw new NotImplementedException();
+            return FakeRepository.Get.
+                Calendars.SingleOrDefault(c => c.Id.Equals(idCalendar)).
+                Users.Any(u => u.DefaultCalendar.Id.Equals(idCalendar));
         }
 
         public int CreateCalendar(int userId, Calendar calendar)
@@ -22,17 +21,11 @@ namespace Business.Tests.FakeRepositories
             var fakeUser = FakeRepository.Get.Users.SingleOrDefault(u => u.Id.Equals(userId));
             if (fakeUser != null)
             {
-                var fakeCalendar = new FakeCalendar
-                {
-                    Id = ++_fakeCalendarId,
-                    Access = (FakeAccess)Enum.ToObject(typeof(FakeAccess), calendar.AccessId),
-                    Name = calendar.Name,
-                    Owner = fakeUser,
-                    Events = new List<FakeEvent>(),
-                    Users = new List<FakeUser>(),
-                };
+                calendar.Id = ++fakeCalendarId;
+                var fakeCalendar = FakeConverters.CalendarToFakeCalendar(calendar, fakeUser);
                 fakeCalendar.Users.Add(fakeUser);
                 FakeRepository.Get.Calendars.Add(fakeCalendar);
+                fakeUser.Calendars.Add(fakeCalendar);
                 return fakeCalendar.Id;
             }
 
@@ -42,19 +35,19 @@ namespace Business.Tests.FakeRepositories
         public Calendar GetCalendarById(int calendarId)
         {
             var fakeCalendar = GetFakeCalendarById(calendarId);
-            return FakeCalendarToCalendar(fakeCalendar);
+            return FakeConverters.FakeCalendarToCalendar(fakeCalendar);
         }
 
         public IEnumerable<Calendar> GetUserCalendars(int userId)
         {
             var fakeUser = FakeRepository.Get.Users.SingleOrDefault(u => u.Id.Equals(userId));
-            return fakeUser?.Calendars.Select(FakeCalendarToCalendar);
+            return fakeUser?.Calendars.Select(FakeConverters.FakeCalendarToCalendar);
         }
 
         public IEnumerable<User> GetUsersByCalendarId(int calendarId)
         {
             var fakeCalendar = GetFakeCalendarById(calendarId);
-            return fakeCalendar?.Users.Select(FakeUserToUser);
+            return fakeCalendar?.Users.Select(FakeConverters.FakeUserToUser);
         }
 
         public int? RemoveCalendar(int id)
@@ -72,46 +65,21 @@ namespace Business.Tests.FakeRepositories
 
         public void SubscribeUserToCalendar(int userId, int calendarId)
         {
-            throw new NotImplementedException();
+            var user = FakeRepository.Get.Users.SingleOrDefault(u => u.Id.Equals(userId));
+            var calendar = GetFakeCalendarById(calendarId);
+            user?.Calendars.Add(calendar);
+            calendar?.Users.Add(user);
         }
 
         public void UnsubscribeUserFromCalendar(int userId, int calendarId)
         {
-            throw new NotImplementedException();
-        }
-
-        private Calendar FakeCalendarToCalendar(FakeCalendar fakeCalendar)
-        {
-            if (fakeCalendar != null)
+            var calendar = GetFakeCalendarById(calendarId);
+            var user = calendar?.Users.SingleOrDefault(u => u.Id.Equals(userId));
+            if (user != null)
             {
-                return new Calendar
-                {
-                    AccessId = (int)fakeCalendar.Access,
-                    Name = fakeCalendar.Name,
-                    Id = fakeCalendar.Id
-                };
+                user.Calendars.Remove(calendar);
+                calendar.Users.Remove(user);
             }
-
-            return null;
-        }
-
-        private User FakeUserToUser(FakeUser fakeUser)
-        {
-            if (fakeUser != null)
-            {
-                return new User
-                {
-                    IdUser = fakeUser.Id,
-                    Name = fakeUser.Name,
-                    Email = fakeUser.Email,
-                    Mobile = fakeUser.Mobile,
-                    Picture = fakeUser.PictureURL,
-                    IdIdentity = fakeUser.IdentityId,
-                    IdCalendarDefault = fakeUser.DefaultCalendar.Id
-                };
-            }
-
-            return null;
         }
 
         private FakeCalendar GetFakeCalendarById(int calendarId)

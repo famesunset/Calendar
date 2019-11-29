@@ -4,3 +4,8 @@
     CONSTRAINT [PK_Repeat] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
+
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20191129-053914]
+    ON [dbo].[Repeat]([Interval] ASC, [Id] ASC);
+

@@ -5,3 +5,8 @@
     CONSTRAINT [FK_UsersCalendars_Calendars] FOREIGN KEY ([CalendarId]) REFERENCES [dbo].[Calendars] ([Id])
 );
 
+
+GO
+CREATE NONCLUSTERED INDEX [IX_UsersCalendars]
+    ON [dbo].[UsersCalendars]([UserId] ASC) WITH (STATISTICS_NORECOMPUTE = ON);
+

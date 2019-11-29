@@ -1,10 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[uspCreateNotification]
 	@eventId int,
-	@minutesBefore int
+	@before int,
+	@timeUnitId int
 AS
 BEGIN
 	SET NOCOUNT ON;
-	insert into Notification (EventId, NotificationMinute)
-	values (@eventId, @minutesBefore)
-	return (SELECT SCOPE_IDENTITY());
+	INSERT INTO Notification (EventId, Before, TimeUnitId)
+	VALUES (@eventId, @before, @timeUnitId)
+
+	SELECT CAST(SCOPE_IDENTITY() as int)
 END

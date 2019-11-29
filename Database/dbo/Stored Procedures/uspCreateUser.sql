@@ -20,9 +20,6 @@ BEGIN TRANSACTION Transact
 	  set @UserId = (select TOP 1 (Id) from Users
 	  order by Id desc)
 
-	  exec uspCreateCalendar @UserId, 'Default', 1, 1
-	  insert into UsersCalendars values (@UserId, 2)
-
   COMMIT TRANSACTION Transact
   END TRY
   BEGIN CATCH
