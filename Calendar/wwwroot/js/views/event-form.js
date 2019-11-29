@@ -71,7 +71,8 @@ export let EventForm = {
     cache: {
       formCallback: null,
       eventId: null,
-      eventColor: null
+      eventColor: null,
+      lastCalendar: null
     }
   },
 
@@ -228,7 +229,7 @@ export let EventForm = {
       $(`#${selector}`).find('input[name="id"]').val(id);
   
       this.close();
-      this.execFormCallback();
+      this.execFormCallback();    
       M.toast({html: 'Event added'});
     }
   },

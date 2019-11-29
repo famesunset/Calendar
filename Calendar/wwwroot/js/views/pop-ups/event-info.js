@@ -63,8 +63,9 @@ export let EventInfo = {
     let id = $(s.s_eventId).val();
 
     let link = await new EventRepository().generateLink(id);
-
-    console.log(link);
+    
+    navigator.clipboard.writeText(link)
+      .then(() => M.toast({html: 'Copied to clipboard'}));    
   },
 
   onEdit() {

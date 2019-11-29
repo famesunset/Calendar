@@ -187,7 +187,7 @@ export let CalendarList = {
     return checkedArray;
   },
 
-  getTopCalendarColor() {
+  getDefaultCalendarColor() {
     let calendar = $(this.data.selectors.s_calendar)[0];    
     let checkbox = $(calendar).find('span')[0];
     let style = window.getComputedStyle(checkbox);

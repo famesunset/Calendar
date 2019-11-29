@@ -77,7 +77,7 @@ export let Daily = {
     let s = this.data.selectors;    
 
     $(s.s_cell).mousedown(e => {
-      this.onCellMouseDown(e);
+      this.onCellMouseDown(e);        
       $(s.s_table).mousemove(async (e) => this.onStretchEvent(e));
       $(s.s_table).mouseup((e) => this.onOpenCreateForm(e));      
     });        
@@ -103,10 +103,10 @@ export let Daily = {
 
     EventForm.openCreate(start, finish);       
 
-    let color = CalendarList.getTopCalendarColor();
+    let color = CalendarList.getDefaultCalendarColor();
     this.renderEvent(container, selector, id, '(No title)', start, finish, color);
     this.cacheEvent(selector);
-    this.cacheColor(color);
+    this.cacheColor(color);    
   },
 
   onShowEventInfo(e) {  
@@ -132,17 +132,17 @@ export let Daily = {
     
     let $target = $(e.currentTarget);
     let eventId = $target.find('input[name="id"]').val();    
-    let pos = { x: e.pageX, y: e.pageY };
+    let pos = { x: e.pageX, y: e.clientY };
 
     this.cacheEvent(e.currentTarget.id);    
     DeleteEvent.open(eventId, pos);
   },
 
   // Stretch mouse down
-  onCellMouseDown(e) {     
+  onCellMouseDown(e) {       
     if (e.which != this.data.ux.leftMouseBtn) 
-      return;
-    
+      return;      
+
     let container = e.target;
     let selector = GUID();
     let eventId = GUID();        
@@ -156,12 +156,12 @@ export let Daily = {
           
     let timeFinish = moment(timeStart).add(1, 'hours').toDate();
 
-    let color = CalendarList.getTopCalendarColor();
+    let color = CalendarList.getDefaultCalendarColor();
     this.renderEvent(container, selector, eventId, '(No title)', timeStart, timeFinish, color);
 
     let targetCoords = this.getCoords(container);
-    this.data.cache.c_targetCellShift = Math.abs(e.pageY - targetCoords.y);
-    this.data.ux.pos_mouseStart = e.pageY;
+    this.data.cache.c_targetCellShift = Math.abs(e.clientY - targetCoords.y);
+    this.data.ux.pos_mouseStart = e.clientY;
     this.data.cache.timeStart = timeStart;
     this.data.cache.timeFinish = timeFinish;
     this.data.cache.state = 'create';
@@ -189,7 +189,7 @@ export let Daily = {
 
     this.data.cache.state = '';
   },
-  
+
   onStretchEvent(e) {
     if (e.which != this.data.ux.leftMouseBtn) 
       return;
@@ -197,7 +197,7 @@ export let Daily = {
     let cache = this.data.cache;
     
     let mouseStart = this.data.ux.pos_mouseStart;
-    let mouseEnd = e.pageY;
+    let mouseEnd = e.clientY;
     let mouseOffset = mouseEnd - mouseStart + cache.c_targetCellShift;
 
     if (mouseOffset >= 25) {
