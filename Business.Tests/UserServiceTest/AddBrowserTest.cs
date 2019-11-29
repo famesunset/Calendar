@@ -1,4 +1,5 @@
-﻿using Business.Services.User;
+﻿using Business.Models;
+using Business.Services.User;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Business.Tests
@@ -27,6 +28,22 @@ namespace Business.Tests
             Assert.AreEqual(result, false);
 
             result = userService.AddBrowser("noid", browserId);
+            Assert.AreEqual(result, false);
+
+           
+        }
+
+        [TestMethod]
+        public void BrowserIdNullReturnsFalse()
+        {
+            var validId = "aa-bb-cc-dd";
+            var user = new User
+            {
+                IdentityId = validId,
+            };
+            userService.CreateUser(user);
+
+            var result = userService.AddBrowser(validId, null);
             Assert.AreEqual(result, false);
         }
 

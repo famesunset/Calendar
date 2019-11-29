@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using Data.Repository.Interfaces;
     using static Business.AMapper;
-    
+
     public class UserService : IUserService
     {
         private IUser userRepos;
@@ -20,10 +20,16 @@
         public bool AddBrowser(string identityId, string browser)
         {
             var dataUser = serviceHelper.GetUserByIdentityId(identityId);
-            if(dataUser != null)
+            if (dataUser != null && browser != null)
             {
                 userRepos.AddBrowser(Mapper.Map<Browser, Data.Models.Browser>
-                (new Browser { UserId=dataUser.IdUser, BrowserId = browser }));
+                (
+                    new Browser
+                    {
+                        UserId = dataUser.IdUser,
+                        BrowserId = browser
+                    }
+                ));
                 return true;
             }
             return false;
@@ -45,7 +51,7 @@
         }
 
         public User GetUserByIdentityId(string id)
-        {            
+        {
             return Mapper.Map<Data.Models.User, User>(userRepos.GetUserByIdentityId(id));
         }
     }

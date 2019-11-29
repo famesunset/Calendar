@@ -17,7 +17,8 @@
 
         static AMapper()
         {
-            htmlEncoder = HtmlEncoder.Create(UnicodeRanges.Cyrillic, UnicodeRanges.BasicLatin);
+            var unicodeRange = UnicodeRange.Create('\u00A0', '\u00A0');
+            htmlEncoder = HtmlEncoder.Create(UnicodeRanges.Cyrillic, UnicodeRanges.BasicLatin, unicodeRange);
             // TODO: rework with resolvers
             var config = new MapperConfiguration(cfg =>
             {
