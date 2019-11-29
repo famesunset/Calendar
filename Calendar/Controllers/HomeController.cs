@@ -24,7 +24,7 @@ namespace Calendar.Controllers
         public IActionResult Index()
         {
             if (signInManager.IsSignedIn(User))
-            {
+            {                
                 var user = userService.GetUserByIdentityId(userManager.GetUserId(User));       
                 
                 ViewBag.Avatar = user?.Picture;

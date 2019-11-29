@@ -18,11 +18,8 @@ $(function() {
       Header.run();
       SideBar.run();
       CalendarList.run(() => {
-        ViewMode.run();         
-      });  
-
-      // let event = await new EventRepository().get(306);      
-      // EventForm.onCreateSharedEvent(event);            
+        ViewMode.run();   
+      });           
     }
   };
 

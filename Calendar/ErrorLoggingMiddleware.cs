@@ -7,7 +7,7 @@
 
     public class ErrorLoggingMiddleware
     {
-        private readonly static string logPath = $"{DateTime.UtcNow.ToShortDateString()}-exceptions.log";
+        private readonly static string logPath = $"exceptions.log";
         private readonly RequestDelegate next;
 
         public ErrorLoggingMiddleware(RequestDelegate next)

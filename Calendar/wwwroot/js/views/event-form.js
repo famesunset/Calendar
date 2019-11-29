@@ -4,6 +4,7 @@ import { Dropdown } from '../models/dropdown.js';
 import { ViewMode } from './view-mode.js';
 import { EventRepository } from '../models/mvc/event-repository.js';
 import { Modal } from '../views/pop-ups/modal.js';
+import { GUID } from '../models/share/GUID.js'
 
 export let EventForm = {
   data: {
@@ -205,13 +206,16 @@ export let EventForm = {
         let content = resp.responseText;        
 
         $(container).html(content);      
+        let selector = GUID();
+        let title = $(s.s_title).val();
         let start = new Date($(s.s_dateStart).val());
         let finish = new Date($(s.s_dateFinish).val());
         
         this.runUserCalendars();
         this.renderDatePickers(start, finish);
-        this.renderTimePickers(start, finish);             
-        this.formState('share');
+        this.renderTimePickers(start, finish);          
+        ViewMode.renderEvent(selector, 0, title, start, finish);
+        this.formState('create');
         this.setUpListeners();
         this.onOptionsOpen(0);
   

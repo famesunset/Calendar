@@ -1,38 +1,39 @@
 ﻿@{
-  string date = DateTime.Now.ToString("ddd, dd MMM yyyy");
-  ViewData["Title"] = $"Calendar - {date}";
+    string date = DateTime.Now.ToString("ddd, dd MMM yyyy");
+    ViewData["Title"] = $"Calendar - {date}";
 }
 
 @section Styles{
-<link rel="stylesheet" href="~/css/header/header.css">
-<link rel="stylesheet" href="~/css/main/body/separate-body.css">
-<link rel="stylesheet" href="~/css/main/body/side-bar.css">
-<link rel="stylesheet" href="~/css/main/body/calendar-table.css">
-<link rel="stylesheet" href="~/css/main/event/create-event.css">
-<link rel="stylesheet" href="~/css/main/event/event-more-options.css">
-<link rel="stylesheet" href="~/css/main/event/event-info.css">
-<link rel="stylesheet" href="~/css/main/view-modes/daily.css">
-<link rel="stylesheet" href="~/css/pop-ups/pop-up.css">
-<link rel="stylesheet" href="~/css/pop-ups/delete-event.css">
-<link rel="stylesheet" href="~/css/pop-ups/create-calendar.css">
-<link rel="stylesheet" href="~/css/pop-ups/delete-calendar.css">
-<link rel="stylesheet" href="~/css/pop-ups/share-calendar.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/header/header.css">
+    <link rel="stylesheet" href="~/css/main/body/separate-body.css">
+    <link rel="stylesheet" href="~/css/main/body/side-bar.css">
+    <link rel="stylesheet" href="~/css/main/body/calendar-table.css">
+    <link rel="stylesheet" href="~/css/main/event/create-event.css">
+    <link rel="stylesheet" href="~/css/main/event/event-more-options.css">
+    <link rel="stylesheet" href="~/css/main/event/event-info.css">
+    <link rel="stylesheet" href="~/css/main/view-modes/daily.css">
+    <link rel="stylesheet" href="~/css/pop-ups/pop-up.css">
+    <link rel="stylesheet" href="~/css/pop-ups/delete-event.css">
+    <link rel="stylesheet" href="~/css/pop-ups/create-calendar.css">
+    <link rel="stylesheet" href="~/css/pop-ups/delete-calendar.css">
+    <link rel="stylesheet" href="~/css/pop-ups/share-calendar.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 }
 
+
 @section Scripts{
-<script type="module" src="~/js/app.js"></script>
+    <script type="module" src="~/js/app.js"></script>
 }
 
 <partial name="PartialViews/HeaderPartial" />
 
 <div class="body-wrapper">
-  <div id="side-bar">
-    <partial name="PartialViews/Sidebar/SidebarPartial" />
-  </div>
-  <div id="calendar-table">
-    <partial name="PartialViews/TableViewModes/DayPartial" />
-  </div>
+    <div id="side-bar">
+        <partial name="PartialViews/Sidebar/SidebarPartial" />
+    </div>
+    <div id="calendar-table">
+        <partial name="PartialViews/TableViewModes/DayPartial" />
+    </div>
 </div>
 
 <div id="load-create-event-form"></div>

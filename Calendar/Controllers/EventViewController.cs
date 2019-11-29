@@ -60,7 +60,7 @@ namespace Calendar.Controllers
         public IActionResult OpenSharedEventForm([FromBody] Event @event)
         {
             string user = userManager.GetUserId(User);
-            var calendar = calendarService.GetCalendar(user, @event.CalendarId);
+            Business.Models.Calendar calendar = null;
             var calendars = calendarService.GetCalendars(user);
 
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial",

@@ -14,12 +14,28 @@ export let ViewMode = {
     Daily.run();
     this.data.current = Daily;
     this.setUpListeners();
+    this.openSharedEvent();
   },
 
   setUpListeners() {
     let s = this.data.selectors;
 
     $(s.s_createEventBtn).click(() => this.onCreateEvent());
+  },
+
+  openSharedEvent() {
+    var urlString = decodeURIComponent(window.location.href);        
+
+    let find = "event=";
+
+    let idx = urlString.indexOf(find)
+
+    if (idx != -1) {
+      let event = urlString.substring(idx + find.length);  
+
+      EventForm.onCreateSharedEvent(JSON.parse(event));
+      window.history.pushState({}, document.title, "/");
+    }
   },
   
   onCreateEvent() {
