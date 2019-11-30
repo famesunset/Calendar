@@ -2,6 +2,7 @@ import { Modal } from "./modal.js";
 import { UserRepository } from '../../models/mvc/user-repository.js';
 import { PopUp } from "./pop-up.js";
 import { CalendarRepository } from "../../models/mvc/calendar-repository.js";
+import { FetchContent } from "../../models/mvc/fetch-content.js";
 
 export let ShareCalendar = {
   data: {
@@ -38,21 +39,20 @@ export let ShareCalendar = {
     let url = u.s_loadForm + `?id=${id}`;
     let container = s.s_calendarList;
 
-    $.get(url, (content) => {      
+    FetchContent.get(url, content => {
       $(container).prepend(content);      
       Modal.open(this.closeForm);
       this.openState(point, root);
-      this.setUpListeners();
+      this.setUpListeners();      
+      this.data.cache.calendar = root;
     });
-
-    this.data.cache.calendar = root;
   },
 
   openConfirm(email, calendarId) {
     let url = this.data.url.s_loadConfirm + `?email=${email}&calendarId=${calendarId}`;
     
-    $.get(url, (content) => {
-      PopUp.open(content, (result) => {
+    FetchContent.get(url, content => {
+      PopUp.open(content, result => {
         let response = PopUp.data.response;
 
         if (result == response.SUBMIT) {

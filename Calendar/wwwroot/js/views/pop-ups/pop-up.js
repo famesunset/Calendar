@@ -1,3 +1,5 @@
+import { FetchContent } from "../../models/mvc/fetch-content.js";
+
 export let PopUp = {
   data: {
     response: {
@@ -32,7 +34,7 @@ export let PopUp = {
     let url = this.data.url.u_popUpLoad;
     let container = $('body');    
 
-    $.get(url, (window) => {
+    FetchContent.get(url, window => {
       container.prepend(window);
 
       let contentContainer = $(this.data.selectors.s_content);

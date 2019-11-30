@@ -2,6 +2,7 @@ import { Modal } from './modal.js';
 import { EventForm } from '../event-form.js';
 import { EventRepository } from '../../models/mvc/event-repository.js';
 import { ViewMode } from '../view-mode.js';
+import { FetchContent } from '../../models/mvc/fetch-content.js';
 
 export let EventInfo = {
   data: {
@@ -43,7 +44,7 @@ export let EventInfo = {
     let container = 'body';
     let url = this.data.url.u_loadView + `?id=${id}`;
 
-    $.get(url, (content) => {
+    FetchContent.get(url, content => {
       $(container).prepend(content);
       Modal.open(this.close);
       this.setUpListeners();

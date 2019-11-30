@@ -4,6 +4,7 @@ import { CreateCalendar } from '../views/pop-ups/create-calendar.js'
 import { Modal } from "./pop-ups/modal.js";
 import { ShareCalendar } from './pop-ups/share-calendar.js';
 import { PopUp } from "./pop-ups/pop-up.js";
+import { FetchContent } from "../models/mvc/fetch-content.js";
 
 export let CalendarList = {
   data: {
@@ -59,7 +60,8 @@ export let CalendarList = {
     let url = this.data.url.u_loadList;
     let container = this.data.selectors.s_calendarList;
 
-    $(container).load(url, () => {
+    FetchContent.get(url, content => {
+      $(container).html(content);
       this.setUpListeners();
       callback();      
     });
@@ -71,11 +73,10 @@ export let CalendarList = {
     }
 
     let id = await new CalendarRepository().insert(name, colorId);
-
     let url = this.data.url.u_calendarView + `?id=${id}`;
     let container = this.data.selectors.s_calendars;
 
-    $.get(url, (content) => {
+    FetchContent.get(url, content => {
       $(container).append(content);  
       this.setUpListeners();
     });
@@ -120,8 +121,8 @@ export let CalendarList = {
     let root = e.currentTarget.parentElement.parentElement;
     let id = $(root).find('input[name="calendarId"]').val();
     
-    this.loadDeleteMessage(id, (content) => {
-      PopUp.open(content, (result) => {
+    this.loadDeleteMessage(id, content => {
+      PopUp.open(content, result => {
         let response = PopUp.data.response;
 
         if (result == response.SUBMIT) {
@@ -158,9 +159,7 @@ export let CalendarList = {
 
   loadDeleteMessage(id, callback) {
     let url = this.data.url.u_deleteView + `?id=${id}`;
-    $.get(url, (content) => {
-      callback(content);
-    });
+    FetchContent.get(url, callback);
   },
 
   hideToolTips() {

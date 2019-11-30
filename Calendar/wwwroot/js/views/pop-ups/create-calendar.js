@@ -1,5 +1,6 @@
 import { Modal } from '../pop-ups/modal.js';
 import { CalendarList } from '../calendar-list.js';
+import { FetchContent } from '../../models/mvc/fetch-content.js';
 
 export let CreateCalendar = {
   data: {
@@ -37,7 +38,7 @@ export let CreateCalendar = {
     let url = this.data.url.loadForm;
     let container = this.data.selectors.s_loadContainer;    
 
-    $.get(url, content => {
+    FetchContent.get(url, content => {
       if (!this.canOpen()) 
       return;
 

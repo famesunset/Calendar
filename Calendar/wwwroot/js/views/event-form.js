@@ -645,25 +645,6 @@ export let EventForm = {
       callback();
   },
 
-  openAnimation() {
-    var s = this.data.selectors;
-    var $content = $(s.s_form);
-        
-    $content.css('display', 'block');    
-    $content.animate({
-        opacity: 1
-    }, 50);
-  },
-
-  closeAnimation() {
-    var s = this.data.selectors;
-    var $content = $(s.s_form);
-
-    $content.animate({
-      opacity: 0
-    }, 50, () => $content.css('display', 'none'));
-  },
-
   openOptionsAnimation(duration) {
     let s = this.data.selectors;
 

@@ -1,6 +1,7 @@
 import { EventRepository } from '../../models/mvc/event-repository.js';
 import { ViewMode } from '../view-mode.js';
 import { Modal } from '../pop-ups/modal.js';
+import { FetchContent } from '../../models/mvc/fetch-content.js';
 
 export let DeleteEvent = {
   data: {
@@ -44,7 +45,9 @@ export let DeleteEvent = {
     let container = this.data.selectors.s_loadDeleteEvent;
     let url = this.data.url.u_windowLoad;
 
-    $(container).load(url, () => {
+    FetchContent.get(url, content => {
+      $(container).html(content);
+
       this.data.cache.eventId = id;          
       this.setUpListeners();   
       this.openAnimation(pos);
@@ -64,7 +67,7 @@ export let DeleteEvent = {
     $wrapper.css('left', `${pos.x}px`);
     $wrapper.animate({
         opacity: 1
-    }, 100);
+    }, 50);
   },
 
   closeAnimation() {
@@ -76,7 +79,7 @@ export let DeleteEvent = {
       $wrapper.animate({
         opacity: 0
       }, 100, () => $content.remove());
-    }, 150);
+    }, 100);
   },
 
   deleteEvent() {
