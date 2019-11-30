@@ -59,12 +59,11 @@ namespace Calendar.Controllers
         [HttpPost]
         public IActionResult OpenSharedEventForm([FromBody] Event @event)
         {
-            string user = userManager.GetUserId(User);
-            Business.Models.Calendar calendar = null;
+            string user = userManager.GetUserId(User);            
             var calendars = calendarService.GetCalendars(user);
 
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial",
-                                new EventFormDTO(calendar, @event, new EventScheduleDropdown(@event.Start, @event.Repeat), calendars));
+                                new EventFormDTO(null, @event, new EventScheduleDropdown(@event.Start, @event.Repeat), calendars));
         }
         
         public IActionResult EditEventForm(int id)
