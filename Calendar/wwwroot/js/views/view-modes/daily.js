@@ -78,8 +78,8 @@ export let Daily = {
 
     $(s.s_cell).mousedown(e => {
       this.onCellMouseDown(e);        
-      $(s.s_table).mousemove(async (e) => this.onStretchEvent(e));
-      $(s.s_table).mouseup((e) => this.onOpenCreateForm(e));      
+      $(document).mousemove(async (e) => this.onStretchEvent(e));      
+      $(document).mouseup((e) => this.onOpenCreateForm(e));      
     });        
   },  
 
@@ -184,8 +184,8 @@ export let Daily = {
     );
     
     $(target).unbind('mouseup');
-    $(s.s_table).unbind('mouseup');
-    $(s.s_table).unbind('mousemove');
+    $(document).unbind('mouseup');
+    $(document).unbind('mousemove');
 
     this.data.cache.state = '';
   },
