@@ -245,9 +245,9 @@ export let Daily = {
   },
 
   renderTable() {  
-    let el =  '<div class="cell" id="{{cell-id}}">' +
-                `<input type="hidden" value="{{time}}">`
-              '</div>';
+    let el =  `<div class="cell" id="{{cell-id}}">
+                <input type="hidden" value="{{time}}">
+              </div>`;
 
     let time = new Date();
     time.setHours(0);
@@ -328,18 +328,18 @@ export let Daily = {
       title = '(No title)';
     }
     
-    var el =   `<div class="daily-event" id="${selector}">` +
-                        `<div class="${this.data.css.s_eventContentWrapper}">` +
-                          `<input type="hidden" name="id" value="${id}">` +
-                          `<h6 class="title">${title}</h4>` +
-                          '<div class="time">' +
-                              `<span class="start">${moment(start).format('LT')}</span>` +
-                              '<span> &mdash; </span>' +
-                              `<span class="end">${moment(finish).format('LT')}</span>` +
-                          '</div>' +
-                        '</div>' +
-                        `<div class="${this.data.css.c_loadDeleteEvent}"></div>` +
-                    '</div>';      
+    var el =   `<div class="daily-event" id="${selector}">
+                  <div class="${this.data.css.s_eventContentWrapper}">
+                    <input type="hidden" name="id" value="${id}">
+                    <h6 class="title">${title}</h4>
+                    <div class="time">
+                      <span class="start">${moment(start).format('LT')}</span>
+                      <span> &mdash; </span>
+                      <span class="end">${moment(finish).format('LT')}</span>
+                    </div>
+                  </div>
+                  <div class="${this.data.css.c_loadDeleteEvent}"></div>
+                </div>`;      
     
     $(container).append(el);
 
@@ -436,7 +436,6 @@ export let Daily = {
     let $wrapper = $(`#${selector} ${s.s_eventContentWrapper}`);  
 
     // Convert start and finish to the same date
-
     finish = moment(start).set({hour: finish.getHours(), minute: finish.getMinutes()}).toDate();
     if (finish.getHours() == 0 &&
         finish.getMinutes() == 0) {

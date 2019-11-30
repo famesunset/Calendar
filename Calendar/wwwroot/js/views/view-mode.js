@@ -31,7 +31,7 @@ export let ViewMode = {
     if (idx != -1) {
       let event = urlString.substring(idx + find.length);  
 
-      EventForm.onCreateSharedEvent(JSON.parse(event));
+      EventForm.openShared(JSON.parse(event));
       window.history.pushState({}, document.title, "/");
     }
   },

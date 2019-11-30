@@ -1,3 +1,6 @@
+/**
+ * This class is used to load html from mvc
+ */
 export class FetchContent {
   /**
    * 

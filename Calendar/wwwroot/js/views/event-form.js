@@ -5,6 +5,7 @@ import { ViewMode } from './view-mode.js';
 import { EventRepository } from '../models/mvc/event-repository.js';
 import { Modal } from '../views/pop-ups/modal.js';
 import { GUID } from '../models/share/GUID.js'
+import { FetchContent } from '../models/mvc/fetch-content.js';
 
 export let EventForm = {
   data: {
@@ -96,67 +97,38 @@ export let EventForm = {
     $(s.s_timeFinish).change(e => this.onTimeChanged(e));
   },
 
-  openCreate(start, finish, allDay = false, callback = null) {    
-    let s = this.data.selectors;
-    let date = new Date(sessionStorage.getItem('currentDate'));
-    let container = s.s_formLoad;
+  openCreate(start, finish, allDay = false, callback = null) {        
+    let event = {
+      start,
+      finish,
+      allDay
+    }
+
+    let date = new Date(sessionStorage.getItem('currentDate'));    
     let url = this.data.url.createEventForm + `?date=${date.toISOString()}`;    
 
-    $.get(url, (content) => {
-      if (!this.formCanOpen())
-        return;
+    FetchContent.get(url, 
+      content => this.renderCreateForm(content, event, callback));
+  },
 
-      $(container).html(content);   
-      this.runUserCalendars();      
-      this.renderDatePickers(start, finish);
-      this.renderTimePickers(start, finish);            
-      this.formState('create');
-      this.setUpListeners();
-      this.cacheFromCallback(callback);
+  openShared(event) {
+    if (!this.formCanOpen())
+      return;
 
-      if (allDay) $(s.s_isAllDay).show();
-      Modal.open(this.onCancelCreation);
-    });
+    let url = this.data.url.sharedEventForm;
+    let _data = JSON.stringify(event);
 
+    FetchContent.post(_data, url, 
+      content => this.renderSharedForm(content, event)); 
   },
 
   openEdit(id) {
-    if (!this.formCanOpen() || isNaN(id))
-      return;
+    if (isNaN(id))
+      return;  
 
-    let s = this.data.selectors;
-    let container = s.s_formLoad;
     let url = this.data.url.editEventForm + `?id=${id}`;
-
-    $.get(url, (content) => {      
-      $(container).html(content);      
-      let start = new Date($(s.s_dateStart).val());
-      let finish = new Date($(s.s_dateFinish).val());
-      
-      this.runUserCalendars();
-      this.renderDatePickers(start, finish);
-      this.renderTimePickers(start, finish);             
-      this.formState('edit');
-      this.setUpListeners();
-      this.onOptionsOpen(0);
-
-      Modal.open(this.onCancelCreation);
-
-      let title = $(s.s_title).val();
-      let isAllDay = $(s.s_isAllDay).is(":checked");
-      let color = ViewMode.getCachedColor();
-
-      let rollback = {
-        id,
-        start,
-        finish,
-        title,
-        isAllDay,
-        color
-      };
-
-      ViewMode.cacheRollback(rollback);
-    });
+    FetchContent.get(url, 
+      content => this.renderEditForm(content, id));
   },
 
   close() {
@@ -183,45 +155,6 @@ export let EventForm = {
       ViewMode.eventRollback();
     }    
     _this.close();
-  },
-
-  onCreateSharedEvent(event) {
-    if (!this.formCanOpen())
-      return;
-
-    let s = this.data.selectors;
-    let container = s.s_formLoad;
-    let url = this.data.url.sharedEventForm;
-
-    let _data = JSON.stringify(event);
-
-    $.ajax({
-      url: url,
-      type: 'POST',
-      data: _data,
-      dataType: 'json',
-      contentType: "application/json; charset=utf-8",
-      traditional: true,      
-      error: (resp) => {      
-        let content = resp.responseText;        
-
-        $(container).html(content);      
-        let selector = GUID();
-        let title = $(s.s_title).val();
-        let start = new Date($(s.s_dateStart).val());
-        let finish = new Date($(s.s_dateFinish).val());
-        
-        this.runUserCalendars();
-        this.renderDatePickers(start, finish);
-        this.renderTimePickers(start, finish);          
-        ViewMode.renderEvent(selector, 0, title, start, finish);
-        this.formState('create');
-        this.setUpListeners();
-        this.onOptionsOpen(0);
-  
-        Modal.open(this.onCancelCreation);
-      }
-    });
   },
 
   async onCreate() {    
@@ -319,6 +252,88 @@ export let EventForm = {
     } else {
       this.notifyClose(target, notifyMenu);
     }
+  },
+
+  renderCreateForm(content, event, callback) {
+    if (!this.formCanOpen())
+      return;
+
+    let s = this.data.selectors;
+    let container = s.s_formLoad;
+
+    $(container).html(content);   
+    this.runUserCalendars();      
+    this.renderDatePickers(event.start, event.finish);
+    this.renderTimePickers(event.start, event.finish);            
+    this.formState('create');
+    this.setUpListeners();
+    this.cacheFromCallback(callback);
+    
+    Modal.open(this.onCancelCreation);
+  },
+
+  renderSharedForm(content, event) {
+    if (!this.formCanOpen())
+      return;
+
+    let s = this.data.selectors;
+    let container = s.s_formLoad;
+
+    $(container).html(content);      
+    let selector = GUID();        
+    let start = new Date(event.Start);
+    let finish = new Date(event.Finish);
+    
+    this.runUserCalendars();
+    this.renderDatePickers(start, finish);
+    this.renderTimePickers(start, finish);                  
+    this.formState('create');
+    this.setUpListeners();
+    this.onOptionsOpen(0);
+
+    if (event.IsAllDay) {
+      ViewMode.renderAllDayEvent(selector, 0, event.Title);
+    } else {
+      ViewMode.renderEvent(selector, 0, event.Title, start, finish);
+    }
+
+    Modal.open(this.onCancelCreation);
+  },  
+
+  renderEditForm(content, id) {
+    if (!this.formCanOpen())
+      return;
+
+    let s = this.data.selectors;
+    let container = s.s_formLoad;
+
+    $(container).html(content);      
+    let start = new Date($(s.s_dateStart).val());
+    let finish = new Date($(s.s_dateFinish).val());
+    
+    this.runUserCalendars();
+    this.renderDatePickers(start, finish);
+    this.renderTimePickers(start, finish);             
+    this.formState('edit');
+    this.setUpListeners();
+    this.onOptionsOpen(0);
+
+    Modal.open(this.onCancelCreation);
+
+    let title = $(s.s_title).val();
+    let isAllDay = $(s.s_isAllDay).is(":checked");
+    let color = ViewMode.getCachedColor();
+
+    let rollback = {
+      id,
+      start,
+      finish,
+      title,
+      isAllDay,
+      color
+    };
+
+    ViewMode.cacheRollback(rollback);
   },
 
   notifyOpen(target, menu) {
