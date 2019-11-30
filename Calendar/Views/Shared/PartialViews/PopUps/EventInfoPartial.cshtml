@@ -4,8 +4,7 @@
   <input type="hidden" name="eventId" value="@Model.Event.Id">
   <div class="top-case">
     <div class="share-event">
-      <i class="material-icons tooltipped" 
-         data-position="bottom" data-tooltip="Generate link">insert_link</i>
+      <i class="material-icons tooltipped" data-position="bottom" data-tooltip="Generate link">insert_link</i>
     </div>
     <div class="edit-event">
       <i class="material-icons">edit</i>
@@ -25,11 +24,14 @@
       <div class="about">
         <h3 class="title">@(string.IsNullOrWhiteSpace(Model.Event.Title) ? "(No title)" : Model.Event.Title) </h3>
         <div class="time-info">
+          @if (!Model.Event.IsAllDay)
+          {
           <div class="daily-range">
             <span class="time-start">@Model.Event.Start.ToLocalTime().ToString("h:mm tt")</span>
             <span> &mdash; </span>
             <span class="time-finish">@Model.Event.Finish.ToLocalTime().ToString("h:mm tt")</span>
           </div>
+          }
           <div class="repeat">
             <span>
               @{

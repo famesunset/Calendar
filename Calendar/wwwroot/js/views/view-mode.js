@@ -25,9 +25,7 @@ export let ViewMode = {
 
   openSharedEvent() {
     var urlString = decodeURIComponent(window.location.href);        
-
     let find = "event=";
-
     let idx = urlString.indexOf(find)
 
     if (idx != -1) {
