@@ -10,15 +10,17 @@
     internal static class AMapper
     {
         private static HtmlEncoder htmlEncoder;
+        private const string NEW_LINE = "&#xA;";
         private static string Encode(string html)
         {
-            return htmlEncoder.Encode(html ?? string.Empty);
+            var encoded = htmlEncoder.Encode(html ?? string.Empty);
+            encoded = encoded.Replace(NEW_LINE, "\n");
+            return encoded;
         }
 
         static AMapper()
-        {
-            var unicodeRange = UnicodeRange.Create('\u00A0', '\u00A0');
-            htmlEncoder = HtmlEncoder.Create(UnicodeRanges.Cyrillic, UnicodeRanges.BasicLatin, unicodeRange);
+        {            
+            htmlEncoder = HtmlEncoder.Create(UnicodeRanges.Cyrillic, UnicodeRanges.BasicLatin);
             // TODO: rework with resolvers
             var config = new MapperConfiguration(cfg =>
             {
