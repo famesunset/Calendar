@@ -5,8 +5,8 @@
 
     public interface IUserService
     {
-        void CreateUser(User user);
-        User GetUserByIdentityId(string id);
+        bool CreateUser(User user);
+        User GetUserByIdentityId(string identityId);
         User GetUserByEmail(string email);
         bool AddBrowser(string userId, string browser);
         IEnumerable<Browser> GetBrowsers(int calendarId);

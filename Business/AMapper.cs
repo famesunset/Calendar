@@ -9,12 +9,12 @@
 
     internal static class AMapper
     {
-        private static HtmlEncoder htmlEncoder;
-        private const string NEW_LINE = "&#xA;";
+        private static readonly HtmlEncoder htmlEncoder;
+        private const string NewLine = "&#xA;";
         private static string Encode(string html)
         {
             var encoded = htmlEncoder.Encode(html ?? string.Empty);
-            encoded = encoded.Replace(NEW_LINE, "\n");
+            encoded = encoded.Replace(NewLine, "\n");
             return encoded;
         }
 

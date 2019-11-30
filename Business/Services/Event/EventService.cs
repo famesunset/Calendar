@@ -40,12 +40,14 @@
                 }
 
                 Data.Models.Event dataEvent = Mapper.Map<Event, Data.Models.Event>(@event);
-                int eventId = eventRepos.CreateEvent(dataEvent);
-                if (@event.Notify != null && @event.Notify.Value > 0)
+                int eventId = serviceHelper.WrapMethodWithReturn(() => eventRepos.CreateEvent(dataEvent), -1);
+                if (eventId > 0)
                 {
-                    notificationRepos.CreateNotification(eventId, @event.Notify.Value, (int)@event.Notify.TimeUnit);
+                    if (@event.Notify != null && @event.Notify.Value > 0)
+                    {
+                        notificationRepos.CreateNotification(eventId, @event.Notify.Value, (int)@event.Notify.TimeUnit);
+                    }
                 }
-
                 return eventId;
             }
             return -1;
@@ -70,14 +72,14 @@
                 beginning = beginning.Date;
                 var dateRange = GetDateRange(beginning, dateUnit);
 
-                var userCalendars = calendarRepos
-                    .GetUserCalendars(dataUser.IdUser)
-                    .Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id)))
-                    .ToList();
+                var userCalendars = serviceHelper.WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(dataUser.IdUser), 
+                    new List<Data.Models.Calendar>())
+                    .Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id)));
 
-                if (userCalendars.Count() > 0)
+                if (userCalendars.Any())
                 {
-                    var events = bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateRange.Start, dateRange.Finish);
+                    var events = serviceHelper.WrapMethodWithReturn(() => bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateRange.Start, dateRange.Finish), 
+                        new List<Data.Models.AllData>());
                     foreach (var _event in events)
                     {
                         AddTimeOffset(_event, timeOffset);
@@ -89,42 +91,45 @@
             return new List<BaseEvent>();
         }
 
-        public void DeleteEvent(string loginedUserId, int eventId)
+        public bool DeleteEvent(string loginedUserId, int eventId)
         {
             var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
             if (dataBigEvent != null)
             {
-                eventRepos.Delete(dataBigEvent.EventId);
-                notificationRepos.DeleteNotification(dataBigEvent.EventId);
-            }
+                var success = serviceHelper.WrapMethod(() => eventRepos.Delete(dataBigEvent.EventId));
+                if (success)
+                {
+                    success = serviceHelper.WrapMethod(() => notificationRepos.DeleteNotification(dataBigEvent.EventId));
+                }
 
+                return success;
+            }
+            return false;
         }
 
-        public void UpdateEvent(string loginedUserId, Event newEvent)
+        public bool UpdateEvent(string loginedUserId, Event newEvent)
         {
             var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
             if (dataBigEvent != null)
             {
                 Data.Models.Event dataEvent = Mapper.Map<Event, Data.Models.Event>(newEvent);
-                eventRepos.UpdateEvent(dataEvent);
-                if (newEvent.Notify != null)
+                var success = serviceHelper.WrapMethod(() => eventRepos.UpdateEvent(dataEvent));
+                if (newEvent.Notify != null && success)
                 {
-                    notificationRepos.UpdateNotification(dataBigEvent.EventId, newEvent.Notify.Value, (int)newEvent.Notify.TimeUnit);
+                    success = serviceHelper.WrapMethod(() => 
+                        notificationRepos.UpdateNotification(dataBigEvent.EventId, newEvent.Notify.Value, (int)newEvent.Notify.TimeUnit));
                 }
+
+                return success;
             }
+
+            return false;
         }
 
         public string GetEventLink(string loginedUserId, int eventId, string domain)
         {
             var _event = GetEvent(loginedUserId, eventId);
             return $"{domain}/?event={JsonConvert.SerializeObject(_event)}";
-        }
-
-        public Event GetEventByLink(string link)
-        {
-            const string attr = "event=";
-            var json = link.Substring(link.IndexOf(attr) + attr.Length);
-            return JsonConvert.DeserializeObject<Event>(json);
         }
     }
 }

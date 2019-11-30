@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Data.Repository
 {
-    public class CalendarRepo : BaseRepository<Calendar>, ICalendar
+    public class CalendarRepo : BaseRepository, ICalendar
     {
         public bool CheckDefaultCalendar(int @idCalendar)
         {
@@ -60,14 +60,14 @@ namespace Data.Repository
             }
         }
 
-        public int? RemoveCalendar(int calendarId)
+        public bool RemoveCalendar(int calendarId)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var removeCalendar = connection.Query("uspRemoveCalendar", new { calendarId },
+                connection.Query("uspRemoveCalendar", new { calendarId },
                     commandType: CommandType.StoredProcedure);
                 string idCheck = "SELECT Id FROM Calendars WHERE Id = @calendarId";
-                return connection.Query<int?>(idCheck, new { calendarId }).SingleOrDefault();
+                return connection.Query<int?>(idCheck, new { calendarId }).SingleOrDefault() == null;
             }
         }
 

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Business.Models;
+    using Models;
     public partial class EventService
     {
         private static (DateTime Start, DateTime Finish) GetDateRange(DateTime beginning, DateUnit dateUnit)
@@ -38,7 +38,8 @@
         private IEnumerable<Data.Models.AllData> GetInfinityEvents
             (int userId, IEnumerable<Data.Models.Calendar> calendarList, DateTime beginning, DateUnit dateUnit, DateTime finish, int timeOffset)
         {
-            var events = bigEventRepos.GetInfinityEvents(userId, calendarList, finish);
+            var events = serviceHelper.WrapMethodWithReturn(() => bigEventRepos.GetInfinityEvents(userId, calendarList, finish),
+                new List<Data.Models.AllData>());
             var result = new List<Data.Models.AllData>();
             foreach (var _event in events)
             {

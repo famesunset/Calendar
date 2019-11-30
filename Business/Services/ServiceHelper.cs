@@ -1,7 +1,8 @@
 ﻿namespace Business.Services
 {
-    using Data.Repository.Interfaces;
+    using System;
     using System.Linq;
+    using Data.Repository.Interfaces;
 
     internal class ServiceHelper
     {
@@ -20,7 +21,7 @@
         {
             if (loginedUserId != null)
             {
-                var dataUser = userRepos.GetUserByIdentityId(loginedUserId);
+                var dataUser = WrapMethodWithReturn(() => userRepos.GetUserByIdentityId(loginedUserId), null);
                 if (dataUser != null && dataUser.IdUser > 0)
                 {
                     return dataUser;
@@ -34,8 +35,11 @@
             var dataUser = GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
-                var dataCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
-                return dataCalendars.Where(c => c.Id == calendarId).FirstOrDefault();
+                var dataCalendars = WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(dataUser.IdUser), null);
+                if (dataCalendars != null)
+                {
+                    return dataCalendars.SingleOrDefault(c => c.Id == calendarId);
+                }
             }
             return null;
         }
@@ -45,14 +49,57 @@
             var dataUser = GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
-                var dataCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
-                var dataBigEvent = bigEventRepos.GetEvent(eventId);
-                if (dataCalendars.Any(c => c.Id.Equals(dataBigEvent.CalendarId)))
+                var dataCalendars = WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(dataUser.IdUser), null);
+                var dataBigEvent = WrapMethodWithReturn(() => bigEventRepos.GetEvent(eventId), null);
+                if (dataBigEvent != null && dataCalendars != null)
                 {
-                    return dataBigEvent;
+                    if (dataCalendars.Any(c => c.Id.Equals(dataBigEvent.CalendarId)))
+                    {
+                        return dataBigEvent;
+                    }
                 }
             }
             return null;
+        }
+
+        public (bool IsOwner, bool IsDefault) GetCalendarData(Models.Calendar calendar, Data.Models.User dataUser)
+        {
+            var isOwner = calendar.OwnerId.Equals(dataUser.IdUser);
+            var isDefault = WrapMethodWithReturn(() => calendarRepos.CheckDefaultCalendar(calendar.Id), false);
+            return (isOwner, isDefault);
+        }
+
+        public T WrapMethodWithReturn<T>(Func<T> function, T defaultReturn)
+        {
+            try
+            {
+                return function();
+            }
+            catch(Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                Console.ForegroundColor = default;
+                return defaultReturn;
+            }
+        }
+
+        public bool WrapMethod(Action function)
+        {
+            try
+            {
+                function();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                Console.ForegroundColor = default;
+                return false;
+            }
         }
     }
 }

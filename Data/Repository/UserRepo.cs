@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Data.Repository
 {
-    public class UserRepo : BaseRepository<User>, IUser
+    public class UserRepo : BaseRepository, IUser
     {
         public void AddBrowser(Browser browser)
         {

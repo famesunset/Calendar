@@ -1,12 +1,11 @@
 ﻿using Data.Repository.Interfaces;
 using System.Data;
 using Dapper;
-using Data.Models;
 using Microsoft.Data.SqlClient;
 
 namespace Data.Repository
 {
-    public class NotificationRepo : BaseRepository<Notification>, INotification
+    public class NotificationRepo : BaseRepository, INotification
     {
         public void UpdateNotification(int eventId, int before, int timeUnitId)
         {

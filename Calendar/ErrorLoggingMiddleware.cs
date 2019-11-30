@@ -7,8 +7,14 @@
 
     public class ErrorLoggingMiddleware
     {
-        private readonly static string logPath = $"exceptions.log";
+        private static readonly string LogPath;
         private readonly RequestDelegate next;
+
+        static ErrorLoggingMiddleware()
+        {
+            var now = DateTime.UtcNow;
+            LogPath = $"{now:yyyy-MM-dd}-exceptions.log";
+        }
 
         public ErrorLoggingMiddleware(RequestDelegate next)
         {
@@ -23,9 +29,10 @@
             }
             catch (Exception ex)
             {
-                using (var writter = File.AppendText(logPath))
+                await using (var writter = File.AppendText(LogPath))
                 {
-                    writter.Write($"Exception: {ex.Message}\nTrace:\n{ex.StackTrace}\n");
+                    var now = DateTime.UtcNow;
+                    writter.Write($"[{now:G}]Exception: {ex.Message}\nTrace:\n{ex.StackTrace}\n");
                 }
                 throw;
             }

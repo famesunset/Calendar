@@ -24,17 +24,19 @@
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
-                var userCalendars = calendarRepos.GetUserCalendars(dataUser.IdUser);
+                var userCalendars = serviceHelper.WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(dataUser.IdUser),
+                    new List<Data.Models.Calendar>());
                 var calendars = userCalendars
                     .Select(c => Mapper.Map<Data.Models.Calendar, Calendar>(c))
                     .OrderBy(c => c.Id)
                     .ToList();
 
-                for (int i = 0; i < calendars.Count(); ++i)
+                for (var i = 0; i < calendars.Count(); ++i)
                 {
                     var calendar = calendars[i];
-                    calendar.IsOwner = calendar.OwnerId.Equals(dataUser.IdUser);
-                    calendar.IsDefault = calendarRepos.CheckDefaultCalendar(calendar.Id);
+                    var (isOwner, isDefault) = serviceHelper.GetCalendarData(calendar, dataUser);
+                    calendar.IsOwner = isOwner;
+                    calendar.IsDefault = isDefault;
                 }
 
                 return calendars;
@@ -49,8 +51,9 @@
             if (dataCalendar != null)
             {
                 var calendar = Mapper.Map<Data.Models.Calendar, Calendar>(dataCalendar);
-                calendar.IsOwner = calendar.OwnerId.Equals(dataUser.IdUser);
-                calendar.IsDefault = calendarRepos.CheckDefaultCalendar(calendar.Id);
+                var (isOwner, isDefault) = serviceHelper.GetCalendarData(calendar, dataUser);
+                calendar.IsOwner = isOwner;
+                calendar.IsDefault = isDefault;
                 return calendar;
             }
             return null;
@@ -58,21 +61,20 @@
 
         public int CreateCalendar(string loginedUserId, string name, int colorId, Access access)
         {
-            var color = colorRepos.GetColorById(colorId);
-            var calendar = new Calendar()
+            var color = serviceHelper.WrapMethodWithReturn(() => colorRepos.GetColorById(colorId), null);
+            var calendar = new Calendar
             {
-
                 Name = name,
-                Color = Mapper.Map<Data.Models.Color, Color>(color),
+                Color = color == null ? null : Mapper.Map<Data.Models.Color, Color>(color),
                 Access = access
             };
 
 
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
-            if(dataUser != null)
-            {                
+            if (dataUser != null)
+            {
                 var dCalendar = Mapper.Map<Calendar, Data.Models.Calendar>(calendar);
-                var calendarId = calendarRepos.CreateCalendar(dataUser.IdUser, dCalendar);
+                var calendarId = serviceHelper.WrapMethodWithReturn(() => calendarRepos.CreateCalendar(dataUser.IdUser, dCalendar), -1);
                 return calendarId;
             }
             return -1;
@@ -81,29 +83,52 @@
         public bool DeleteCalendar(string loginedUserId, int calendaId)
         {
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendaId);
-            int? deleted = calendarRepos.RemoveCalendar(dataCalendar.Id);
-            return dataCalendar != null && deleted == null;
+            if (dataCalendar != null)
+            {
+                return serviceHelper.WrapMethodWithReturn(() => calendarRepos.RemoveCalendar(dataCalendar.Id), false);
+            }
+
+            return false;
         }
 
         public IEnumerable<Color> GetCalendarColors()
         {
-            return colorRepos.GetColors().Select(c => Mapper.Map<Data.Models.Color, Color>(c));
+            return colorRepos.GetColors()?.Select(c => Mapper.Map<Data.Models.Color, Color>(c));
         }
 
         public Color GetCalendarColor(int id)
         {
-            return Mapper.Map<Data.Models.Color, Color>(colorRepos.GetColorById(id));
+            var colors = serviceHelper.WrapMethodWithReturn(() => colorRepos.GetColorById(id), null);
+            if (colors != null)
+            {
+                return Mapper.Map<Data.Models.Color, Color>(colors);
+            }
+
+            return null;
         }
 
-        public void SubscribeUser(int userId, int calendarId)
+        public bool SubscribeUser(int userId, int calendarId)
         {
-            calendarRepos.SubscribeUserToCalendar(userId, calendarId);
+            var userCaledars = serviceHelper.WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(userId), null);
+
+            if (userCaledars != null && !userCaledars.Any(c => c.Id.Equals(calendarId)))
+            {
+                var success = serviceHelper.WrapMethod(() => calendarRepos.SubscribeUserToCalendar(userId, calendarId));
+                return success;
+            }
+            return false;
         }
 
-        public void UnsubscribeUser(string loginedUserId, int calendarId)
+        public bool UnsubscribeUser(string loginedUserId, int calendarId)
         {
             var user = serviceHelper.GetUserByIdentityId(loginedUserId);
-            calendarRepos.UnsubscribeUserFromCalendar(user.IdUser, calendarId);
+            if (user != null)
+            {
+                var success = serviceHelper.WrapMethod(() => calendarRepos.UnsubscribeUserFromCalendar(user.IdUser, calendarId));
+                return success;
+            }
+
+            return false;
         }
     }
 }

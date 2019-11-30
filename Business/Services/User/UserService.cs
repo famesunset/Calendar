@@ -4,12 +4,12 @@
     using System.Linq;
     using System.Collections.Generic;
     using Data.Repository.Interfaces;
-    using static Business.AMapper;
+    using static AMapper;
 
     public class UserService : IUserService
     {
-        private IUser userRepos;
-        private ServiceHelper serviceHelper;
+        private readonly IUser userRepos;
+        private readonly ServiceHelper serviceHelper;
 
         public UserService(IUser userRepository, ICalendar calendarRepository, IAllData bigDataRepository)
         {
@@ -22,37 +22,51 @@
             var dataUser = serviceHelper.GetUserByIdentityId(identityId);
             if (dataUser != null && browser != null)
             {
-                userRepos.AddBrowser(Mapper.Map<Browser, Data.Models.Browser>
+                var success = serviceHelper.WrapMethod(() => userRepos.AddBrowser(Mapper.Map<Browser, Data.Models.Browser>
                 (
                     new Browser
                     {
                         UserId = dataUser.IdUser,
                         BrowserId = browser
                     }
-                ));
-                return true;
+                )));
+                return success;
             }
             return false;
         }
 
-        public void CreateUser(User user)
+        public bool CreateUser(User user)
         {
-            userRepos.CreateUser(Mapper.Map<User, Data.Models.User>(user));
+            var success = serviceHelper.WrapMethod(() =>userRepos.CreateUser(Mapper.Map<User, Data.Models.User>(user)));
+            return success;
         }
 
         public IEnumerable<Browser> GetBrowsers(int calendarId)
         {
-            return userRepos.GetBrowsers(calendarId).Select(b => Mapper.Map<Data.Models.Browser, Browser>(b));
+            var browsers = serviceHelper.WrapMethodWithReturn(() => userRepos.GetBrowsers(calendarId), null);
+            return browsers?.Select(b => Mapper.Map<Data.Models.Browser, Browser>(b));
         }
 
         public User GetUserByEmail(string email)
         {
-            return Mapper.Map<Data.Models.User, User>(userRepos.GetUserByEmail(email));
+            var user = serviceHelper.WrapMethodWithReturn(() => userRepos.GetUserByEmail(email), null);
+            if (user != null)
+            {
+                return Mapper.Map<Data.Models.User, User>(user);
+            }
+
+            return null;
         }
 
-        public User GetUserByIdentityId(string id)
+        public User GetUserByIdentityId(string identityId)
         {
-            return Mapper.Map<Data.Models.User, User>(userRepos.GetUserByIdentityId(id));
+            var user = serviceHelper.WrapMethodWithReturn(() => userRepos.GetUserByEmail(identityId), null);
+            if (user != null)
+            {
+                return Mapper.Map<Data.Models.User, User>(user);
+            }
+
+            return null;
         }
     }
 }

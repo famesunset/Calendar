@@ -7,7 +7,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Data.Repository
 {
-    public class AccessRepo : BaseRepository<Access>, IAccess
+    public class AccessRepo : BaseRepository, IAccess
     {
         public IEnumerable<Access> GetNameById(Access @access)
         {

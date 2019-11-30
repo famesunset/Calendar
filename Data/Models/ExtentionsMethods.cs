@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-
-namespace Data.Models
+﻿namespace Data.Models
 {
+    using System;
+    using System.Data;
+    using System.ComponentModel;
+    using System.Collections.Generic;
+    
     public static class ExtentionsMethods
     {
+        // TODO: покрыть юнит-тестами
         public static DataTable ConvertToDatatable<T>(this List<T> data, string columnName = null)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));

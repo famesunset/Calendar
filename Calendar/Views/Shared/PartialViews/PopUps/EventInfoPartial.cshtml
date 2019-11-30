@@ -27,9 +27,9 @@
           @if (!Model.Event.IsAllDay)
           {
           <div class="daily-range">
-            <span class="time-start">@Model.Event.Start.ToLocalTime().ToString("h:mm tt")</span>
+            <span class="time-start">@Model.Event.Start.ToString("h:mm tt")</span>
             <span> &mdash; </span>
-            <span class="time-finish">@Model.Event.Finish.ToLocalTime().ToString("h:mm tt")</span>
+            <span class="time-finish">@Model.Event.Finish.ToString("h:mm tt")</span>
           </div>
           }
           <div class="repeat">

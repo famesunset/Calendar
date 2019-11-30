@@ -9,7 +9,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Data.Repository
 {
-    public class AllDataRepo : BaseRepository<AllData>, IAllData
+    public class AllDataRepo : BaseRepository, IAllData
     {
         public IEnumerable<AllData> GetDataEvents(int userId, IEnumerable<Calendar> @calendarList, DateTime dateTimeStart, DateTime dateTimeFinish)
         {

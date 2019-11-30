@@ -7,7 +7,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Data.Repository
 {
-    public class EventRepo : BaseRepository<Event>, IEvent
+    public class EventRepo : BaseRepository, IEvent
     {
         public int CreateEvent(Event @event)
         {
@@ -30,12 +30,12 @@ namespace Data.Repository
             }
         }
 
-        public void UpdateEvent(Event @newEvent)
+        public void UpdateEvent(Event newEvent)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Query<Event>("uspUpdateEvent",
-                    new { @newEvent.Id, @newEvent.CalendarId, @newEvent.Description, @newEvent.Title, @newEvent.RepeatId, @newEvent.TimeStart, @newEvent.TimeFinish, @newEvent.AllDay },
+                    new { newEvent.Id, newEvent.CalendarId, newEvent.Description, newEvent.Title, newEvent.RepeatId, newEvent.TimeStart, newEvent.TimeFinish, newEvent.AllDay },
                     commandType: CommandType.StoredProcedure);
             }
         }

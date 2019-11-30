@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Data.Repository
 {
-    public abstract class BaseRepository<T> where T : class
+    public abstract class BaseRepository
     {
         public string ConnectionString { get; }
         protected BaseRepository()

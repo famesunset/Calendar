@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Dapper;
 using Data.Models;
 using Data.Repository.Interfaces;
@@ -9,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Data.Repository
 {
-  public class ColorRepo : BaseRepository<Color>, IColor
+  public class ColorRepo : BaseRepository, IColor
   {
     public IEnumerable<Color> GetColors()
     {
@@ -25,9 +24,9 @@ namespace Data.Repository
     {
         using (SqlConnection connection = new SqlConnection(ConnectionString))
         {
-            string sql = "Select Hex from Color where Id = " + colorId;
-            var c = connection.Query<Color>(sql).Select(x => (new Color(colorId, x.Hex))).FirstOrDefault();
-                return c;
+            string sql = "Select * from Color where Id = @colorId";
+            var color = connection.Query<Color>(sql, new { colorId }).FirstOrDefault();
+            return color;
         }
     }
   }
