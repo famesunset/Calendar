@@ -7,4 +7,6 @@ BEGIN
 	SET NOCOUNT ON;
     INSERT INTO UsersCalendars (UserId, CalendarId)
 	VALUES (@userId, @calendarId)
+
+	SELECT TOP 1 Id FROM Calendars ORDER BY Id DESC
 END

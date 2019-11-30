@@ -7,21 +7,20 @@ CREATE PROCEDURE [dbo].[uspCreateUser]
 	@picture nvarchar(max)
 AS
 BEGIN
-	declare @IdCalendarDefault int
+	declare @CalendarId int
 	declare @UserId int
 BEGIN TRANSACTION Transact
   BEGIN TRY
-	  set @IdCalendarDefault = (select TOP 1 (Id) + 1 from Calendars
-	  order by Id desc)
-
-	  IF @IdCalendarDefault IS NULL
-		set @IdCalendarDefault = 1
-
 	  insert into Users(Name, Mobile, Email, CalendarDefaultId, IdentityId, Picture)
-	  values (@name, @mobile, @email, @IdCalendarDefault, @identityId, @picture)
+	  values (@name, @mobile, @email, 1, @identityId, @picture)
 
 	  set @UserId = (select TOP 1 (Id) from Users
 	  order by Id desc)
+
+	  exec uspCreateCalendar @UserId, 'Default', 1, 1
+
+	  set @CalendarId = (select TOP 1 (Id) from Calendars order by Id desc)
+	  UPDATE Users SET CalendarDefaultId = @CalendarId WHERE Id = @UserId
 
   COMMIT TRANSACTION Transact
   END TRY

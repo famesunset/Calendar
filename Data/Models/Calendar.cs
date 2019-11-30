@@ -8,5 +8,6 @@
         public int UserOwnerId { get; set; }
         public int ColorId { get; set; }
         public string ColorHex { get; set; }
+        public bool IsAccepted { get; set; }
     }
 }

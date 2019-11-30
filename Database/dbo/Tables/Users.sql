@@ -9,3 +9,8 @@
     CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
+
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20191129-071451]
+    ON [dbo].[Users]([Id] ASC, [CalendarDefaultId] ASC);
+

@@ -13,5 +13,6 @@ namespace Business.Models
         public bool IsOwner { get; set; }
         public int OwnerId { get; set; }
         public bool IsDefault { get; set; }
+        public bool IsAccepted { get; set; }
     }
 }

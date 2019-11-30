@@ -132,6 +132,12 @@
     <None Include="Snapshots\Database_20191120_01-08-50.dacpac" />
     <None Include="Snapshots\Database_20191126_10-37-51.dacpac" />
     <None Include="Snapshots\Database_20191129_06-35-35.dacpac" />
+    <None Include="Snapshots\Database_20191201_00-30-55.dacpac" />
+    <None Include="Snapshots\Database_20191201_01-37-20.dacpac" />
+    <None Include="Snapshots\Database_20191201_01-45-13.dacpac" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment1.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Repeat.sql">
@@ -326,7 +332,15 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <Build Include="dbo\Stored Procedures\uspFragmentation.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
     <Build Include="dbo\Stored Procedures\uspCreateUser.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Stored Procedures\uspAcceptCalendar.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -349,8 +363,5 @@
     <Build Include="dbo\User Defined Types\idsCalendars.sql" />
     <Build Include="dbo\User Defined Types\CalendarsUsers.sql" />
     <Build Include="dbo\User Defined Types\Schedule.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="Script.PostDeployment1.sql" />
   </ItemGroup>
 </Project>

@@ -17,5 +17,6 @@ namespace Data.Models
         public string CalendarColor { get; set; }
         public int NotificationValue { get; set; }
         public int NotificationTimeUnitId { get; set; }
+        public bool IsCalendarAccepted { get; set; }
     }
 }

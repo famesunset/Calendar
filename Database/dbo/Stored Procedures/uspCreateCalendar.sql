@@ -6,7 +6,7 @@ CREATE PROCEDURE [dbo].[uspCreateCalendar]
 	@ColorId int
 AS
 BEGIN
-declare @CalendarsUsers CalendarsUsers
+declare @id int
 	SET NOCOUNT ON;
 BEGIN TRANSACTION Transact
   BEGIN TRY
@@ -14,13 +14,12 @@ BEGIN TRANSACTION Transact
 	insert into Calendars (Name, AccessId, UserOwnerId, ColorId)
 	values (@Name, @AccessId, @IdUser, @ColorId)
 
-	insert into @CalendarsUsers (id_User, id_Calendar)
-	values(
-	@IdUser,
-	(select top 1 Id from Calendars order by Id desc))
+	SET @id = SCOPE_IDENTITY()
+	
+	exec uspSetCalendarToUser @id, @IdUser
+	exec uspAcceptCalendar @IdUser, @id
 
-	exec uspSetCalendarsToUser @CalendarsUsers
-
+	SELECT @id
 COMMIT TRANSACTION Transact
   END TRY
   BEGIN CATCH
