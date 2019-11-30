@@ -60,7 +60,7 @@
 
         public User GetUserByIdentityId(string identityId)
         {
-            var user = serviceHelper.WrapMethodWithReturn(() => userRepos.GetUserByEmail(identityId), null);
+            var user = serviceHelper.WrapMethodWithReturn(() => userRepos.GetUserByIdentityId(identityId), null);
             if (user != null)
             {
                 return Mapper.Map<Data.Models.User, User>(user);
