@@ -1,51 +1,33 @@
 import { Repository } from "./repository.js";
 
 export class CalendarRepository extends Repository {  
-  async get(id) {
-    let calendar = {};
-
-    let promise = super.get({ id }, '/Calendar/GetCalendar');
-    await promise.then(data => {
-      calendar = data;
-    });
-
-    return calendar;
+  get(id, callback) {
+    let url = '/Calendar/GetCalendar' + `?id=${id}`;    
+    super.get(url, callback);
   }
   
-  async getList() {
-    let list = [];
-
-    let promise = super.getList({ date: date.toISOString() }, '/Calendar/GetCalendarList');    
-    await promise.then(data => {
-      list = data;
-    });
-
-    return list;
+  getList(callback) {    
+    let url = '/Calendar/GetCalendarList';
+    super.get(url, callback);        
   }
 
-  async insert(name, colorId) {
-    let calendarId = 0;
-    
-    let promise = super.get({ name, colorId }, '/Calendar/CreateCalendar');
-    await promise.then(data => {
-      calendarId = data;
-    });
-
-    return calendarId;
+  insert(name, colorId, callback) {    
+    let url = '/Calendar/CreateCalendar';
+    super.post({ name, colorId }, url, callback);
   }
 
-  delete(id) {
-    let promise = super.delete({ id }, '/Calendar/DeleteCalendar');    
-    promise.then();
+  delete(id, callback) {
+    let url = '/Calendar/DeleteCalendar' + `?id=${id}`;
+    super.get(url, callback);        
   }
 
-  subscribe(email, calendarId) {
-    let promise = super.get({ email, calendarId }, '/Calendar/SubscribeCalendar');    
-    promise.then();
+  subscribe(email, calendarId, callback) {
+    let url = '/Calendar/SubscribeCalendar';
+    super.post({ email, calendarId }, url, callback);    
   }
 
-  unsubscribe(id) {
-    let promise = super.delete({ id }, '/Calendar/UnsubscribeCalendar');    
-    promise.then();
+  unsubscribe(id, callback) {
+    let url = '/Calendar/UnsubscribeCalendar' + `?id=${id}`;
+    super.get(url, callback);        
   }
 }

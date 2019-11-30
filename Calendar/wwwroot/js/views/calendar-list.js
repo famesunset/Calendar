@@ -67,18 +67,21 @@ export let CalendarList = {
     });
   },
 
-  async addCalendar(name, colorId) {
+  addCalendar(name, colorId) {
     if (!name || name.trim() === '') {
       name = '(No name)';
     }
 
-    let id = await new CalendarRepository().insert(name, colorId);
-    let url = this.data.url.u_calendarView + `?id=${id}`;
-    let container = this.data.selectors.s_calendars;
-
-    FetchContent.get(url, content => {
-      $(container).append(content);  
-      this.setUpListeners();
+    new CalendarRepository().insert(name, colorId,
+    id => {
+      let url = this.data.url.u_calendarView + `?id=${id}`;
+      let container = this.data.selectors.s_calendars;
+  
+      FetchContent.get(url, content => {
+        $(container).append(content);  
+        this.setUpListeners();
+        M.toast({html: 'Calendar added'});
+      });
     });
   },
 
@@ -109,9 +112,12 @@ export let CalendarList = {
 
         if (result == response.SUBMIT) {
           ViewMode.hideEventsByCalendarId(id);
-          new CalendarRepository().delete(id);
-          this.hideToolTips();   
-          $(root).remove();
+          new CalendarRepository().delete(id,
+          () => {
+            this.hideToolTips();   
+            $(root).remove();
+            M.toast({html: 'Calendar deleted'})
+          });          
         }
       });
     });

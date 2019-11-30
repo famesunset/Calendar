@@ -18,21 +18,23 @@ export let MainCalendar = {
     this.render();
   },
 
-  async onSelect(date) {
+  onSelect(date) {
     if (!this.validDate(date)) 
       return;
 
-    ViewMode.close();     
-
+    ViewMode.clear();     
     Header.renderDate(date);
     ViewMode.renderDate(date);    
 
     let calendars = CalendarList.getSelectedCalendars();
-    let events = await  new EventRepository().getList(date, calendars);
-    ViewMode.renderEvents(events);
+    new EventRepository()
+    .getList(date, calendars,
+    events => {
+      ViewMode.renderEvents(events);
 
-    let currentDate = new Date(date);        
-    sessionStorage.setItem('currentDate', currentDate);
+      let currentDate = new Date(date);        
+      sessionStorage.setItem('currentDate', currentDate);
+    });
   },
 
   render() {

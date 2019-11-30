@@ -56,7 +56,8 @@ export let ShareCalendar = {
         let response = PopUp.data.response;
 
         if (result == response.SUBMIT) {
-          new CalendarRepository().subscribe(email, calendarId);
+          new CalendarRepository().subscribe(email, calendarId,
+          () => M.toast({html: 'Calendar was shared'}));
         }
       });
     });
@@ -71,17 +72,18 @@ export let ShareCalendar = {
     Modal.close();
   },
 
-  async onShareCalendar() {    
+  onShareCalendar() {    
     let s = this.data.selectors;
     let email = $(s.s_shareCalendarEmail).val();
     let calendarId = $(s.s_shareCalendarId).val();
 
-    let isValid = await new UserRepository().validEmail(email);
-
-    if (isValid) {
-      this.closeForm();
-      this.openConfirm(email, calendarId);
-    }
+    new UserRepository().validEmail(email,
+    isValid => {
+      if (isValid) {
+        this.closeForm();
+        this.openConfirm(email, calendarId);
+      }
+    });    
   },
 
   openState(point, root) {

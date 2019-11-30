@@ -71,8 +71,7 @@ export let CreateCalendar = {
     let colorId = $(selectedColor).find('input[name="colorId"]').val();   
     let name = $(form).find('input[name="calendarName"]').val();    
 
-    CalendarList.addCalendar(name, colorId);
-    M.toast({html: 'Calendar added'});
+    CalendarList.addCalendar(name, colorId);    
     this.close();
   }, 
 

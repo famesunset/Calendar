@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Business.Models;
 using Business.Services.Calendar;
 using Business.Services.User;
+using Calendar.Models.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,7 @@ namespace Calendar.Controllers
             return Json(calendar);
         }
 
+        [HttpGet]        
         public IActionResult GetCalendarList()
         {
             string user = userManager.GetUserId(User);
@@ -43,11 +45,11 @@ namespace Calendar.Controllers
             return Json(calendars);
         }
 
-        [HttpGet]
-        public IActionResult CreateCalendar(string name, int colorId)
+        [HttpPost]
+        public IActionResult CreateCalendar([FromBody] CreateCalendarDTO calendarDTO)
         {
             string user = userManager.GetUserId(User);
-            int id = calendarService.CreateCalendar(user, name, colorId, Access.Private);            
+            int id = calendarService.CreateCalendar(user, calendarDTO.Name, calendarDTO.ColorId, Access.Private);            
             return Json(id);
         }
     
@@ -69,13 +71,13 @@ namespace Calendar.Controllers
             return Json("success");
         }
 
-        [HttpGet]
-        public IActionResult SubscribeCalendar(string email, int calendarId)
+        [HttpPost]
+        public IActionResult SubscribeCalendar([FromBody] SubscribeCalendarDTO calendarDTO)
         {
-            var user = userService.GetUserByEmail(email);
+            var user = userService.GetUserByEmail(calendarDTO.Email);
             if (user != null)
             {
-                calendarService.SubscribeUser(user.Id, calendarId);
+                calendarService.SubscribeUser(user.Id, calendarDTO.CalendarId);
             }
             return Json("Success");
         }

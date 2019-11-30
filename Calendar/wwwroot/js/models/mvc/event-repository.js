@@ -1,60 +1,39 @@
 import { Repository } from './repository.js';
 
 export class EventRepository extends Repository {
-  async get(id) {
-    let event = {};
-    
-    let promise = super.get({ id }, '/Event/GetEvent');    
-    await promise.then(data => {
-      event = data;
-    });
-
-    return event;
+  get(id, callback) {
+    let url = '/Event/GetEvent' + `?id=${id}`;    
+    super.get(url, callback);        
   }
   
-  async getList(date, calendars) {
-    let timeOffset = new Date().getTimezoneOffset();
-    let list = [];
+  getList(date, calendars, callback) {
+    let data = {
+      date: date.toDateString(),
+      timeOffset: new Date().getTimezoneOffset(),
+      calendars
+    };    
 
-    let promise = super.getList({ date: date.toDateString(), calendars: calendars, timeOffset }, '/Event/GetEventList');    
-    await promise.then(data => {
-      list = data;
-    });
-
-    return list;
+    let url = '/Event/GetEventList';
+    super.post(data, url, callback);        
   }  
 
-  async insert(event) {
-    let id;
-    
-    let promise = super.insert(event, '/Event/CreateEvent');    
-    await promise.then((data) => {
-        id = data
-    }).catch(err => {
-        alert(err);
-    });
-
-    return id;
+  insert(event, callback) {
+    let url = '/Event/CreateEvent';
+    super.post(event, url, callback);
   }
 
-  async generateLink(id) {
-    let link = {};
-    
-    let promise = super.get({ id }, '/Event/GenerateEventLink');    
-    await promise.then(data => {
-      link = data;
-    });
-
-    return link;
+  generateLink(id, callback) {
+    let url = '/Event/GenerateEventLink' + `?id=${id}`;    
+    super.get(url, callback);    
   }
 
-  update(item) {
-    let promise = super.update(item, '/Event/EditEvent');    
-    promise.then();
+  update(item, callback) {
+    let url = '/Event/EditEvent';
+    super.post(item, url, callback);        
   }
 
-  delete(id) {
-    let promise = super.delete({ id }, '/Event/DeleteEvent');    
-    promise.then();
+  delete(id, callback) {
+    let url = '/Event/DeleteEvent' + `?id=${id}`;
+    super.get(url, callback);        
   }
 }

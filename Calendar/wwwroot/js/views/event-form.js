@@ -157,25 +157,31 @@ export let EventForm = {
     _this.close();
   },
 
-  async onCreate() {    
+  onCreate() {    
     let event = this.getEvent();
-    let id = await new EventRepository().insert(event);    
     
-    if (id != -1) {
-      let selector = ViewMode.getCachedEvent();
-      $(`#${selector}`).find('input[name="id"]').val(id);
-  
-      this.close();
-      this.execFormCallback();    
-      M.toast({html: 'Event added'});
-    }
+    new EventRepository()
+    .insert(event, 
+    id => {
+      if (id != -1) {
+        let selector = ViewMode.getCachedEvent();
+        $(`#${selector}`).find('input[name="id"]').val(id);
+    
+        this.close();
+        this.execFormCallback();    
+        M.toast({html: 'Event added'});
+      }
+    });    
   },
 
   onEdit() {
     let event = this.getEvent();
-    new EventRepository().update(event);
-    M.toast({html: 'Event changed'});
-    this.close();
+    
+    new EventRepository().update(event, 
+    () => {
+      M.toast({html: 'Event changed'});
+      this.close();
+    });    
   },
 
   onCalendarChanged(e) {

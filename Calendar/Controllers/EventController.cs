@@ -31,17 +31,19 @@ namespace Calendar.Controllers
             this.hangfire = new HangfireEvent(userService);
         }
 
-
+        [HttpGet]
         public IActionResult GetEvent(int id)
         {
             Event @event = eventService.GetEvent(userManager.GetUserId(User), id);
             return Json(@event);
         }
 
-        [HttpGet]
-        public IActionResult GetEventList(DateTime date, int[] calendars, int timeOffset)
+        [HttpPost]
+        public IActionResult GetEventList([FromBody] GetEventListDTO eventListDTO)
         {
-            var events = eventService.GetEvents(userManager.GetUserId(User), date, DateUnit.Day, calendars, timeOffset);
+            var events = eventService.GetEvents(userManager.GetUserId(User), 
+                eventListDTO.Date, DateUnit.Day, eventListDTO.Calendars, eventListDTO.TimeOffset);
+            
             return Json(events);
         }
 

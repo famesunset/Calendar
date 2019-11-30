@@ -51,8 +51,8 @@ export let ViewMode = {
     EventInfo.open(id);
   },
 
-  close() {
-    this.data.current.close();
+  clear() {
+    this.data.current.clear();
   },
 
   renderDate(date) {    

@@ -58,19 +58,19 @@ export let Daily = {
     }
   },
 
-  async run() {    
-    let calendars = CalendarList.getSelectedCalendars();
-    let repo = new EventRepository(); 
+  run() {    
+    let calendars = CalendarList.getSelectedCalendars();    
     let date = new Date(sessionStorage.getItem('currentDate'));
-    let events = await repo.getList(moment(date)
-                                    .startOf('day')
-                                    .toDate(), calendars);
 
-    this.renderDate(date);
-    this.renderTable();
-    this.renderEvents(events);
-    this.setUpListeners();  
-    this.currentTimeListener();
+    new EventRepository()
+    .getList(moment(date).startOf('day').toDate(), calendars,
+    events => {
+      this.renderDate(date);
+      this.renderTable();
+      this.renderEvents(events);
+      this.setUpListeners();  
+      this.currentTimeListener();
+    });
   },
 
   setUpListeners() {
@@ -83,7 +83,7 @@ export let Daily = {
     });        
   },  
 
-  close() {
+  clear() {
     let s = this.data.selectors;
 
     $(s.s_dailyEvent).remove();
@@ -376,21 +376,25 @@ export let Daily = {
     $(`#${selector}`).mouseup(e => this.onShowEventInfo(e));
   },
 
-  async hideEventsByCalendarId(calendarId) {
+  hideEventsByCalendarId(calendarId) {
     let date = new Date(sessionStorage.getItem('currentDate'));
-    let events = await new EventRepository().getList(date, [calendarId]);        
+    new EventRepository()
+    .getList(date, [calendarId],
 
-    events.forEach(event => {                    
-      let root = this.findRootByEventId(event.id);
-      if (root != null) $(root).remove();      
-    });
+    events => {
+      events.forEach(event => {                    
+        let root = this.findRootByEventId(event.id);
+        if (root != null) $(root).remove();      
+      });
+    });        
   },
 
-  async showEventsByCalendarId(calendarId) {    
+  showEventsByCalendarId(calendarId) {    
     let date = new Date(sessionStorage.getItem('currentDate'));
-    let events = await new EventRepository().getList(date, [calendarId]);     
-
-    this.renderEvents(events);
+    
+    new EventRepository()
+    .getList(date, [calendarId],
+    events => this.renderEvents(events));         
   },
 
   findRootByEventId(id) {
@@ -473,11 +477,11 @@ export let Daily = {
     this.renderEvent(container, selector, id, title, start, finish, color);
   },
 
-  async changeEventCalendar(id) {
-    let calendar = await new CalendarRepository().get(id);
-    
-    let event = this.getCachedEvent();
-    $(`#${event}`).css('background-color', calendar.color.hex);    
+  changeEventCalendar(id) {
+    new CalendarRepository().get(id, calendar => {
+      let event = this.getCachedEvent();
+      $(`#${event}`).css('background-color', calendar.color.hex); 
+    });     
   },
 
   eventRollback() {

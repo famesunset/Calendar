@@ -59,14 +59,15 @@ export let EventInfo = {
     Modal.close();
   },
 
-  async onShare() {
+  onShare() {
     let s = this.data.selectors;
     let id = $(s.s_eventId).val();
 
-    let link = await new EventRepository().generateLink(id);
-    
-    navigator.clipboard.writeText(link)
-      .then(() => M.toast({html: 'Copied to clipboard'}));    
+    new EventRepository().generateLink(id, 
+    link => {
+      navigator.clipboard.writeText(link)
+      .then(() => M.toast({ html: 'Copied to clipboard' }));  
+    });  
   },
 
   onEdit() {
@@ -80,11 +81,13 @@ export let EventInfo = {
   onDelete() {
     let s = this.data.selectors;
     let id = $(s.s_eventId).val();
-    let selector = ViewMode.getCachedEvent();
+    let selector = ViewMode.getCachedEvent();    
 
-    this.close();
-    ViewMode.deleteEvent(selector);
-    new EventRepository().delete(id);
-    M.toast({html: 'Event deleted'});
+    new EventRepository().delete(id, 
+    () => {
+      this.close();
+      ViewMode.deleteEvent(selector);
+      M.toast({html: 'Event deleted'})
+    });    
   }
 }

@@ -83,8 +83,10 @@ export let DeleteEvent = {
   },
 
   deleteEvent() {
-    new EventRepository().delete(this.data.cache.eventId);
-    let selector = ViewMode.getCachedEvent();
-    ViewMode.deleteEvent(selector);
+    new EventRepository().delete(this.data.cache.eventId,
+    () => {
+      let selector = ViewMode.getCachedEvent();
+      ViewMode.deleteEvent(selector);
+    });    
   }
 };

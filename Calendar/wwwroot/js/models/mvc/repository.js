@@ -1,84 +1,25 @@
 const UNAUTHORIZED = 401;
 
 export class Repository {
-  get(id, url) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: url,
-        type: 'GET',
-        data: id,
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8",
-        traditional: true,
-        success: data => resolve(data),
-        error: () => reject('error')
-      });
-    });
+  get(url, callback) {
+    fetch(url)
+    .then(resp => resp.text())
+    .then(json => JSON.parse(json))
+    .then(data => callback(data));
   }
 
-  async getList(_data, url) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: url,
-        type: 'GET',
-        data: _data,
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8",
-        traditional: true,
-        success: data => resolve(data),
-        error: () => reject('error')
-      });
-    });
-  }
+  post(data, url, callback) {
+    let _data = JSON.stringify(data);
 
-  update(item, url) {
-    let _data = JSON.stringify(item);
-
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: url,
-        type: 'POST',
-        data: _data,
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8",
-        success: data => resolve(data),
-        error: () => reject('error')
-      });
-    });
-  }
-
-  insert(item, url) {
-    let _data = JSON.stringify(item);
-
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: url,
-        type: 'POST',
-        data: _data,
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8",
-        traditional: true,
-        success: data => resolve(data),
-        error: (resp) => {
-          if (resp.status === UNAUTHORIZED) {
-            reject('Login first.');
-          }
-        }
-      });
-    });
-  }
-
-  delete(id, url) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: url,
-        type: 'GET',
-        data: id,
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8",
-        success: data => resolve(data),
-        error: () => reject('error')
-      });
-    });
-  }
+    fetch(url, {
+      method: 'POST',
+      body: _data,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(resp => resp.text())
+    .then(json => JSON.parse(json))
+    .then(data => callback(data));
+  }  
 }
