@@ -44,7 +44,8 @@ export let Daily = {
       s_eventWrapperTiny: 'daily-event-tiny',
       c_loadDeleteEvent: 'load-delete-event',
       c_currentDate: 'current-date',
-      c_currentDateDayOfWeek: 'current-date-day-of-week'
+      c_currentDateDayOfWeek: 'current-date-day-of-week',
+      с_eventDrag: 'event-drag'
     },
 
     ux: {
@@ -142,7 +143,7 @@ export let Daily = {
   onCellMouseDown(e) {       
     if (e.which != this.data.ux.leftMouseBtn) 
       return;      
-
+    
     let container = e.target;
     let selector = GUID();
     let eventId = GUID();        
@@ -166,6 +167,7 @@ export let Daily = {
     this.data.cache.timeFinish = timeFinish;
     this.data.cache.state = 'create';
     this.data.cache.cachedColor = color;
+    $(this.data.selectors.s_table).addClass(this.data.css.с_eventDrag);
   },
 
   // Stretch mouse up
@@ -186,6 +188,7 @@ export let Daily = {
     $(target).unbind('mouseup');
     $(document).unbind('mouseup');
     $(document).unbind('mousemove');
+    $(this.data.selectors.s_table).removeClass(this.data.css.с_eventDrag);
 
     this.data.cache.state = '';
   },
