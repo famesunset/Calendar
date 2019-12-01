@@ -252,11 +252,9 @@ export let Daily = {
                 <input type="hidden" value="{{time}}">
               </div>`;
 
-    let time = new Date();
-    time.setHours(0);
-
-    let ampm = 'AM';
+    let timeIterator = 0
     let hour = 0;
+    let ampm = 'AM';    
 
     for (let i = 0; i < 24; ++i) {            
       ampm = hour < 12 ? 'AM' : 'PM';
@@ -264,16 +262,14 @@ export let Daily = {
 
       let dataContent = `${hour} ${ampm}`;
       let dataTime = dataContent;
-      this.renderCell(el, time, dataContent, dataTime);
-
-      time.setHours(time.getHours() + 1);      
-      hour = time.getHours();
+      this.renderCell(el, timeIterator, dataContent, dataTime);
+          
+      hour = ++timeIterator;
     }
   },
 
-  renderCell(el, time, dataContent, dataTime) {
-    let s = this.data.selectors;
-    let hour = time.getHours();
+  renderCell(el, hour, dataContent, dataTime) {
+    let s = this.data.selectors;    
     
     let html = el.replace('{{time}}', hour);
     html = html.replace('{{cell-id}}', `cell-${hour}`);    
