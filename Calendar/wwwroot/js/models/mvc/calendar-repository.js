@@ -2,7 +2,7 @@ import { Repository } from "./repository.js";
 
 export class CalendarRepository extends Repository {  
   get(id, callback) {
-    let url = '/Calendar/GetCalendar' + `?id=${id}`;    
+    let url = `/Calendar/GetCalendar?id=${id}`;    
     super.get(url, callback);
   }
   
@@ -17,7 +17,7 @@ export class CalendarRepository extends Repository {
   }
 
   delete(id, callback) {
-    let url = '/Calendar/DeleteCalendar' + `?id=${id}`;
+    let url = `/Calendar/DeleteCalendar?id=${id}`;
     super.get(url, callback);        
   }
 
@@ -27,7 +27,7 @@ export class CalendarRepository extends Repository {
   }
 
   unsubscribe(id, callback) {
-    let url = '/Calendar/UnsubscribeCalendar' + `?id=${id}`;
+    let url = `/Calendar/UnsubscribeCalendar?id=${id}`;
     super.get(url, callback);        
   }
 }

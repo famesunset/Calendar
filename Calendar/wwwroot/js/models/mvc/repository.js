@@ -1,5 +1,3 @@
-const UNAUTHORIZED = 401;
-
 export class Repository {
   get(url, callback) {
     fetch(url)

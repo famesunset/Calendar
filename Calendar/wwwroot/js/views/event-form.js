@@ -6,6 +6,7 @@ import { EventRepository } from '../models/mvc/event-repository.js';
 import { Modal } from '../views/pop-ups/modal.js';
 import { GUID } from '../models/share/GUID.js'
 import { FetchContent } from '../models/mvc/fetch-content.js';
+import { CalendarList } from './calendar-list.js';
 
 export let EventForm = {
   data: {
@@ -297,10 +298,11 @@ export let EventForm = {
     this.setUpListeners();
     this.onOptionsOpen(0);
 
+    let color = CalendarList.getDefaultCalendarColor();
     if (event.IsAllDay) {
-      ViewMode.renderAllDayEvent(selector, 0, event.Title);
+      ViewMode.renderAllDayEvent(selector, 0, event.Title, color);
     } else {
-      ViewMode.renderEvent(selector, 0, event.Title, start, finish);
+      ViewMode.renderEvent(selector, 0, event.Title, start, finish, color);
     }
 
     Modal.open(this.onCancelCreation);
