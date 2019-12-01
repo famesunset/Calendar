@@ -521,8 +521,8 @@ export let EventForm = {
         calendarId,
         title,
         description,
-        start: moment(start).toISOString(true),
-        finish: moment(finish).toISOString(true),
+        start: moment(start).toISOString(false),
+        finish: moment(finish).toISOString(false),
         isAllDay,   
         repeat,
         notify
