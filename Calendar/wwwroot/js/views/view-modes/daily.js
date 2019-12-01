@@ -483,7 +483,9 @@ export let Daily = {
   changeEventCalendar(id) {
     new CalendarRepository().get(id, calendar => {
       let event = this.getCachedEvent();
-      $(`#${event}`).css('background-color', calendar.color.hex); 
+
+      if (event != '')
+        $(`#${event}`).css('background-color', calendar.color.hex); 
     });     
   },
 

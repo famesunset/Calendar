@@ -8,14 +8,14 @@ $(function() {
   let app = {
     run() {    
       let sessionDate = sessionStorage.getItem('currentDate');          
-      let date = sessionDate != null ? new Date(sessionDate) : new Date();
+      let date = sessionDate != null ? new Date(sessionDate) : new Date();            
 
       sessionStorage.setItem('currentDate', 
-        moment(date).startOf('day').toDate());
+        moment(date).startOf('day').toDate());      
 
       Header.run();
       SideBar.run();
-      CalendarList.run(() => {
+      CalendarList.run(() => {        
         ViewMode.run();   
       });          
       UserMenu.run();

@@ -1,6 +1,7 @@
 import { Modal } from '../pop-ups/modal.js';
 import { CalendarList } from '../calendar-list.js';
 import { FetchContent } from '../../models/mvc/fetch-content.js';
+import { Key } from '../../models/share/key-bind.js';
 
 export let CreateCalendar = {
   data: {
@@ -32,9 +33,12 @@ export let CreateCalendar = {
 
     $(s.s_color).click(e => this.onColorSelected(e));
     $(s.s_createCalendarSubmit).click(() => this.onCreateCalendar());
+    Key.enter(() => this.onCreateCalendar());
+    Key.ecs(() => this.close());
   },
 
   open() {
+    let form = this.data.selectors.s_createCalendarForm;
     let url = this.data.url.loadForm;
     let container = this.data.selectors.s_loadContainer;    
 
@@ -42,9 +46,11 @@ export let CreateCalendar = {
       if (!this.canOpen()) 
       return;
 
-      $(container).html(content);
-      Modal.open(this.close);
+      $(container).html(content);      
+      $(form).find('input[name="calendarName"]').focus();
+
       this.setUpListeners();
+      Modal.open(this.close);
     });
   },
 

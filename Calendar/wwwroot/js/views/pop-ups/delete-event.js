@@ -2,6 +2,7 @@ import { EventRepository } from '../../models/mvc/event-repository.js';
 import { ViewMode } from '../view-mode.js';
 import { Modal } from '../pop-ups/modal.js';
 import { FetchContent } from '../../models/mvc/fetch-content.js';
+import { Key } from '../../models/share/key-bind.js';
 
 export let DeleteEvent = {
   data: {
@@ -24,6 +25,7 @@ export let DeleteEvent = {
     let s = this.data.selectors;
 
     $(s.s_deleteEvent).click(() => this.onDeleteEvent());
+    Key.ecs(() => this.close());
   },
 
   onClose() {
