@@ -240,6 +240,9 @@ export let CalendarList = {
   },
 
   getCalendarInfoByRoot(root) {
+    if (root == null)
+      root = this.getDefaultCalendar();    
+
     let s = this.data.selectors;
 
     let name = $(root).find('span')[0].innerText;
