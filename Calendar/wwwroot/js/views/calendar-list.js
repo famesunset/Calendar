@@ -9,7 +9,8 @@ import { FetchContent } from "../models/mvc/fetch-content.js";
 export let CalendarList = {
   data: {
     cache: {
-      tooltips: []
+      tooltips: [],
+      calendar: null
     },
 
     selectors: {
@@ -17,6 +18,7 @@ export let CalendarList = {
       s_calendars: '.calendar-list',
       s_calendar: '.calendar',
       s_calendarActions: '.calendar-actions',
+      s_calendarColor: '.calendar-color',
       s_displayCalendar: '.calendar-events-checkbox',
       s_unsubscribeCalendar: '.unsubscribe-calendar',
       s_deleteCalendar: '.delete-calendar',      
@@ -192,6 +194,19 @@ export let CalendarList = {
     return checkedArray;
   },
 
+  getCachedCalendarColor() {    
+    let cache = this.data.cache;
+    
+    let calendar = cache.calendar != null ?
+      cache.calendar : this.getDefaultCalendar();
+
+    let checkbox = $(calendar).find('span')[0];
+    let style = window.getComputedStyle(checkbox);
+    let color = style.getPropertyValue('--checkbox-color')
+
+    return color;
+  },
+
   getDefaultCalendarColor() {
     let calendar = $(this.data.selectors.s_calendar)[0];    
     let checkbox = $(calendar).find('span')[0];
@@ -212,5 +227,32 @@ export let CalendarList = {
     }
 
     return null;
+  },
+
+  getCalendarInfoByRoot(root) {
+    let s = this.data.selectors;
+
+    let name = $(root).find('span')[0].innerText;
+    let colorContainer = $(root).find(s.s_calendarColor);
+    let color = $(colorContainer).css('background-color');
+    let id = $(root).find('input[name="calendarId"]').val();
+
+    return {
+      id,
+      name,
+      color
+    }
+  },
+
+  getDefaultCalendar() {
+    return $(this.data.selectors.s_calendar)[0]; 
+  },
+
+  cacheCalendar(calendar) {
+    this.data.cache.calendar = calendar;
+  },
+
+  getCachedCalendar() {
+    return this.data.cache.calendar;
   }
 };

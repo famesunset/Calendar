@@ -157,7 +157,7 @@ export let Daily = {
           
     let timeFinish = moment(timeStart).add(1, 'hours').toDate();
 
-    let color = CalendarList.getDefaultCalendarColor();
+    let color = CalendarList.getCachedCalendarColor();
     this.renderEvent(container, selector, eventId, '(No title)', timeStart, timeFinish, color);
 
     let targetCoords = this.getCoords(container);

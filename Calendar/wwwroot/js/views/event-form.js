@@ -159,10 +159,10 @@ export let EventForm = {
   },
 
   onCreate() {    
-    let event = this.getEvent();
+    let data = this.getEvent();
     
     new EventRepository()
-    .insert(event, 
+    .insert(data, 
     id => {
       if (id != -1) {
         let selector = ViewMode.getCachedEvent();
@@ -173,6 +173,9 @@ export let EventForm = {
         M.toast({html: 'Event added'});
       }
     });    
+
+    let calendarCache = CalendarList.findRootById(data.event.calendarId);
+    CalendarList.cacheCalendar(calendarCache);
   },
 
   onEdit() {
@@ -187,21 +190,10 @@ export let EventForm = {
 
   onCalendarChanged(e) {
     let s = this.data.selectors;
-    let target = e.currentTarget;
-    let selectedCalendar = s.s_seletedCalendar;    
+    let target = e.currentTarget;      
 
-    let name = $(target).find('span')[0].innerText;
-    let colorContainer = $(target).find(s.s_calendarColor)[0];
-    let color = $(colorContainer).css('background-color');
-    let id = $(target).find('input[name="calendarId"]').val();
-
-    $(selectedCalendar).find('span')[0].innerText = name;
-    $(selectedCalendar).find('input[name="calendarId"]').val(id);
-    let selectedCalendarColor = $(selectedCalendar).find(s.s_calendarColor)[0];
-    $(selectedCalendarColor).css('background-color', color);
-
-    ViewMode.changeEventCalendar(+id);
-    ViewMode.cacheColor(color);
+    let calendar = CalendarList.getCalendarInfoByRoot(target);
+    this.setCalendar(calendar.id, calendar.name, calendar.color);
   },
 
   onAllDayChanged(e) {
@@ -275,6 +267,11 @@ export let EventForm = {
     this.formState('create');
     this.setUpListeners();
     this.cacheFromCallback(callback);
+    
+    let calendarRoot = CalendarList.getCachedCalendar();
+    let calendar = CalendarList.getCalendarInfoByRoot(calendarRoot);
+    let color = CalendarList.getCachedCalendarColor();
+    this.setCalendar(calendar.id, calendar.name, color);
     
     Modal.open(this.onCancelCreation);
   },
@@ -426,6 +423,19 @@ export let EventForm = {
     } else {
       this.validDateRange();
     }
+  },
+
+  setCalendar(id, name, color) {
+    let s = this.data.selectors;
+    let selectedCalendar = s.s_seletedCalendar;
+
+    $(selectedCalendar).find('span')[0].innerText = name;
+    $(selectedCalendar).find('input[name="calendarId"]').val(id);
+    let selectedCalendarColor = $(selectedCalendar).find(s.s_calendarColor)[0];
+    $(selectedCalendarColor).css('background-color', color);
+
+    ViewMode.changeEventCalendar(+id);
+    ViewMode.cacheColor(color);
   },
 
   inValidDateRange() {
