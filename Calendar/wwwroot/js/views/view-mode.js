@@ -77,8 +77,8 @@ export let ViewMode = {
     this.data.current.showEventsByCalendarId(calendarId);
   },
 
-  hideEventsByCalendarId(calendarId) {
-    this.data.current.hideEventsByCalendarId(calendarId);
+  hideEventsByCalendarId(calendarId, callback) {
+    this.data.current.hideEventsByCalendarId(calendarId, callback);
   },
 
   createEvent(hour = new Date().getHours()) {    

@@ -377,7 +377,7 @@ export let Daily = {
     $(`#${selector}`).mouseup(e => this.onShowEventInfo(e));
   },
 
-  hideEventsByCalendarId(calendarId) {
+  hideEventsByCalendarId(calendarId, callback) {
     let date = new Date(sessionStorage.getItem('currentDate'));
     new EventRepository()
     .getList(date, [calendarId],
@@ -387,7 +387,9 @@ export let Daily = {
         let root = this.findRootByEventId(event.id);
         if (root != null) $(root).remove();      
       });
-    });        
+
+      callback();
+    });      
   },
 
   showEventsByCalendarId(calendarId) {    

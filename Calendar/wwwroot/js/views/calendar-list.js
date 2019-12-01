@@ -112,15 +112,16 @@ export let CalendarList = {
       PopUp.open(content, result => {
         let response = PopUp.data.response;
 
-        if (result == response.SUBMIT) {
-          ViewMode.hideEventsByCalendarId(id);
-          new CalendarRepository().delete(id,
-          () => {
-            this.hideToolTips();   
-            $(root).remove();
-            M.toast({html: 'Calendar deleted'});
-            this.checkCache(id);
-          });          
+        if (result == response.SUBMIT) {          
+          ViewMode.hideEventsByCalendarId(id, () => {
+            new CalendarRepository().delete(id,
+              () => {
+                this.hideToolTips();   
+                $(root).remove();
+                M.toast({html: 'Calendar deleted'});
+                this.checkCache(id);
+              });   
+          });        
         }
       });
     });
