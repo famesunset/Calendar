@@ -223,6 +223,7 @@ form button:focus {
 
 .user-info {
   margin-left: 20px;
+  text-align: left;
 }
 
 .user-name {
@@ -230,8 +231,7 @@ form button:focus {
   font-size: 18px;
 }
 
-.user-email {
-  display: none;
+.user-email {  
   font-size: 12px;
   color: var(--color-small-font-size);
 }
