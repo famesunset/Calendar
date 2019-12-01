@@ -47,10 +47,10 @@ namespace Calendar.Controllers
                 new EventFormDTO(null, _event, new EventScheduleDropdown(date), calendars));
         }
 
-        public IActionResult EventInfo(int id)
+        public IActionResult EventInfo(int id, int timeOffset)
         {
             string user = userManager.GetUserId(User);
-            var @event = eventService.GetEvent(user, id);
+            var @event = eventService.GetEvent(user, id, timeOffset);
             var calendar = calendarService.GetCalendar(user, @event.CalendarId);
 
             return PartialView("PartialViews/PopUps/EventInfoPartial", new EventCalendarDTO(@event, calendar));
@@ -66,10 +66,10 @@ namespace Calendar.Controllers
                                 new EventFormDTO(null, @event, new EventScheduleDropdown(@event.Start, @event.Repeat), calendars));
         }
         
-        public IActionResult EditEventForm(int id)
+        public IActionResult EditEventForm(int id, int timeOffset)
         {
             string user = userManager.GetUserId(User);
-            Event @event = eventService.GetEvent(user, id);
+            Event @event = eventService.GetEvent(user, id, timeOffset);
             var calendar = calendarService.GetCalendar(user, @event.CalendarId);
             var calendars = calendarService.GetCalendars(user);
 

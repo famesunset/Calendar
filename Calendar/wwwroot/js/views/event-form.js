@@ -126,7 +126,7 @@ export let EventForm = {
     if (isNaN(id))
       return;  
 
-    let url = this.data.url.editEventForm + `?id=${id}`;
+    let url = this.data.url.editEventForm + `?id=${id}&timeOffset=${new Date().getTimezoneOffset()}`;
     FetchContent.get(url, 
       content => this.renderEditForm(content, id));
   },

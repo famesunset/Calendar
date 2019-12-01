@@ -1,10 +1,8 @@
-﻿using System;
 using Business.Models;
 using Business.Services.Event;
 using Business.Services.User;
 using Calendar.Models;
 using Calendar.Models.DTO;
-using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,9 +30,9 @@ namespace Calendar.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEvent(int id)
+        public IActionResult GetEvent(int id, int timeOffset)
         {
-            Event @event = eventService.GetEvent(userManager.GetUserId(User), id);
+            Event @event = eventService.GetEvent(userManager.GetUserId(User), id, timeOffset);
             return Json(@event);
         }
 
@@ -60,10 +58,10 @@ namespace Calendar.Controllers
         }
 
         [HttpGet]
-        public IActionResult GenerateEventLink(int id)
+        public IActionResult GenerateEventLink(int id, int timeOffset)
         {
             string domainName = $"{Request.Scheme}://{Request.Host}";
-            var link = eventService.GetEventLink(userManager.GetUserId(User), id, domainName);
+            var link = eventService.GetEventLink(userManager.GetUserId(User), id, domainName, timeOffset);
 
             return Json(link);
         }

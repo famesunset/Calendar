@@ -53,12 +53,13 @@
             return -1;
         }
 
-        public Event GetEvent(string loginedUserId, int eventId)
+        public Event GetEvent(string loginedUserId, int eventId, int timeOffset)
         {
             var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
             if (dataBigEvent != null)
             {
                 var businessEvent = Mapper.Map<Data.Models.AllData, Event>(dataBigEvent);
+                AddTimeOffset(businessEvent, timeOffset);
                 return businessEvent;
             }
             return null;
@@ -126,9 +127,9 @@
             return false;
         }
 
-        public string GetEventLink(string loginedUserId, int eventId, string domain)
+        public string GetEventLink(string loginedUserId, int eventId, string domain, int timeOffset)
         {
-            var _event = GetEvent(loginedUserId, eventId);
+            var _event = GetEvent(loginedUserId, eventId, timeOffset);
             return $"{domain}/?event={JsonConvert.SerializeObject(_event)}";
         }
     }

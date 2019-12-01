@@ -55,6 +55,12 @@
             _event.TimeFinish = _event.TimeFinish.AddMinutes(-timeOffset);
         }
 
+        private static void AddTimeOffset(Event _event, int timeOffset)
+        {
+            _event.Start = _event.Start.AddMinutes(-timeOffset);
+            _event.Finish = _event.Finish.AddMinutes(-timeOffset);
+        }
+
         private static IEnumerable<Data.Models.AllData> FindEvents(DateTime beginning, DateUnit dateUnit, Data.Models.AllData _event)
         {
             switch (dateUnit)

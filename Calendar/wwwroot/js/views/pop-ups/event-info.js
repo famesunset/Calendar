@@ -42,7 +42,7 @@ export let EventInfo = {
       return;
 
     let container = 'body';
-    let url = this.data.url.u_loadView + `?id=${id}`;
+    let url = this.data.url.u_loadView + `?id=${id}&timeOffset=${new Date().getTimezoneOffset()}`;
 
     FetchContent.get(url, content => {
       $(container).prepend(content);
@@ -87,7 +87,7 @@ export let EventInfo = {
     () => {
       this.close();
       ViewMode.deleteEvent(selector);
-      M.toast({html: 'Event deleted'})
+      M.toast({ html: 'Event deleted' });
     });    
   }
 }

@@ -2,7 +2,7 @@ import { Repository } from './repository.js';
 
 export class EventRepository extends Repository {
   get(id, callback) {
-    let url = '/Event/GetEvent' + `?id=${id}`;    
+    let url = '/Event/GetEvent' + `?id=${id}&timeOffset=${new Date().getTimezoneOffset()}`;    
     super.get(url, callback);        
   }
   
@@ -23,7 +23,7 @@ export class EventRepository extends Repository {
   }
 
   generateLink(id, callback) {
-    let url = '/Event/GenerateEventLink' + `?id=${id}`;    
+    let url = '/Event/GenerateEventLink' + `?id=${id}&timeOffset=${new Date().getTimezoneOffset()}`;    
     super.get(url, callback);    
   }
 
