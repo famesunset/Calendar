@@ -10,5 +10,6 @@
         User GetUserByEmail(string email);
         bool AddBrowser(string userId, string browser);
         IEnumerable<Browser> GetBrowsers(int calendarId);
+        bool RemoveBrowser(string browser);
     }
 }

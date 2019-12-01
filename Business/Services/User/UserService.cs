@@ -47,6 +47,12 @@
             return browsers?.Select(b => Mapper.Map<Data.Models.Browser, Browser>(b));
         }
 
+        public bool RemoveBrowser(string browser)
+        {
+            var result = serviceHelper.WrapMethod(() => userRepos.RemoveBrowser(browser));
+            return result;
+        }
+
         public User GetUserByEmail(string email)
         {
             var user = serviceHelper.WrapMethodWithReturn(() => userRepos.GetUserByEmail(email), null);

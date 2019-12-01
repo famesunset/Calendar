@@ -35,10 +35,10 @@ namespace Calendar.Controllers
             return RedirectToPage("/");
         }
 
-        public async Task<IActionResult> Logout(string returnUrl = null)
+        public async Task<IActionResult> Logout(string browserId, string returnUrl = null)
         {
+            userService.RemoveBrowser(browserId);
             await signInManager.SignOutAsync();
-            // TODO: удалить browserId из бд
             return Redirect(returnUrl);
         }
 

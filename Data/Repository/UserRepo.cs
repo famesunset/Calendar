@@ -19,6 +19,15 @@ namespace Data.Repository
             }
         }
 
+        public void RemoveBrowser(string browserId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Query("uspRemoveBrowser", new { browser = browserId },
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public void CreateUser(User user)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))

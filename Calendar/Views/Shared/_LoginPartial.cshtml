@@ -5,20 +5,26 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-<div class="account-wrapper state-close">
-  <img class="avatar avatar-large" src='@(ViewBag.Avatar ?? "/images/user.png")' alt="user-icon" />
-  <div class="user-info">
-    <span class="user-name">@ViewBag.UserName</span>
-    <span class="user-email">@ViewBag.Email</span>
-    <a class="account" asp-action="Logout" asp-controller="Authentication"
-        asp-route-returnUrl='@Url.Action("Index", "Home" , new { area="" })'>
-      <div class="logout">
-        <i class="material-icons">exit_to_app</i>
-        <span>Logout</span>
-      </div>
-    </a>
-  </div>
-</div>
+    <div class="account-wrapper state-close">
+        <img class="avatar avatar-large" src='@(ViewBag.Avatar ?? "/images/user.png")' alt="user-icon" />
+        <div class="user-info">
+            <span class="user-name">@ViewBag.UserName</span>
+            <span class="user-email">@ViewBag.Email</span>
+            <a class="account account-logout" asp-action="Logout" asp-controller="Authentication"
+               asp-route-returnUrl='@Url.Action("Index", "Home" , new { area="" })'>
+                <div class="logout">
+                    <i class="material-icons">exit_to_app</i>
+                    <span>Logout</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <script>
+        let logout = document.querySelector(".account-logout");
+        let link = logout.href;
+        let browserId = window.localStorage.getItem('sentFirebaseMessagingToken');
+        logout.href = link + `&browserId=${browserId}`;
+    </script>
 }
 else
 {

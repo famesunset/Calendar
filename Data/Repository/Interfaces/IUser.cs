@@ -10,5 +10,6 @@ namespace Data.Repository.Interfaces
         User GetUserByEmail(string email);
         IEnumerable<Browser> GetBrowsers(int calendarId);
         void AddBrowser(Browser browser);
+        void RemoveBrowser(string browserId);
     }
 }
