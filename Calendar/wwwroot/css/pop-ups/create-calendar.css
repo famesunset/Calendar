@@ -47,9 +47,9 @@
 }
 
 #colors {
-  display: flex;
+  display: grid;
   justify-content: space-between;
-  align-items: center;
+  grid-template-columns: repeat(6, 1fr);  
   padding: 10px 0;
   width: 100%;
 }

@@ -331,18 +331,19 @@ export let Daily = {
       title = '(No title)';
     }
     
-    var el =   `<div class="daily-event" id="${selector}">
-                  <div class="${this.data.css.s_eventContentWrapper}">
-                    <input type="hidden" name="id" value="${id}">
-                    <h6 class="title">${title}</h4>
-                    <div class="time">
-                      <span class="start">${moment(start).format('LT')}</span>
-                      <span> &mdash; </span>
-                      <span class="end">${moment(finish).format('LT')}</span>
-                    </div>
-                  </div>
-                  <div class="${this.data.css.c_loadDeleteEvent}"></div>
-                </div>`;      
+    var el = 
+    `<div class="daily-event" id="${selector}">
+      <div class="${this.data.css.s_eventContentWrapper}">
+        <input type="hidden" name="id" value="${id}">
+        <h6 class="title">${title}</h4>
+        <div class="time">
+          <span class="start">${moment(start).format('LT')}</span>
+          <span> &mdash; </span>
+          <span class="end">${moment(finish).format('LT')}</span>
+        </div>
+      </div>
+      <div class="${this.data.css.c_loadDeleteEvent}"></div>
+    </div>`;      
     
     $(container).append(el);
 
@@ -365,11 +366,12 @@ export let Daily = {
       title = '(No title)';
     }
 
-    let el = `<div class="all-day-event" id="${selector}">
-                <input type="hidden" name="id" value="${id}">
-                <span class="title">${title}</span>
-                <div class="${this.data.css.c_loadDeleteEvent}"></div>
-              </div>`;
+    let el = 
+    `<div class="all-day-event" id="${selector}">
+      <input type="hidden" name="id" value="${id}">
+      <span class="title">${title}</span>
+      <div class="${this.data.css.c_loadDeleteEvent}"></div>
+    </div>`;
     
     $(s.s_allDayEvents).append(el);
 
