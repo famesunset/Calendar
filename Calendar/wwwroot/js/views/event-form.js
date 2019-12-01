@@ -188,8 +188,7 @@ export let EventForm = {
     });    
   },
 
-  onCalendarChanged(e) {
-    let s = this.data.selectors;
+  onCalendarChanged(e) {    
     let target = e.currentTarget;      
 
     let calendar = CalendarList.getCalendarInfoByRoot(target);
