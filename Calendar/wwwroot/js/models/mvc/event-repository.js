@@ -10,7 +10,7 @@ export class EventRepository extends Repository {
   
   getList(date, calendars, callback) {
     let data = {
-      date: moment(date).toISOString(true),
+      date: date.toDateString(),
       timeOffset: new Date().getTimezoneOffset(),
       calendars
     };    
