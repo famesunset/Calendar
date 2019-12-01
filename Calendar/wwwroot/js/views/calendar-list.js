@@ -108,8 +108,8 @@ export let CalendarList = {
     let root = e.currentTarget.parentElement.parentElement;
     let id = $(root).find('input[name="calendarId"]').val();
     
-    this.loadDeleteMessage(id, (content) => {
-      PopUp.open(content, (result) => {
+    this.loadDeleteMessage(id, content => {
+      PopUp.open(content, result => {
         let response = PopUp.data.response;
 
         if (result == response.SUBMIT) {
@@ -118,7 +118,8 @@ export let CalendarList = {
           () => {
             this.hideToolTips();   
             $(root).remove();
-            M.toast({html: 'Calendar deleted'})
+            M.toast({html: 'Calendar deleted'});
+            this.checkCache(id);
           });          
         }
       });
@@ -174,6 +175,15 @@ export let CalendarList = {
     for (let tooltip of this.data.cache.tooltips) {
       var instance = M.Tooltip.getInstance(tooltip);
       instance.close();
+    }
+  },
+
+  checkCache(id) {    
+    let calendar = this.findRootById(id);
+
+    // if calendar was deleted
+    if (calendar == null) {
+      this.cacheCalendar(null);
     }
   },
 

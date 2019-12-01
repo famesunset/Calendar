@@ -31,6 +31,9 @@ export let PopUp = {
   },
 
   open(content, callback) {
+    if (!this.canOpen()) 
+      return;
+    
     let url = this.data.url.u_popUpLoad;
     let container = $('body');    
 
@@ -68,5 +71,10 @@ export let PopUp = {
 
   cacheCallback(callback) {
     this.data.cache.callback = callback;
+  },
+
+  canOpen() {
+    let s = this.data.selectors;
+    return $(s.s_popUp)[0] == null;
   }
 }
