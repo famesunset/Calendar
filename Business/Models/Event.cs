@@ -1,9 +1,5 @@
-using System.Reflection.Metadata;
-
 namespace Business.Models
 {
-    using System;
-
     public class Event : BaseEvent
     {
         public int CalendarId { get; set; }

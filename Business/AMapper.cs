@@ -9,18 +9,17 @@
 
     internal static class AMapper
     {
-        private static readonly HtmlEncoder htmlEncoder;
         private const string NewLine = "&#xA;";
         private static string Encode(string html)
         {
-            var encoded = htmlEncoder.Encode(html ?? string.Empty);
-            encoded = encoded.Replace(NewLine, "\n");
+            var encoded = html;
+            encoded = encoded.Replace("<", "&lt;");
+            encoded = encoded.Replace(">", "&gt;");
             return encoded;
         }
 
         static AMapper()
-        {            
-            htmlEncoder = HtmlEncoder.Create(UnicodeRanges.Cyrillic, UnicodeRanges.BasicLatin);
+        {
             // TODO: rework with resolvers
             var config = new MapperConfiguration(cfg =>
             {
