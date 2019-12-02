@@ -92,6 +92,13 @@
   margin-bottom: 20px;  
 }
 
+.m-dot {
+  font-size: 19px;
+  font-weight: 600; 
+  line-height: 17px;
+  color: var(--color-small-font-size);
+}
+
 .about-description {
   max-width: calc(100% - 15px);
   padding-right: 10px;
