@@ -4,12 +4,9 @@
     using Models;
     using System;
     using System.Collections.Generic;
-    using System.Text.Encodings.Web;
-    using System.Text.Unicode;
 
     internal static class AMapper
     {
-        private const string NewLine = "&#xA;";
         private static string Encode(string html)
         {
             var encoded = html;
@@ -94,8 +91,8 @@
                         CalendarId = val.CalendarId,
                         Description = val.Description,
                         Title = val.Title,
-                        TimeFinish = val.Finish.ToUniversalTime(),
-                        TimeStart = val.Start.ToUniversalTime(),
+                        TimeFinish = val.Finish,
+                        TimeStart = val.Start,
                         RepeatId = (int)val.Repeat,
                     });
 

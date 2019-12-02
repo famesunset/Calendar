@@ -78,8 +78,8 @@
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
-                beginning = beginning.Date;
-                var dateRange = GetDateRange(beginning, dateUnit);
+                beginning = beginning.AddMinutes(-timeOffset).Date;
+                var dateRange = GetDateRange(beginning, dateUnit, timeOffset);
 
                 var userCalendars = serviceHelper.WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(dataUser.IdUser), 
                     new List<Data.Models.Calendar>())

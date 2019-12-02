@@ -82,6 +82,7 @@ export let EventForm = {
 
   setUpListeners() {
     let s = this.data.selectors;
+    let state = this.data.form.state;
 
     $(s.s_userCalendarItem).click((e) => this.onCalendarChanged(e));
     $(s.s_closeTrigger).click(() => this.onCancelCreation());  
@@ -95,7 +96,12 @@ export let EventForm = {
     $(s.s_isAllDay).change(e => this.onAllDayChanged(e));
     $(s.s_timeStart).change(e => this.onTimeChanged(e));
     $(s.s_timeFinish).change(e => this.onTimeChanged(e));
-    Key.enter(() => this.onCreate());
+    Key.enter(() => {
+      if (state == 'create') 
+        this.onCreate();
+      else 
+        this.onEdit();
+    });
     Key.ecs(() => this.onCancelCreation());
 
     $(s.s_title).focus();

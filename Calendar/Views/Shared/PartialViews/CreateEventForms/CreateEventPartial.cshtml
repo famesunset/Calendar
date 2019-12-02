@@ -1,108 +1,108 @@
 @model Calendar.Models.DTO.EventFormDTO;
 
 <div class="create-event-wrapper scale-transition">
-    <div class="create-event-form">
-        <input type="hidden" name="eventId" value="@Model.Event.Id">
-        <i class="waves-effect close material-icons right">close</i>
-        <div class="title">
-            <input placeholder="Add title" id="title" type="text" value="@Model.Event.Title">
-        </div>
-        <div class="select-date">
-            <i class="material-icons">access_time</i>
-            <input id="date-start" type="text" value='@Model.Event.Start.ToString("o")'>
-            <input id="time-start" type="text" value='@Model.Event.Start.ToString("o")'>
-            <span> &mdash; </span>
-            <input id="time-finish" type="text" value='@Model.Event.Finish.ToString("o")'>
-            <input id="date-finish" type="text" value='@Model.Event.Finish.ToString("o")'>
-        </div>
-        @Html.Partial("PartialViews/CreateEventForms/SelectUserCalendarPartial", Model.CalendarDTO)
-        <div id="more-options">
-            <div id="options" class="options">
-                <div class="inline-group repeat-wrapper">
-                    <div>
-                        <i class="replay-icon material-icons">replay</i>
-                    </div>
-                    <div class="is-all-day-event">
-                        <label>
-                            <input checked="@Model.Event.IsAllDay" id="all-day" type="checkbox" class="filled-in" />
-                            <span>All day</span>
-                        </label>
-                    </div>
-                    <div class="repeat">
-                        <!-- Dropdown Trigger -->
-                        <div data-target='repeat-dropdown-content' class="repeat-dropdown" id='repeat-dropdown-trigger'>
-                            @{
-                                var selectedItem = Model.Dropdown.Items
-                                .Where(item => item.Interval.Equals(Model.Dropdown.Interval))
-                                .FirstOrDefault();
-
-                                <a>
-                                    <span>@selectedItem.Value</span>
-                                    <input type="hidden" name="interval" value="@selectedItem.Interval" />
-                                </a>
-                            }
-
-                            <i class="material-icons tiny">arrow_drop_down</i>
-                        </div>
-
-                        <!-- Dropdown Structure -->
-                        <ul id='repeat-dropdown-content' class='dropdown-content'>
-                            @foreach (var item in Model.Dropdown.Items)
-                            {
-                                <li>
-                                    <a>@item.Value</a>
-                                    <input type="hidden" name="interval" value="@item.Interval" />
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-                <div class="notify">
-                    <div class="inline-group">
-                        <i class="replay-icon material-icons">notifications_none</i>
-                        <span>Notify</span>
-                        @{
-                            bool isNotify = @Model.Event.Notify.TimeUnit != Business.Models.NotifyTimeUnit.NoNotify;
-
-                            <div id="notify-settings" class='inline-group @(isNotify ? "" : "state-close")'>
-                                <input type="number" name="timeValue" value='@(isNotify ? Model.Event.Notify.Value : 0)' min="0"
-                                       max="1000">
-                                <a id="notify-time-unit" class='dropdown-trigger' data-target='time-unit-list'>
-                                    <span>@Model.Event.Notify.TimeUnit.ToString("g")</span>
-                                    <i class="material-icons tiny">arrow_drop_down</i>
-                                    <input type="hidden" name="timeUnit" value="@Model.Event.Notify.TimeUnit">
-                                </a>
-                                <ul id='time-unit-list' class='dropdown-content'>
-                                    <li>
-                                        <a>Min</a>
-                                        <input type="hidden" name="timeUnit" value="Min">
-                                    </li>
-                                    <li>
-                                        <a>Hour</a>
-                                        <input type="hidden" name="timeUnit" value="Hour">
-                                    </li>
-                                    <li>
-                                        <a>Day</a>
-                                        <input type="hidden" name="timeUnit" value="Day">
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                        <div class="notify-toggle" data-target="notify-settings">
-                            <i class="material-icons">add</i>
-                        </div>
-                    </div>
-                </div>
-                <div class="description">
-                    <i class="material-icons">format_align_left</i>
-                    <textarea rows="1" placeholder="Description" id="description"
-                              class="materialize-textarea scrollbar">@Model.Event.Description</textarea>
-                </div>
-            </div>
-        </div>
-        <div class="actions">
-            <a class="more-options-btn">More options</a>
-            <a id="event-submit-btn" class="waves-effect waves-light btn">Save</a>
-        </div>
+  <div class="create-event-form">
+    <input type="hidden" name="eventId" value="@Model.Event.Id">
+    <i class="waves-effect close material-icons right">close</i>
+    <div class="title">
+      <input placeholder="Add title" id="title" type="text" value="@Model.Event.Title">
     </div>
+    <div class="select-date">
+      <i class="material-icons">access_time</i>
+      <input id="date-start" type="text" value='@Model.Event.Start.ToString("o")'>
+      <input id="time-start" type="text" value='@Model.Event.Start.ToString("o")'>
+      <span> &mdash; </span>
+      <input id="time-finish" type="text" value='@Model.Event.Finish.ToString("o")'>
+      <input id="date-finish" type="text" value='@Model.Event.Finish.ToString("o")'>
+    </div>
+    @Html.Partial("PartialViews/CreateEventForms/SelectUserCalendarPartial", Model.CalendarDTO)
+    <div id="more-options">
+      <div id="options" class="options">
+        <div class="inline-group repeat-wrapper">
+          <div>
+            <i class="replay-icon material-icons">replay</i>
+          </div>
+          <div class="is-all-day-event">
+            <label>
+              <input checked="@Model.Event.IsAllDay" id="all-day" type="checkbox" class="filled-in" />
+              <span>All day</span>
+            </label>
+          </div>
+          <div class="repeat">
+            <!-- Dropdown Trigger -->
+            <div data-target='repeat-dropdown-content' class="repeat-dropdown" id='repeat-dropdown-trigger'>
+              @{
+              var selectedItem = Model.Dropdown.Items
+              .Where(item => item.Interval.Equals(Model.Dropdown.Interval))
+              .FirstOrDefault();
+
+              <a>
+                <span>@selectedItem.Value</span>
+                <input type="hidden" name="interval" value="@selectedItem.Interval" />
+              </a>
+              }
+
+              <i class="material-icons tiny">arrow_drop_down</i>
+            </div>
+
+            <!-- Dropdown Structure -->
+            <ul id='repeat-dropdown-content' class='dropdown-content'>
+              @foreach (var item in Model.Dropdown.Items)
+              {
+              <li>
+                <a>@item.Value</a>
+                <input type="hidden" name="interval" value="@item.Interval" />
+              </li>
+              }
+            </ul>
+          </div>
+        </div>
+        <div class="notify">
+          <div class="inline-group">
+            <i class="replay-icon material-icons">notifications_none</i>
+            <span>Notify</span>
+            @{
+            bool isNotify = @Model.Event.Notify.TimeUnit != Business.Models.NotifyTimeUnit.NoNotify;
+
+            <div id="notify-settings" class='inline-group @(isNotify ? "" : "state-close")'>
+              <input type="number" name="timeValue" value='@(isNotify ? Model.Event.Notify.Value : 0)' min="0"
+                max="1000">
+              <a id="notify-time-unit" class='dropdown-trigger' data-target='time-unit-list'>
+                <span>@Model.Event.Notify.TimeUnit.ToString("g")</span>
+                <i class="material-icons tiny">arrow_drop_down</i>
+                <input type="hidden" name="timeUnit" value="@Model.Event.Notify.TimeUnit">
+              </a>
+              <ul id='time-unit-list' class='dropdown-content'>
+                <li>
+                  <a>Min</a>
+                  <input type="hidden" name="timeUnit" value="Min">
+                </li>
+                <li>
+                  <a>Hour</a>
+                  <input type="hidden" name="timeUnit" value="Hour">
+                </li>
+                <li>
+                  <a>Day</a>
+                  <input type="hidden" name="timeUnit" value="Day">
+                </li>
+              </ul>
+            </div>
+            }
+            <div class="notify-toggle" data-target="notify-settings">
+              <i class="material-icons">add</i>
+            </div>
+          </div>
+        </div>
+        <div class="description">
+          <i class="material-icons">format_align_left</i>
+          <textarea rows="1" placeholder="Description" id="description"
+            class="materialize-textarea scrollbar">@Model.Event.Description</textarea>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="more-options-btn">More options</a>
+      <a id="event-submit-btn" class="waves-effect waves-light btn">Save</a>
+    </div>
+  </div>
 </div>

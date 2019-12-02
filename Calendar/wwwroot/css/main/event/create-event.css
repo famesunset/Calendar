@@ -154,6 +154,11 @@
   margin-right: 15px;
 }
 
+#user-calendar-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 #user-calendar-list > li {
   padding: 0px 10px;
 }
