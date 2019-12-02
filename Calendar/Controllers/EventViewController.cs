@@ -45,10 +45,9 @@ namespace Calendar.Controllers
         {
             string user = userManager.GetUserId(User);
             var @event = eventService.GetEvent(user, id, timeOffset);
-            var calendar = calendarService.GetCalendar(user, @event.CalendarId);  
-            User creator = null;
+            var calendar = calendarService.GetCalendar(user, @event.CalendarId); 
 
-            return PartialView("PartialViews/PopUps/EventInfoPartial", new EventInfoDTO(@event, calendar, creator));
+            return PartialView("PartialViews/PopUps/EventInfoPartial", new EventInfoDTO(@event, calendar));
         }
 
         [HttpPost]

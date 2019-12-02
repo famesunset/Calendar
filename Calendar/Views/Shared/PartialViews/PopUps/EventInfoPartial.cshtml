@@ -25,9 +25,8 @@
         <h3 class="title">@(string.IsNullOrWhiteSpace(Model.Event.Title) ? "(No title)" : Model.Event.Title) </h3>
         <div class="time-info">
           <div class="daily-range">
-            @{
-              var execDate = DateTime.Now;
-              <span>@execDate.ToString("dddd, MMMM d", new System.Globalization.CultureInfo("en-US"))</span>
+            @{              
+              <span>@Model.Event.Start.ToString("dddd, MMMM d", new System.Globalization.CultureInfo("en-US"))</span>
 
               if(!Model.Event.IsAllDay) {
                 <span class="m-dot"> ⋅ </span>
@@ -119,11 +118,11 @@
     <!-- Creator info -->
     <div class="info-row">
       <div class="info-icon">
-        <img src="/images/user.png" alt="user">
+        <img src="@(Model.Event.Creator.Picture ?? "/images/user.png")" alt="user">
       </div>
       <div class="about">
         <span class="user-email">
-          user-email
+          @Model.Event.Creator.Email
         </span>
       </div>
     </div>
