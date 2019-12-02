@@ -46,8 +46,7 @@
 
         public Calendar GetCalendar(string loginedUserId, int calendarId)
         {
-            var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendarId);
-            var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
+            var (dataUser, dataCalendar) = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendarId);
             if (dataCalendar != null)
             {
                 var calendar = Mapper.Map<Data.Models.Calendar, Calendar>(dataCalendar);
@@ -82,7 +81,7 @@
 
         public bool DeleteCalendar(string loginedUserId, int calendaId)
         {
-            var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendaId);
+            var (dataUser, dataCalendar) = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, calendaId);
             if (dataCalendar != null)
             {
                 return serviceHelper.WrapMethodWithReturn(() => calendarRepos.RemoveCalendar(dataCalendar.Id), false);

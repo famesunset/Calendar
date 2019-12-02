@@ -142,8 +142,9 @@ export let Daily = {
   // Stretch mouse down
   onCellMouseDown(e) {       
     if (e.which != this.data.ux.leftMouseBtn) 
-      return;      
-    
+      return;    
+    $(this.data.selectors.s_cell).unbind('mousedown');    
+
     let container = e.target;
     let selector = GUID();
     let eventId = GUID();        
@@ -157,7 +158,7 @@ export let Daily = {
           
     let timeFinish = moment(timeStart).add(1, 'hours').toDate();
 
-    let color = CalendarList.getDefaultCalendarColor();
+    let color = CalendarList.getCachedCalendarColor();
     this.renderEvent(container, selector, eventId, '(No title)', timeStart, timeFinish, color);
 
     let targetCoords = this.getCoords(container);
@@ -167,7 +168,7 @@ export let Daily = {
     this.data.cache.timeFinish = timeFinish;
     this.data.cache.state = 'create';
     this.data.cache.cachedColor = color;
-    $(this.data.selectors.s_table).addClass(this.data.css.с_eventDrag);
+    $(this.data.selectors.s_table).addClass(this.data.css.с_eventDrag);    
   },
 
   // Stretch mouse up
@@ -182,13 +183,13 @@ export let Daily = {
       this.data.cache.timeStart,
       this.data.cache.timeFinish,
       allDay,
+      () => this.setUpListeners(),
       () => $(target).mouseup((e) => this.onShowEventInfo(e))
     );
-    
-    $(target).unbind('mouseup');
+        
     $(document).unbind('mouseup');
-    $(document).unbind('mousemove');
-    $(this.data.selectors.s_table).removeClass(this.data.css.с_eventDrag);
+    $(document).unbind('mousemove');    
+    $(s.s_table).removeClass(this.data.css.с_eventDrag);    
 
     this.data.cache.state = '';
   },
@@ -252,11 +253,9 @@ export let Daily = {
                 <input type="hidden" value="{{time}}">
               </div>`;
 
-    let time = new Date();
-    time.setHours(0);
-
-    let ampm = 'AM';
+    let timeIterator = 0
     let hour = 0;
+    let ampm = 'AM';    
 
     for (let i = 0; i < 24; ++i) {            
       ampm = hour < 12 ? 'AM' : 'PM';
@@ -264,16 +263,14 @@ export let Daily = {
 
       let dataContent = `${hour} ${ampm}`;
       let dataTime = dataContent;
-      this.renderCell(el, time, dataContent, dataTime);
-
-      time.setHours(time.getHours() + 1);      
-      hour = time.getHours();
+      this.renderCell(el, timeIterator, dataContent, dataTime);
+          
+      hour = ++timeIterator;
     }
   },
 
-  renderCell(el, time, dataContent, dataTime) {
-    let s = this.data.selectors;
-    let hour = time.getHours();
+  renderCell(el, hour, dataContent, dataTime) {
+    let s = this.data.selectors;    
     
     let html = el.replace('{{time}}', hour);
     html = html.replace('{{cell-id}}', `cell-${hour}`);    
@@ -381,7 +378,7 @@ export let Daily = {
     $(`#${selector}`).mouseup(e => this.onShowEventInfo(e));
   },
 
-  hideEventsByCalendarId(calendarId) {
+  hideEventsByCalendarId(calendarId, callback) {
     let date = new Date(sessionStorage.getItem('currentDate'));
     new EventRepository()
     .getList(date, [calendarId],
@@ -391,7 +388,9 @@ export let Daily = {
         let root = this.findRootByEventId(event.id);
         if (root != null) $(root).remove();      
       });
-    });        
+
+      callback();
+    });      
   },
 
   showEventsByCalendarId(calendarId) {    
@@ -485,7 +484,9 @@ export let Daily = {
   changeEventCalendar(id) {
     new CalendarRepository().get(id, calendar => {
       let event = this.getCachedEvent();
-      $(`#${event}`).css('background-color', calendar.color.hex); 
+
+      if (event != '')
+        $(`#${event}`).css('background-color', calendar.color.hex); 
     });     
   },
 

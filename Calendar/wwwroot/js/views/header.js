@@ -2,6 +2,7 @@ import { Dropdown } from '../models/dropdown.js';
 import { ViewMode } from './view-mode.js';
 import { MainCalendar } from './main-calendar.js';
 import { Modal } from '../views/pop-ups/modal.js';
+import { Key } from '../models/share/key-bind.js';
 
 export let Header = {
   data: {
@@ -52,6 +53,7 @@ export let Header = {
     $(menu).removeClass(close);    
     
     this.data.cache.userMenu = menu;
+    Key.ecs(() => this.onCloseUserMenu());
   },
 
   onCloseUserMenu() {   

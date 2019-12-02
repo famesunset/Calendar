@@ -74,5 +74,16 @@
 
             return null;
         }
+
+        public User GetUserById(int id)
+        {
+            var user = serviceHelper.WrapMethodWithReturn(() => userRepos.GetUserById(id), null);
+            if (user != null)
+            {
+                return Mapper.Map<Data.Models.User, User>(user);
+            }
+
+            return null;
+        }
     }
 }

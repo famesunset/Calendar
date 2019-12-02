@@ -10,7 +10,7 @@ select uc.CalendarId, ca.Name as CalendarName, a.Name as AccessName,
 e.Id as EventId, e.Description, e.Title,
 e.TimeStart, e.TimeFinish, e.AllDay, e.RepeatId, CalendarColor = color.Hex,
 n.Before as NotificationValue, n.TimeUnitId as NotificationTimeUnitId,
-uc.IsAccepted as IsCalendarAccepted
+uc.IsAccepted as IsCalendarAccepted, e.CreatorId
 
 from Users u
 left join UsersCalendars uc on u.Id = uc.UserId

@@ -19,12 +19,6 @@
             </a>
         </div>
     </div>
-    <script>
-        let logout = document.querySelector(".account-logout");
-        let link = logout.href;
-        let browserId = window.localStorage.getItem('sentFirebaseMessagingToken');
-        logout.href = link + `&browserId=${browserId}`;
-    </script>
 }
 else
 {

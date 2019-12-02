@@ -3,6 +3,7 @@ import { EventForm } from '../event-form.js';
 import { EventRepository } from '../../models/mvc/event-repository.js';
 import { ViewMode } from '../view-mode.js';
 import { FetchContent } from '../../models/mvc/fetch-content.js';
+import { Key } from '../../models/share/key-bind.js';
 
 export let EventInfo = {
   data: {
@@ -24,10 +25,11 @@ export let EventInfo = {
   setUpListeners() {
     let s = this.data.selectors;
 
+    Key.ecs(() => this.close());
     $(s.s_shareTrigger).click(() => this.onShare());
     $(s.s_editTrigger).click(() => this.onEdit());
     $(s.s_deleteTrigger).click(() => this.onDelete());
-    $(s.s_closeTrigger).click(() => this.close());
+    $(s.s_closeTrigger).click(() => this.close());    
     $('.tooltipped').tooltip({
       inDuration: 0, 
       outDuration: 0,  
@@ -45,9 +47,10 @@ export let EventInfo = {
     let url = this.data.url.u_loadView + `?id=${id}&timeOffset=${new Date().getTimezoneOffset()}`;
 
     FetchContent.get(url, content => {
-      $(container).prepend(content);
-      Modal.open(this.close);
+      $(container).prepend(content);      
       this.setUpListeners();
+
+      Modal.open(this.close);      
     });
   },
 
@@ -57,6 +60,7 @@ export let EventInfo = {
 
     $(info).remove();
     Modal.close();
+    Key.unbind();
   },
 
   onShare() {

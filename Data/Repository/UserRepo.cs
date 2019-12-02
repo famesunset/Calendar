@@ -61,9 +61,19 @@ namespace Data.Repository
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                IEnumerable<User> s = connection.Query<User>("uspGetUserByIdentityId", new { identityId = id },
-                    commandType: CommandType.StoredProcedure);
-                return s.SingleOrDefault();
+                User user = connection.Query<User>("uspGetUserByIdentityId", new { identityId = id },
+                    commandType: CommandType.StoredProcedure).SingleOrDefault();
+                return user;
+            }
+        }
+
+        public User GetUserById(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                User user = connection.Query<User>("uspGetUserById", new { id },
+                    commandType: CommandType.StoredProcedure).SingleOrDefault();
+                return user;
             }
         }
     }

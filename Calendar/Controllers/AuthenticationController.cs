@@ -35,6 +35,7 @@ namespace Calendar.Controllers
             return RedirectToPage("/");
         }
 
+        [HttpGet]
         public async Task<IActionResult> Logout(string browserId, string returnUrl = null)
         {
             userService.RemoveBrowser(browserId);

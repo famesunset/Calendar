@@ -18,5 +18,6 @@ namespace Data.Models
         public int NotificationValue { get; set; }
         public int NotificationTimeUnitId { get; set; }
         public bool IsCalendarAccepted { get; set; }
+        public int CreatorId { get; set; }
     }
 }

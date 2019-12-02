@@ -3,12 +3,13 @@ import { UserRepository } from '../../models/mvc/user-repository.js';
 import { PopUp } from "./pop-up.js";
 import { CalendarRepository } from "../../models/mvc/calendar-repository.js";
 import { FetchContent } from "../../models/mvc/fetch-content.js";
+import { Key } from "../../models/share/key-bind.js";
 
 export let ShareCalendar = {
   data: {
     cache: {
       calendar: null
-    },
+    }, 
 
     selectors: {
       s_calendarList: '#calendar-list',
@@ -29,7 +30,10 @@ export let ShareCalendar = {
   setUpListeners() {
     let s = this.data.selectors;
 
-    $(s.s_shareCalendarSubmit).click(() => this.onShareCalendar())
+    $(s.s_shareCalendarSubmit).click(() => this.onShareCalendar());
+    Key.enter(() => this.onShareCalendar());
+    Key.ecs(() => this.closeForm());
+    $(s.s_shareCalendarEmail).focus();
   },
 
   openForm(id, point, root) {
@@ -44,7 +48,7 @@ export let ShareCalendar = {
       Modal.open(this.closeForm);
       this.openState(point, root);
       this.setUpListeners();      
-      this.data.cache.calendar = root;
+      this.data.cache.calendar = root;      
     });
   },
 
@@ -70,6 +74,7 @@ export let ShareCalendar = {
     $(form).remove();
     $(calendar).css('background-color', 'transparent');
     Modal.close();
+    Key.unbind();
   },
 
   onShareCalendar() {    

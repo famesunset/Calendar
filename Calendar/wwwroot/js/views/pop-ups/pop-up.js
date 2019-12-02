@@ -1,4 +1,5 @@
 import { FetchContent } from "../../models/mvc/fetch-content.js";
+import { Key } from "../../models/share/key-bind.js";
 
 export let PopUp = {
   data: {
@@ -28,9 +29,14 @@ export let PopUp = {
     
     $(s.s_submit).click(() => this.onSubmit());
     $(s.s_cancel).click(() => this.onCancel());
+    Key.enter(() => this.onSubmit());
+    Key.ecs(() => this.onCancel());
   },
 
   open(content, callback) {
+    if (!this.canOpen()) 
+      return;
+    
     let url = this.data.url.u_popUpLoad;
     let container = $('body');    
 
@@ -38,10 +44,10 @@ export let PopUp = {
       container.prepend(window);
 
       let contentContainer = $(this.data.selectors.s_content);
-      contentContainer.append(content);
+      contentContainer.append(content);      
 
       this.cacheCallback(callback);
-      this.setUpListeners();
+      this.setUpListeners();      
     });
   },
 
@@ -64,9 +70,15 @@ export let PopUp = {
 
     callback(response.CANCEL);
     this.close();
+    Key.unbind();
   },
 
   cacheCallback(callback) {
     this.data.cache.callback = callback;
+  },
+
+  canOpen() {
+    let s = this.data.selectors;
+    return $(s.s_popUp)[0] == null;
   }
 }

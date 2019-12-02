@@ -1,4 +1,4 @@
-@model Calendar.Models.DTO.EventCalendarDTO
+@model Calendar.Models.DTO.EventInfoDTO
 
 <div class="pop-up event-info">
   <input type="hidden" name="eventId" value="@Model.Event.Id">
@@ -24,36 +24,41 @@
       <div class="about">
         <h3 class="title">@(string.IsNullOrWhiteSpace(Model.Event.Title) ? "(No title)" : Model.Event.Title) </h3>
         <div class="time-info">
-          @if (!Model.Event.IsAllDay)
-          {
           <div class="daily-range">
-            <span class="time-start">@Model.Event.Start.ToString("h:mm tt")</span>
-            <span> &mdash; </span>
-            <span class="time-finish">@Model.Event.Finish.ToString("h:mm tt")</span>
+            @{              
+              <span>@Model.Event.Start.ToString("dddd, MMMM d", new System.Globalization.CultureInfo("en-US"))</span>
+
+              if(!Model.Event.IsAllDay) {
+                <span class="m-dot"> ⋅ </span>
+                <span class="time-start">@Model.Event.Start.ToString("h:mm tt")</span>
+                <span> &mdash; </span>
+                <span class="time-finish">@Model.Event.Finish.ToString("h:mm tt")</span>
+              }
+            }          
           </div>
-          }
+
           <div class="repeat">
             <span>
               @{
-              var date = Model.Event.Start;
+                var date = Model.Event.Start;
 
-              switch (Model.Event.Repeat)
-              {
-              case Business.Models.Interval.NoRepeat:
-              break;
-              case Business.Models.Interval.Day:
-              <span>Daily</span>
-              break;
-              case Business.Models.Interval.Week:
-              <span>Weekly on @date.ToString("dddd")</span>
-              break;
-              case Business.Models.Interval.Month:
-              <span>Monthly on the @date.ToString("dd")</span>
-              break;
-              case Business.Models.Interval.Year:
-              <span>Annually on @date.ToString("MMMM") @date.ToString("dd")</span>
-              break;
-              }
+                switch (Model.Event.Repeat)
+                {
+                case Business.Models.Interval.NoRepeat:
+                break;
+                case Business.Models.Interval.Day:
+                <span>Daily</span>
+                break;
+                case Business.Models.Interval.Week:
+                <span>Weekly on @date.ToString("dddd")</span>
+                break;
+                case Business.Models.Interval.Month:
+                <span>Monthly on the @date.ToString("dd")</span>
+                break;
+                case Business.Models.Interval.Year:
+                <span>Annually on @date.ToString("MMMM") @date.ToString("dd")</span>
+                break;
+                }
               }
             </span>
           </div>
@@ -107,6 +112,17 @@
       <div class="about">
         <span class="calendar-name">
           @Model.Calendar.Name
+        </span>
+      </div>
+    </div>
+    <!-- Creator info -->
+    <div class="info-row">
+      <div class="info-icon">
+        <img src="@(Model.Event.Creator.Picture ?? "/images/user.png")" alt="user">
+      </div>
+      <div class="about">
+        <span class="user-email">
+          @Model.Event.Creator.Email
         </span>
       </div>
     </div>

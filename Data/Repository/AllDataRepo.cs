@@ -16,9 +16,9 @@ namespace Data.Repository
             DataTable idsCalendars = (@calendarList.Select(x => x.Id).ToList()).ConvertToDatatable("idsCalendars");
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                IEnumerable<AllData> s = connection.Query<AllData>("uspGetDataEvents", new { IdUser = userId, id_Calendar = idsCalendars, dateTimeStart, dateTimeFinish },
+                IEnumerable<AllData> events = connection.Query<AllData>("uspGetDataEvents", new { IdUser = userId, id_Calendar = idsCalendars, dateTimeStart, dateTimeFinish },
                     commandType: CommandType.StoredProcedure);
-                return s;
+                return events;
             }
         }
 
@@ -27,10 +27,10 @@ namespace Data.Repository
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 DataTable idsCalendars = (@calendarList.Select(x => x.Id).ToList()).ConvertToDatatable("idsCalendars");
-                IEnumerable<AllData> s = connection.Query<AllData>("uspGetDataInfinityEvents",
+                IEnumerable<AllData> events = connection.Query<AllData>("uspGetDataInfinityEvents",
                     new {IdUser = userId, id_Calendar = idsCalendars, date = finish},
                     commandType: CommandType.StoredProcedure);
-                return s;
+                return events;
             }
         }
 
@@ -38,9 +38,9 @@ namespace Data.Repository
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                AllData s = connection.Query<AllData>("uspGetEventById", new { eventId },
+                AllData _event = connection.Query<AllData>("uspGetEventById", new { eventId },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
-                return s;
+                return _event;
             }
         }
     }

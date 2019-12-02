@@ -7,6 +7,7 @@ import { Modal } from '../views/pop-ups/modal.js';
 import { GUID } from '../models/share/GUID.js'
 import { FetchContent } from '../models/mvc/fetch-content.js';
 import { CalendarList } from './calendar-list.js';
+import { Key } from '../models/share/key-bind.js';
 
 export let EventForm = {
   data: {
@@ -37,8 +38,8 @@ export let EventForm = {
       s_isAllDay: '.create-event-form #all-day', 
       s_repeatInterval: '#repeat-dropdown-trigger',
       s_repeatIntervalItem: '#repeat-dropdown-content li',
-      s_userCaledars: '#user-calendars-trigger',
-      s_seletedCalendar: '#user-calendars-trigger',
+      s_userCalendars: '#user-calendars-trigger',
+      s_selectedCalendar: '#user-calendars-trigger',
       s_userCalendar: '.user-calendar',
       s_userCalendarItem: '#user-calendar-list .user-calendar',
       s_calendarColor: '.calendar-color',
@@ -90,15 +91,17 @@ export let EventForm = {
     $(s.s_repeatIntervalItem).click(e => this.onRepeatIntervalChanged(e));
     $(s.s_submitCreate).click(() => this.onCreate());
     $(s.s_submitEdit).click(() => this.onEdit());
-    $(s.s_title).focusout(e => this.onTitleFocusOut(e));
+    $(s.s_title).on('input', e => this.onInputTitle(e));
     $(s.s_isAllDay).change(e => this.onAllDayChanged(e));
-    $(s.s_timeStart).on('input', e => this.onTimeChanged(e));
-    $(s.s_timeFinish).on('input', e => this.onTimeChanged(e));
     $(s.s_timeStart).change(e => this.onTimeChanged(e));
     $(s.s_timeFinish).change(e => this.onTimeChanged(e));
+    Key.enter(() => this.onCreate());
+    Key.ecs(() => this.onCancelCreation());
+
+    $(s.s_title).focus();
   },
 
-  openCreate(start, finish, allDay = false, callback = null) {        
+  openCreate(start, finish, allDay = false, onOpenCallback = null,  onCreateCallback = null) {        
     let event = {
       start,
       finish,
@@ -109,7 +112,7 @@ export let EventForm = {
     let url = this.data.url.createEventForm + `?date=${date.toISOString()}`;    
 
     FetchContent.get(url, 
-      content => this.renderCreateForm(content, event, callback));
+      content => this.renderCreateForm(content, event, onOpenCallback, onCreateCallback));
   },
 
   openShared(event) {
@@ -156,13 +159,14 @@ export let EventForm = {
       ViewMode.eventRollback();
     }    
     _this.close();
+    Key.unbind();
   },
 
   onCreate() {    
-    let event = this.getEvent();
+    let data = this.getEvent();
     
     new EventRepository()
-    .insert(event, 
+    .insert(data, 
     id => {
       if (id != -1) {
         let selector = ViewMode.getCachedEvent();
@@ -173,6 +177,9 @@ export let EventForm = {
         M.toast({html: 'Event added'});
       }
     });    
+
+    let calendarCache = CalendarList.findRootById(data.event.calendarId);
+    CalendarList.cacheCalendar(calendarCache);
   },
 
   onEdit() {
@@ -185,23 +192,11 @@ export let EventForm = {
     });    
   },
 
-  onCalendarChanged(e) {
-    let s = this.data.selectors;
-    let target = e.currentTarget;
-    let selectedCalendar = s.s_seletedCalendar;    
+  onCalendarChanged(e) {    
+    let target = e.currentTarget;      
 
-    let name = $(target).find('span')[0].innerText;
-    let colorContainer = $(target).find(s.s_calendarColor)[0];
-    let color = $(colorContainer).css('background-color');
-    let id = $(target).find('input[name="calendarId"]').val();
-
-    $(selectedCalendar).find('span')[0].innerText = name;
-    $(selectedCalendar).find('input[name="calendarId"]').val(id);
-    let selectedCalendarColor = $(selectedCalendar).find(s.s_calendarColor)[0];
-    $(selectedCalendarColor).css('background-color', color);
-
-    ViewMode.changeEventCalendar(+id);
-    ViewMode.cacheColor(color);
+    let calendar = CalendarList.getCalendarInfoByRoot(target);
+    this.setCalendar(calendar.id, calendar.name, calendar.color);
   },
 
   onAllDayChanged(e) {
@@ -261,7 +256,7 @@ export let EventForm = {
     }
   },
 
-  renderCreateForm(content, event, callback) {
+  renderCreateForm(content, event, openCallBack, createCallback) {
     if (!this.formCanOpen())
       return;
 
@@ -274,9 +269,15 @@ export let EventForm = {
     this.renderTimePickers(event.start, event.finish);            
     this.formState('create');
     this.setUpListeners();
-    this.cacheFromCallback(callback);
+    this.cacheFormCallback(createCallback);
     
-    Modal.open(this.onCancelCreation);
+    let calendarRoot = CalendarList.getCachedCalendar();
+    let calendar = CalendarList.getCalendarInfoByRoot(calendarRoot);
+    let color = CalendarList.getCachedCalendarColor();
+    this.setCalendar(calendar.id, calendar.name, color);
+        
+    Modal.open(this.onCancelCreation);   
+    openCallBack();
   },
 
   renderSharedForm(content, event) {
@@ -379,7 +380,7 @@ export let EventForm = {
     $(s.s_notifyTimeUnitValue).val(value);
   },
 
-  onTitleFocusOut(e) {
+  onInputTitle(e) {
     let title = $(e.target).val();
     let id = ViewMode.getCachedEvent();
 
@@ -426,6 +427,19 @@ export let EventForm = {
     } else {
       this.validDateRange();
     }
+  },
+
+  setCalendar(id, name, color) {
+    let s = this.data.selectors;
+    let selectedCalendar = s.s_selectedCalendar;
+
+    $(selectedCalendar).find('span')[0].innerText = name;
+    $(selectedCalendar).find('input[name="calendarId"]').val(id);
+    let selectedCalendarColor = $(selectedCalendar).find(s.s_calendarColor)[0];
+    $(selectedCalendarColor).css('background-color', color);
+
+    ViewMode.changeEventCalendar(+id);
+    ViewMode.cacheColor(color);
   },
 
   inValidDateRange() {
@@ -492,7 +506,7 @@ export let EventForm = {
     let timePickers = this.data.form.timePickers;
 
     let id = $(s.s_form).find('input[name="eventId"]').val();
-    let calendarId = $(s.s_seletedCalendar).find('input[name="calendarId"]').val();
+    let calendarId = $(s.s_selectedCalendar).find('input[name="calendarId"]').val();
     let title = $(s.s_title).val();
     let description = $(s.s_description).val();
     let isAllDay = $(s.s_isAllDay).is(":checked");
@@ -587,7 +601,7 @@ export let EventForm = {
   runUserCalendars() {
     let s = this.data.selectors;
 
-    this.data.form.userCalendars = new Dropdown(s.s_userCaledars, { constrainWidth: false });
+    this.data.form.userCalendars = new Dropdown(s.s_userCalendars, { constrainWidth: false });
     this.data.form.userCalendars.runDropdown();    
   },
 
@@ -642,7 +656,7 @@ export let EventForm = {
     }
   },
 
-  cacheFromCallback(callback) {
+  cacheFormCallback(callback) {
     this.data.cache.formCallback = callback;
   },
 

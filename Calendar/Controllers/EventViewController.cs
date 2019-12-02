@@ -35,13 +35,7 @@ namespace Calendar.Controllers
         {
             string user = userManager.GetUserId(User);
             var calendars = calendarService.GetCalendars(user);
-            var _event = new Event 
-            {
-                Notify = new NotificationSchedule
-                {
-                    TimeUnit = NotifyTimeUnit.NoNotify,
-                },
-            };
+            var _event = new Event();
 
             return PartialView("PartialViews/CreateEventForms/CreateEventPartial",
                 new EventFormDTO(null, _event, new EventScheduleDropdown(date), calendars));
@@ -51,9 +45,9 @@ namespace Calendar.Controllers
         {
             string user = userManager.GetUserId(User);
             var @event = eventService.GetEvent(user, id, timeOffset);
-            var calendar = calendarService.GetCalendar(user, @event.CalendarId);
+            var calendar = calendarService.GetCalendar(user, @event.CalendarId); 
 
-            return PartialView("PartialViews/PopUps/EventInfoPartial", new EventCalendarDTO(@event, calendar));
+            return PartialView("PartialViews/PopUps/EventInfoPartial", new EventInfoDTO(@event, calendar));
         }
 
         [HttpPost]

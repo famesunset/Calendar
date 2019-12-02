@@ -14,6 +14,7 @@
         private readonly ICalendar calendarRepos;
         private readonly IAllData bigEventRepos;
         private readonly INotification notificationRepos;
+        private readonly IUser userRepos;
 
         private readonly ServiceHelper serviceHelper;
 
@@ -24,13 +25,14 @@
             this.calendarRepos = calendarRepository;
             this.bigEventRepos = bigEventRepository;
             this.notificationRepos = notificationRepository;
+            this.userRepos = userRepository;
 
             this.serviceHelper = new ServiceHelper(userRepository, calendarRepository, bigEventRepository);
         }
 
         public int CreateEvent(string loginedUserId, Event @event, int timeOffset)
         {
-            var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
+            var (dataUser, dataCalendar) = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
             if (dataCalendar != null)
             {
                 if (!@event.Start.Kind.Equals(DateTimeKind.Utc))
@@ -40,6 +42,7 @@
                 }
 
                 Data.Models.Event dataEvent = Mapper.Map<Event, Data.Models.Event>(@event);
+                dataEvent.CreatorId = dataUser.IdUser;
                 int eventId = serviceHelper.WrapMethodWithReturn(() => eventRepos.CreateEvent(dataEvent), -1);
                 if (eventId > 0)
                 {
@@ -55,10 +58,15 @@
 
         public Event GetEvent(string loginedUserId, int eventId, int timeOffset)
         {
-            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
+            var (dataUser, dataBigEvent) = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
             if (dataBigEvent != null)
             {
                 var businessEvent = Mapper.Map<Data.Models.AllData, Event>(dataBigEvent);
+                var creator = serviceHelper.WrapMethodWithReturn(() => userRepos.GetUserById(dataBigEvent.CreatorId), null);
+                if (creator != null)
+                {
+                    businessEvent.Creator = Mapper.Map<Data.Models.User, User>(creator);
+                }
                 AddTimeOffset(businessEvent, timeOffset);
                 return businessEvent;
             }
@@ -94,7 +102,7 @@
 
         public bool DeleteEvent(string loginedUserId, int eventId)
         {
-            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
+            var (dataUser, dataBigEvent) = serviceHelper.IsUserHasAccessToEvent(loginedUserId, eventId);
             if (dataBigEvent != null)
             {
                 var success = serviceHelper.WrapMethod(() => eventRepos.Delete(dataBigEvent.EventId));
@@ -102,7 +110,6 @@
                 {
                     success = serviceHelper.WrapMethod(() => notificationRepos.DeleteNotification(dataBigEvent.EventId));
                 }
-
                 return success;
             }
             return false;
@@ -110,7 +117,7 @@
 
         public bool UpdateEvent(string loginedUserId, Event newEvent)
         {
-            var dataBigEvent = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
+            var (dataUser, dataBigEvent) = serviceHelper.IsUserHasAccessToEvent(loginedUserId, newEvent.Id);
             if (dataBigEvent != null)
             {
                 Data.Models.Event dataEvent = Mapper.Map<Event, Data.Models.Event>(newEvent);
@@ -120,10 +127,8 @@
                     success = serviceHelper.WrapMethod(() => 
                         notificationRepos.UpdateNotification(dataBigEvent.EventId, newEvent.Notify.Value, (int)newEvent.Notify.TimeUnit));
                 }
-
                 return success;
             }
-
             return false;
         }
 
