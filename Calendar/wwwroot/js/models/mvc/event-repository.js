@@ -31,6 +31,7 @@ export class EventRepository extends Repository {
     super.get(url, callback);    
   }
 
+  // item -> { event, timeOffset }
   update(item, callback) {
     let url = '/Event/EditEvent';
     super.post(item, url, callback);        

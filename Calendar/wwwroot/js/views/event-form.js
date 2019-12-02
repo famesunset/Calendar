@@ -96,11 +96,10 @@ export let EventForm = {
     $(s.s_isAllDay).change(e => this.onAllDayChanged(e));
     $(s.s_timeStart).change(e => this.onTimeChanged(e));
     $(s.s_timeFinish).change(e => this.onTimeChanged(e));
+    
     Key.enter(() => {
-      if (state == 'create') 
-        this.onCreate();
-      else 
-        this.onEdit();
+      if (state == 'create') this.onCreate();
+      else this.onEdit();
     });
     Key.ecs(() => this.onCancelCreation());
 
@@ -505,8 +504,7 @@ export let EventForm = {
   },
 
   getEvent() {
-    let s = this.data.selectors;
-    let currentDate = new Date(sessionStorage.getItem('currentDate'));
+    let s = this.data.selectors;  
 
     let datePickers = this.data.form.datePickers;
     let timePickers = this.data.form.timePickers;

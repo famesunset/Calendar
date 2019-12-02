@@ -31,6 +31,7 @@ export let Daily = {
       s_dayOfWeek: '.date .day-of-week',
       s_dailyEvent: '.daily-event',
       s_allDayEvent: '.all-day-event',
+      s_eventStretch: '.event-stretch',
       s_createAllDayTarget: '#day-view-mode .date',
       s_loadDeleteEvent: '.load-delete-event',
       s_eventContentWrapper: '.event-content-wrapper',
@@ -45,7 +46,8 @@ export let Daily = {
       c_loadDeleteEvent: 'load-delete-event',
       c_currentDate: 'current-date',
       c_currentDateDayOfWeek: 'current-date-day-of-week',
-      с_eventDrag: 'event-drag'
+      с_eventDrag: 'event-drag',
+      c_eventStretch: 'event-stretch'
     },
 
     ux: {
@@ -194,7 +196,7 @@ export let Daily = {
     this.data.cache.state = '';
   },
 
-  onStretchEvent(e) {
+  onStretchEvent(e) {    
     if (e.which != this.data.ux.leftMouseBtn) 
       return;
 
@@ -327,6 +329,8 @@ export let Daily = {
     if (!title || title.trim() === '') {
       title = '(No title)';
     }
+
+    let s = this.data.selectors;
     
     var el = 
     `<div class="daily-event" id="${selector}">
@@ -342,13 +346,20 @@ export let Daily = {
       <div class="${this.data.css.c_loadDeleteEvent}"></div>
     </div>`;      
     
-    $(container).append(el);
+    $(container).append(el);    
 
     this.calcEventPosition(selector, start, finish);   
     this.cacheEvent(selector); 
-    $(`#${selector}`).css('background-color', color);
-    $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
-    $(`#${selector}`).mouseup(e => {
+
+    let $el = $(`#${selector}`);
+
+    $el.append(`<div class="${this.data.css.c_eventStretch}"></div>`);    
+    let $eventStretch = $(`#${selector}`).find(s.s_eventStretch);
+    $eventStretch.mousedown(e => this.onEventStretchMouseDown(e, $eventStretch[0]));
+
+    $el.css('background-color', color);    
+    $el.mousedown(e => this.onDeleteEvent(e));
+    $el.mouseup(e => {
       if (this.data.cache.state == 'create')
         this.onOpenCreateForm(e);
       else 
@@ -376,6 +387,72 @@ export let Daily = {
     $(`#${selector}`).css('background-color', color);
     $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
     $(`#${selector}`).mouseup(e => this.onShowEventInfo(e));
+  },
+
+  onEventStretchMouseDown(e, $stretch) {    
+    e.stopPropagation();
+    let s = this.data.selectors;
+
+    if (e.which != this.data.ux.leftMouseBtn) 
+      return;    
+    $(s.s_cell).unbind('mousedown');   
+        
+    let root = $stretch.parentElement;
+    this.cacheEvent(root.id);
+    
+    let $root = $(root);
+    $root.unbind('mouseup');    
+
+    let event = this.getEventInfoByRoot(root);    
+    let container = root.parentElement;    
+
+    let targetCoords = this.getCoords(container);
+    this.data.cache.c_targetCellShift = Math.abs(e.clientY - targetCoords.y);
+    this.data.ux.pos_mouseStart = e.clientY;
+    this.data.cache.timeStart = event.start;
+    this.data.cache.timeFinish = event.finish;        
+    $(this.data.selectors.s_table).addClass(this.data.css.с_eventDrag);          
+
+    let $doc = $(document);
+    $doc.mousemove(e => this.onStretchEvent(e));
+    $doc.mouseup(() => {
+      $doc.unbind('mousemove');  
+      $doc.unbind('mouseup');    
+      
+      $(s.s_table).removeClass(this.data.css.с_eventDrag);      
+      $root.mouseup(e => this.onShowEventInfo(e));
+
+      event = this.getEventInfoByRoot(root);
+      this.dbEditEventTime(event.id, event.start, event.finish);
+    });
+  },
+
+  dbEditEventTime(id, start, finish)  {        
+    let repo = new EventRepository();
+
+    repo.get(id, 
+    event => {  
+      let dbStart = moment(new Date(event.start));
+      let dbFinish = moment(new Date(event.finish));
+
+      dbStart.hours(start.getHours());
+      dbStart.minutes(start.getMinutes());
+      dbFinish.hours(finish.getHours());      
+      dbFinish.minutes(finish.getMinutes());
+
+      start = dbStart.toDate();
+      finish = dbFinish.toDate();
+
+      event.start = moment(start).toISOString(false);
+      event.finish = moment(finish).toISOString(false);  
+
+      let offset = new Date().getTimezoneOffset();          
+
+      repo.update({ event, offset }, 
+      () => {
+        M.toast({html: 'Event changed'});
+      });
+    });
   },
 
   hideEventsByCalendarId(calendarId, callback) {
@@ -416,6 +493,25 @@ export let Daily = {
     }
 
     return null;
+  },
+
+  getEventInfoByRoot(root) {
+    let $root = $(root);
+
+    let id = $root.find('input[name="id"]').val();
+    let title = $root.find('.title').text();
+    let startText = $root.find('.start').text();
+    let finishText = $root.find('.end').text();    
+
+    let start = moment(startText, ['h:m a', 'H:m']).toDate();
+    let finish = moment(finishText, ['h:m a', 'H:m']).toDate();
+
+    return {
+      id,
+      title, 
+      start,
+      finish
+    }
   },
 
   currentTimeListener() {        

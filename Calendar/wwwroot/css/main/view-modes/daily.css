@@ -131,6 +131,7 @@
 }
 
 .daily-event {  
+  position: relative;
   user-select: none;
   -moz-user-select: none;
   z-index: 200;
@@ -222,4 +223,16 @@
   padding: 8px 16px;
   margin-top: 15px;
   margin-left: 20px;
+}
+
+.event-stretch {
+  position: absolute;
+  height: 8px;
+  width: 100%;
+  bottom: 0;  
+  border-radius: 4px;
+}
+
+.event-stretch:hover {
+  cursor: ns-resize;
 }
