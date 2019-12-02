@@ -418,12 +418,13 @@ export let Daily = {
     $doc.mouseup(() => {
       $doc.unbind('mousemove');  
       $doc.unbind('mouseup');    
-      
+
       $(s.s_table).removeClass(this.data.css.с_eventDrag);      
       $root.mouseup(e => this.onShowEventInfo(e));
 
       event = this.getEventInfoByRoot(root);
       this.dbEditEventTime(event.id, event.start, event.finish);
+      this.setUpListeners();
     });
   },
 
