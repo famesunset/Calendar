@@ -1,3 +1,5 @@
+using System.Reflection.Metadata;
+
 namespace Business.Models
 {
     using System;
@@ -8,6 +10,7 @@ namespace Business.Models
         public string Description { get; set; }
         public Interval Repeat { get; set; }
         public NotificationSchedule Notify { get; set; }
+        public User Creator { get; set; }
 
         public Event()
         {
