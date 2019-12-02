@@ -389,7 +389,8 @@ export let Daily = {
         if (root != null) $(root).remove();      
       });
 
-      callback();
+      if (callback != undefined)
+        callback();
     });      
   },
 
