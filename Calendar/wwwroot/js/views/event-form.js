@@ -159,6 +159,7 @@ export let EventForm = {
       ViewMode.eventRollback();
     }    
     _this.close();
+    Key.unbind();
   },
 
   onCreate() {    

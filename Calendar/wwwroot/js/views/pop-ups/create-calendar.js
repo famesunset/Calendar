@@ -59,6 +59,7 @@ export let CreateCalendar = {
     let form = _this.data.selectors.s_createCalendarForm;
     $(form).remove();
     Modal.close();
+    Key.unbind();
   },
 
   onColorSelected(e) {

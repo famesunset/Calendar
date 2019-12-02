@@ -59,6 +59,7 @@ export let DeleteEvent = {
 
   close() {    
     this.closeAnimation();
+    Key.unbind();
   },
 
   openAnimation(pos) {

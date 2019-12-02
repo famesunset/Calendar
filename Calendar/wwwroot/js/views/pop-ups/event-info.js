@@ -60,6 +60,7 @@ export let EventInfo = {
 
     $(info).remove();
     Modal.close();
+    Key.unbind();
   },
 
   onShare() {

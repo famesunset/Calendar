@@ -74,6 +74,7 @@ export let ShareCalendar = {
     $(form).remove();
     $(calendar).css('background-color', 'transparent');
     Modal.close();
+    Key.unbind();
   },
 
   onShareCalendar() {    

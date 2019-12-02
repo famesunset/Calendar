@@ -70,6 +70,7 @@ export let PopUp = {
 
     callback(response.CANCEL);
     this.close();
+    Key.unbind();
   },
 
   cacheCallback(callback) {

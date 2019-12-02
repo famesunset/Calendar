@@ -2,13 +2,13 @@
 importScripts('https://www.gstatic.com/firebasejs/3.6.8/firebase-messaging.js');
 
 var firebaseConfig = {
-    apiKey: "AIzaSyBtsbJsgq5g6cBO2TE6JOVPllkE6wA8ilg",
-    authDomain: "calendarpush-74bfd.firebaseapp.com",
-    databaseURL: "https://calendarpush-74bfd.firebaseio.com",
-    projectId: "calendarpush-74bfd",
-    storageBucket: "calendarpush-74bfd.appspot.com",
-    messagingSenderId: "1057839628645",
-    appId: "1:1057839628645:web:0f11859e8c0641b749a18c"
+  apiKey: "AIzaSyBtsbJsgq5g6cBO2TE6JOVPllkE6wA8ilg",
+  authDomain: "calendarpush-74bfd.firebaseapp.com",
+  databaseURL: "https://calendarpush-74bfd.firebaseio.com",
+  projectId: "calendarpush-74bfd",
+  storageBucket: "calendarpush-74bfd.appspot.com",
+  messagingSenderId: "1057839628645",
+  appId: "1:1057839628645:web:0f11859e8c0641b749a18c"
 };
 firebase.initializeApp(firebaseConfig);
 

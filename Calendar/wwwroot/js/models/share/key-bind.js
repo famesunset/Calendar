@@ -4,10 +4,14 @@ export let Key = {
     esc: 27
   },
 
+  unbind() {
+    $(document).unbind('keyup');
+  },
+
   bind(keyCode, callback) {
     $(document).keyup(e => {      
       if (e.keyCode == keyCode) {
-        $(document).unbind('keyup');
+        this.unbind();
         callback();        
       }
     });
