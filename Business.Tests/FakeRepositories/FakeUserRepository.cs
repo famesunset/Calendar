@@ -21,6 +21,11 @@
             }
         }
 
+        public void RemoveBrowser(string browserId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void CreateUser(User user)
         {
             user.IdUser = ++fakeUserId;
@@ -43,6 +48,11 @@
         {
             var calendar = FakeRepository.Get.Calendars.SingleOrDefault(c => c.Id.Equals(calendarId));
             return calendar.Users.SelectMany(u => u.Browsers.Select(b => FakeConverters.FakeBrowserToBrowser(b)));
+        }
+
+        public User GetUserById(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public User GetUserByEmail(string email)

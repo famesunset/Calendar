@@ -30,7 +30,7 @@
             return null;
         }
 
-        public Data.Models.Calendar IsUserHasAccessToCalendar(string loginedUserId, int calendarId)
+        public (Data.Models.User dataUser, Data.Models.Calendar dataCalendar) IsUserHasAccessToCalendar(string loginedUserId, int calendarId)
         {
             var dataUser = GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
@@ -38,13 +38,13 @@
                 var dataCalendars = WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(dataUser.IdUser), null);
                 if (dataCalendars != null)
                 {
-                    return dataCalendars.SingleOrDefault(c => c.Id == calendarId);
+                    return (dataUser, dataCalendars.SingleOrDefault(c => c.Id == calendarId));
                 }
             }
-            return null;
+            return (null, null);
         }
 
-        public Data.Models.AllData IsUserHasAccessToEvent(string loginedUserId, int eventId)
+        public (Data.Models.User dataUser, Data.Models.AllData dataBigEvent) IsUserHasAccessToEvent(string loginedUserId, int eventId)
         {
             var dataUser = GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
@@ -55,11 +55,11 @@
                 {
                     if (dataCalendars.Any(c => c.Id.Equals(dataBigEvent.CalendarId)))
                     {
-                        return dataBigEvent;
+                        return (dataUser, dataBigEvent);
                     }
                 }
             }
-            return null;
+            return (null, null);
         }
 
         public (bool IsOwner, bool IsDefault) GetCalendarData(Models.Calendar calendar, Data.Models.User dataUser)

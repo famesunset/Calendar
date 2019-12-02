@@ -7,6 +7,7 @@ namespace Data.Repository.Interfaces
     {
         void CreateUser(User user);
         User GetUserByIdentityId(string id);
+        User GetUserById(int id);
         User GetUserByEmail(string email);
         IEnumerable<Browser> GetBrowsers(int calendarId);
         void AddBrowser(Browser browser);

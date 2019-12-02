@@ -86,5 +86,10 @@
         {
             return FakeRepository.Get.Calendars.SingleOrDefault(c => c.Id.Equals(calendarId));
         }
+
+        bool ICalendar.RemoveCalendar(int id)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
