@@ -5,17 +5,18 @@
     using Models;
     public partial class EventService
     {
-        private static (DateTime Start, DateTime Finish) GetDateRange(DateTime beginning, DateUnit dateUnit)
+        private static (DateTime Start, DateTime Finish) GetDateRange(DateTime beginning, DateUnit dateUnit, int timeOffset)
         {
             DateTime dateStart;
             DateTime dateFinish;
+            beginning = beginning.AddMinutes(timeOffset);
             switch (dateUnit)
             {
                 default:
                 case DateUnit.Day:
                     {
-                        dateStart = beginning.ToUniversalTime();
-                        dateFinish = dateStart.AddDays(1);
+                        dateStart = beginning + TimeSpan.FromSeconds(1);
+                        dateFinish = dateStart.AddDays(1) - TimeSpan.FromSeconds(2);
                     }
                     break;
                 case DateUnit.Week:
