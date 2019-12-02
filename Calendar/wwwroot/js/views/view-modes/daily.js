@@ -142,8 +142,9 @@ export let Daily = {
   // Stretch mouse down
   onCellMouseDown(e) {       
     if (e.which != this.data.ux.leftMouseBtn) 
-      return;      
-    
+      return;    
+    $(this.data.selectors.s_cell).unbind('mousedown');    
+
     let container = e.target;
     let selector = GUID();
     let eventId = GUID();        
@@ -167,7 +168,7 @@ export let Daily = {
     this.data.cache.timeFinish = timeFinish;
     this.data.cache.state = 'create';
     this.data.cache.cachedColor = color;
-    $(this.data.selectors.s_table).addClass(this.data.css.с_eventDrag);
+    $(this.data.selectors.s_table).addClass(this.data.css.с_eventDrag);    
   },
 
   // Stretch mouse up
@@ -182,13 +183,13 @@ export let Daily = {
       this.data.cache.timeStart,
       this.data.cache.timeFinish,
       allDay,
+      () => this.setUpListeners(),
       () => $(target).mouseup((e) => this.onShowEventInfo(e))
     );
-    
-    $(target).unbind('mouseup');
+        
     $(document).unbind('mouseup');
-    $(document).unbind('mousemove');
-    $(this.data.selectors.s_table).removeClass(this.data.css.с_eventDrag);
+    $(document).unbind('mousemove');    
+    $(s.s_table).removeClass(this.data.css.с_eventDrag);    
 
     this.data.cache.state = '';
   },

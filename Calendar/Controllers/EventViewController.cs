@@ -46,7 +46,7 @@ namespace Calendar.Controllers
             string user = userManager.GetUserId(User);
             var @event = eventService.GetEvent(user, id, timeOffset);
             var calendar = calendarService.GetCalendar(user, @event.CalendarId);
-            User creator = null; // TODO: Get user by id
+            User creator = null; // TODO: Get user by id            
 
             return PartialView("PartialViews/PopUps/EventInfoPartial", new EventInfoDTO(@event, calendar, creator));
         }

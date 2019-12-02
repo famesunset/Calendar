@@ -101,7 +101,7 @@ export let EventForm = {
     $(s.s_title).focus();
   },
 
-  openCreate(start, finish, allDay = false, callback = null) {        
+  openCreate(start, finish, allDay = false, onOpenCallback = null,  onCreateCallback = null) {        
     let event = {
       start,
       finish,
@@ -112,7 +112,7 @@ export let EventForm = {
     let url = this.data.url.createEventForm + `?date=${date.toISOString()}`;    
 
     FetchContent.get(url, 
-      content => this.renderCreateForm(content, event, callback));
+      content => this.renderCreateForm(content, event, onOpenCallback, onCreateCallback));
   },
 
   openShared(event) {
@@ -255,7 +255,7 @@ export let EventForm = {
     }
   },
 
-  renderCreateForm(content, event, callback) {
+  renderCreateForm(content, event, openCallBack, createCallback) {
     if (!this.formCanOpen())
       return;
 
@@ -268,7 +268,7 @@ export let EventForm = {
     this.renderTimePickers(event.start, event.finish);            
     this.formState('create');
     this.setUpListeners();
-    this.cacheFromCallback(callback);
+    this.cacheFormCallback(createCallback);
     
     let calendarRoot = CalendarList.getCachedCalendar();
     let calendar = CalendarList.getCalendarInfoByRoot(calendarRoot);
@@ -276,6 +276,7 @@ export let EventForm = {
     this.setCalendar(calendar.id, calendar.name, color);
         
     Modal.open(this.onCancelCreation);   
+    openCallBack();
   },
 
   renderSharedForm(content, event) {
@@ -654,7 +655,7 @@ export let EventForm = {
     }
   },
 
-  cacheFromCallback(callback) {
+  cacheFormCallback(callback) {
     this.data.cache.formCallback = callback;
   },
 
