@@ -31,6 +31,7 @@
         public int CreateEvent(string loginedUserId, Event @event, int timeOffset)
         {
             var dataCalendar = serviceHelper.IsUserHasAccessToCalendar(loginedUserId, @event.CalendarId);
+            var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataCalendar != null)
             {
                 if (!@event.Start.Kind.Equals(DateTimeKind.Utc))
@@ -40,6 +41,7 @@
                 }
 
                 Data.Models.Event dataEvent = Mapper.Map<Event, Data.Models.Event>(@event);
+                dataEvent.CreatorId = dataUser.IdUser;
                 int eventId = serviceHelper.WrapMethodWithReturn(() => eventRepos.CreateEvent(dataEvent), -1);
                 if (eventId > 0)
                 {

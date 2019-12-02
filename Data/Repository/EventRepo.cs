@@ -14,7 +14,7 @@ namespace Data.Repository
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 int eventId = connection.ExecuteScalar<int>("uspCreateEvent",
-                    new { @event.CalendarId, @event.Description, @event.Title, @event.RepeatId, @event.TimeStart, @event.TimeFinish, @event.AllDay },
+                    new { @event.CalendarId, @event.Description, @event.Title, @event.RepeatId, @event.TimeStart, @event.TimeFinish, @event.AllDay, @event.CreatorId },
                     commandType: CommandType.StoredProcedure);
                 return eventId;
             }

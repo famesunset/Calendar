@@ -12,5 +12,6 @@
         public DateTime TimeFinish { get; set; }
         public bool AllDay { get; set; }
         public int RepeatId { get; set; }
+        public int CreatorId { get; set; }
     }
 }
