@@ -4,6 +4,7 @@ import { PopUp } from "./pop-up.js";
 import { CalendarRepository } from "../../models/mvc/calendar-repository.js";
 import { FetchContent } from "../../models/mvc/fetch-content.js";
 import { Key } from "../../models/share/key-bind.js";
+import { Toast } from "../../models/toast.js";
 
 export let ShareCalendar = {
   data: {
@@ -61,7 +62,7 @@ export let ShareCalendar = {
 
         if (result == response.SUBMIT) {
           new CalendarRepository().subscribe(email, calendarId,
-          () => M.toast({html: 'Calendar was shared'}));
+          () => Toast.display('Calendar was shared'));
         }
       });
     });

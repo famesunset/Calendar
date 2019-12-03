@@ -3,6 +3,7 @@ import { ViewMode } from '../view-mode.js';
 import { Modal } from '../pop-ups/modal.js';
 import { FetchContent } from '../../models/mvc/fetch-content.js';
 import { Key } from '../../models/share/key-bind.js';
+import { Toast } from '../../models/toast.js';
 
 export let DeleteEvent = {
   data: {
@@ -37,7 +38,7 @@ export let DeleteEvent = {
     this.deleteEvent();
     this.close();
     Modal.close();
-    M.toast({html: 'Event deleted'});
+    Toast.display('Event deleted');
   },
 
   open(id, pos) {    

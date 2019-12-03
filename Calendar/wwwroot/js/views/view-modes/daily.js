@@ -5,6 +5,7 @@ import { DeleteEvent } from '../pop-ups/delete-event.js';
 import { CalendarRepository } from '../../models/mvc/calendar-repository.js';
 import { CalendarList } from '../calendar-list.js';
 import { EventInfo } from '../pop-ups/event-info.js';
+import { Toast } from '../../models/toast.js';
 
 export let Daily = {
   data: {
@@ -454,9 +455,7 @@ export let Daily = {
       let offset = new Date().getTimezoneOffset();          
 
       repo.update({ event, offset }, 
-      () => {
-        M.toast({html: 'Event changed'});
-      });
+      () => Toast.display('Event changed'));
     });
   },
 

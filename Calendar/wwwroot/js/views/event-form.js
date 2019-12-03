@@ -8,6 +8,7 @@ import { GUID } from '../models/share/GUID.js'
 import { FetchContent } from '../models/mvc/fetch-content.js';
 import { CalendarList } from './calendar-list.js';
 import { Key } from '../models/share/key-bind.js';
+import { Toast } from '../models/toast.js';
 
 export let EventForm = {
   data: {
@@ -179,7 +180,7 @@ export let EventForm = {
     
         this.close();
         this.execFormCallback();    
-        M.toast({html: 'Event added'});
+        Toast.display('Event added');
       }
     });    
 
@@ -192,7 +193,7 @@ export let EventForm = {
     
     new EventRepository().update(event, 
     () => {
-      M.toast({html: 'Event changed'});
+      Toast.display('Event changed');
       this.close();
     });    
   },

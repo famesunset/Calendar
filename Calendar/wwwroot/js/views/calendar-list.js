@@ -5,6 +5,7 @@ import { Modal } from "./pop-ups/modal.js";
 import { ShareCalendar } from './pop-ups/share-calendar.js';
 import { PopUp } from "./pop-ups/pop-up.js";
 import { FetchContent } from "../models/mvc/fetch-content.js";
+import { Toast } from "../models/toast.js";
 
 export let CalendarList = {
   data: {
@@ -82,7 +83,7 @@ export let CalendarList = {
       FetchContent.get(url, content => {
         $(container).append(content);  
         this.setUpListeners();
-        M.toast({html: 'Calendar added'});
+        Toast.display('Calendar added');
       });
     });
   },
@@ -118,7 +119,7 @@ export let CalendarList = {
               () => {
                 this.hideToolTips();   
                 $(root).remove();
-                M.toast({html: 'Calendar deleted'});
+                Toast.display('Calendar was hidden');
                 this.checkCache(id);
               });   
           });        

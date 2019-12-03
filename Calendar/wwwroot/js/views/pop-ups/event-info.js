@@ -4,6 +4,7 @@ import { EventRepository } from '../../models/mvc/event-repository.js';
 import { ViewMode } from '../view-mode.js';
 import { FetchContent } from '../../models/mvc/fetch-content.js';
 import { Key } from '../../models/share/key-bind.js';
+import { Toast } from '../../models/toast.js';
 
 export let EventInfo = {
   data: {
@@ -70,7 +71,7 @@ export let EventInfo = {
     new EventRepository().generateLink(id, 
     link => {
       navigator.clipboard.writeText(link)
-      .then(() => M.toast({ html: 'Copied to clipboard' }));  
+      .then(() => Toast.display('Copied to clipboard'));  
     });  
   },
 
@@ -91,7 +92,7 @@ export let EventInfo = {
     () => {
       this.close();
       ViewMode.deleteEvent(selector);
-      M.toast({ html: 'Event deleted' });
+      Toast.display('Event deleted');
     });    
   }
 }
