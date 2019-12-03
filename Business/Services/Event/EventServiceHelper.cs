@@ -5,11 +5,10 @@
     using Models;
     public partial class EventService
     {
-        private static (DateTime Start, DateTime Finish) GetDateRange(DateTime beginning, DateUnit dateUnit, int timeOffset)
+        private static (DateTime start, DateTime finish) GetDateRange(DateTime beginning, DateUnit dateUnit)
         {
             DateTime dateStart;
             DateTime dateFinish;
-            beginning = beginning.AddMinutes(timeOffset);
             switch (dateUnit)
             {
                 default:
@@ -37,14 +36,13 @@
         }
 
         private IEnumerable<Data.Models.AllData> GetInfinityEvents
-            (int userId, IEnumerable<Data.Models.Calendar> calendarList, DateTime beginning, DateUnit dateUnit, DateTime finish, int timeOffset)
+            (int userId, IEnumerable<Data.Models.Calendar> calendarList, DateTime beginning, DateUnit dateUnit, DateTime finish)
         {
             var events = serviceHelper.WrapMethodWithReturn(() => bigEventRepos.GetInfinityEvents(userId, calendarList, finish),
                 new List<Data.Models.AllData>());
             var result = new List<Data.Models.AllData>();
             foreach (var _event in events)
             {
-                AddTimeOffset(_event, timeOffset);
                 result.AddRange(FindEvents(beginning, dateUnit, _event));
             }
             return result;
