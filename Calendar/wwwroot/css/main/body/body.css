@@ -1,3 +1,9 @@
+.body-wrapper {
+  height: calc(100% - var(--header-height));
+  width: 100%;
+  display: flex;
+}
+
 #calendar-table {
   height: 100%;
   width: calc(100% - var(--side-bar-width));

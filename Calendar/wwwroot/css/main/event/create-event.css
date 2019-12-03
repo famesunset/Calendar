@@ -1,14 +1,13 @@
 #load-create-event-form {
   z-index: 100;
   position: absolute;
-  left: 50%;
-  margin-left: -225px;
+  width: 450px;
+  left: calc(50% - 225px);  
   top: 20%;
 }
 
 .create-event-form {      
-  padding: 10px 20px 20px 20px;
-  width: 450px;
+  padding: 10px 20px 20px 20px;  
   border-radius: 10px;
   -webkit-box-shadow: var(--box-shadow-event-form);
   -moz-box-shadow: var(--box-shadow-event-form);

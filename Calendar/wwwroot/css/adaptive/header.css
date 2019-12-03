@@ -1,0 +1,10 @@
+@media only screen and (max-width: 950px) {
+  header {
+    padding: 0;
+  }
+
+  .calendar-icon span,
+  .header-date {
+    display: none;
+  }
+}

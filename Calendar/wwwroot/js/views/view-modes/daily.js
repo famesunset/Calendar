@@ -47,7 +47,8 @@ export let Daily = {
       c_currentDate: 'current-date',
       c_currentDateDayOfWeek: 'current-date-day-of-week',
       с_eventDrag: 'event-drag',
-      c_eventStretch: 'event-stretch'
+      c_eventStretch: 'event-stretch',
+      c_tableEventStretch: 'table-event-stretch'
     },
 
     ux: {
@@ -411,7 +412,8 @@ export let Daily = {
     this.data.ux.pos_mouseStart = e.clientY;
     this.data.cache.timeStart = event.start;
     this.data.cache.timeFinish = event.finish;        
-    $(this.data.selectors.s_table).addClass(this.data.css.с_eventDrag);          
+    $(s.s_cell).addClass(this.data.css.c_tableEventStretch);          
+    $(s.s_table).addClass(this.data.css.c_tableEventStretch);
 
     let $doc = $(document);
     $doc.mousemove(e => this.onStretchEvent(e));
@@ -419,12 +421,14 @@ export let Daily = {
       $doc.unbind('mousemove');  
       $doc.unbind('mouseup');    
 
-      $(s.s_table).removeClass(this.data.css.с_eventDrag);      
+      $(s.s_cell).removeClass(this.data.css.c_tableEventStretch);  
+      $(s.s_table).removeClass(this.data.css.c_tableEventStretch);  
       $root.mouseup(e => this.onShowEventInfo(e));
 
       event = this.getEventInfoByRoot(root);
       this.dbEditEventTime(event.id, event.start, event.finish);
       this.setUpListeners();
+      this.cacheEvent(null);
     });
   },
 

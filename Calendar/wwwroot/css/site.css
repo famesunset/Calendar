@@ -6,7 +6,7 @@
   font-family: var(--font-main-family);
   font-weight: 500;
   color: var(--color-main-gray);
-  overflow: hidden;
+  overflow: auto;
   background-color: #fff;
 }
 
@@ -53,22 +53,4 @@ textarea.materialize-textarea:focus:not([readonly]) {
   right: auto !important;
   bottom: 0px;  
   left: 45%;
-}
-
-@media only screen and (max-width: 800px) {
-  #side-bar {
-    display: none !important;
-  }
-
-  #calendar-table {
-    width: 100% !important;
-  }
-
-  .calendar-icon span {
-    display: none;
-  }
-
-  header {
-    padding: 0 !important;
-  }
 }
