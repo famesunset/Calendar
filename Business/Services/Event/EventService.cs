@@ -78,22 +78,21 @@
             var dataUser = serviceHelper.GetUserByIdentityId(loginedUserId);
             if (dataUser != null)
             {
-                beginning = beginning.AddMinutes(-timeOffset).Date;
-                var dateRange = GetDateRange(beginning, dateUnit, timeOffset);
-
-                var userCalendars = serviceHelper.WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(dataUser.IdUser), 
-                    new List<Data.Models.Calendar>())
+                var utcTime = beginning;
+                var userTime = utcTime.AddMinutes(-timeOffset);
+                var userCalendars = serviceHelper.WrapMethodWithReturn(() => calendarRepos.GetUserCalendars(dataUser.IdUser), new List<Data.Models.Calendar>())
                     .Where(uc => calendarIds.Any(ci => ci.Equals(uc.Id)));
 
                 if (userCalendars.Any())
                 {
-                    var events = serviceHelper.WrapMethodWithReturn(() => bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, dateRange.Start, dateRange.Finish), 
+                    var (start, finish) = GetDateRange(utcTime, dateUnit);
+                    var events = serviceHelper.WrapMethodWithReturn(() => bigEventRepos.GetDataEvents(dataUser.IdUser, userCalendars, start, finish),
                         new List<Data.Models.AllData>());
+                    events = events.Concat(GetInfinityEvents(dataUser.IdUser, userCalendars, userTime, dateUnit, finish));
                     foreach (var _event in events)
                     {
                         AddTimeOffset(_event, timeOffset);
                     }
-                    events = events.Concat(GetInfinityEvents(dataUser.IdUser, userCalendars, beginning, dateUnit, dateRange.Item2, timeOffset));
                     return events.Select(e => Mapper.Map<Data.Models.AllData, BaseEvent>(e));
                 }
             }
@@ -124,7 +123,7 @@
                 var success = serviceHelper.WrapMethod(() => eventRepos.UpdateEvent(dataEvent));
                 if (newEvent.Notify != null && success)
                 {
-                    success = serviceHelper.WrapMethod(() => 
+                    success = serviceHelper.WrapMethod(() =>
                         notificationRepos.UpdateNotification(dataBigEvent.EventId, newEvent.Notify.Value, (int)newEvent.Notify.TimeUnit));
                 }
                 return success;
