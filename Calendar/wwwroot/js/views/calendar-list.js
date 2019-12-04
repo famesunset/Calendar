@@ -75,6 +75,7 @@ export let CalendarList = {
       name = '(No name)';
     }
 
+    Toast.display('Saving...');
     new CalendarRepository().insert(name, colorId,
     id => {
       let url = this.data.url.u_calendarView + `?id=${id}`;
@@ -113,6 +114,7 @@ export let CalendarList = {
       PopUp.open(content, result => {
         let response = PopUp.data.response;
 
+        Toast.display('Saving...');
         if (result == response.SUBMIT) {          
           ViewMode.hideEventsByCalendarId(id, () => {
             new CalendarRepository().delete(id,

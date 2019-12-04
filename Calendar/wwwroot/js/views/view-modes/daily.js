@@ -11,10 +11,12 @@ export let Daily = {
   data: {
     cache: {
       cachedEvent: '',
+      cacheEventGhost: '',
       cachedColor: '',      
-      c_targetCellShift: {},
+      targetCellShift: {},
       timeStart: {},
       timeFinish: {},
+      timeRange: 0,
       state: '',
       rollback: {
         id: 0,
@@ -49,13 +51,15 @@ export let Daily = {
       c_currentDateDayOfWeek: 'current-date-day-of-week',
       с_eventDrag: 'event-drag',
       c_eventStretch: 'event-stretch',
-      c_tableEventStretch: 'table-event-stretch'
+      c_tableEventStretch: 'table-event-stretch',
+      c_tableGrab: 'grabbing',
+      c_ghostState: 'daily-ghost-state'
     },
 
     ux: {
       cellHeight: 50,
       eventHeight: 46,
-      pos_mouseStart: 0,
+      dragStartPoint: 0,
       animateDuration: 150,
       eventDraggableStep: 15,
       leftMouseBtn: 1,
@@ -118,14 +122,14 @@ export let Daily = {
     e.stopPropagation();
     if (e.which != this.data.ux.leftMouseBtn)
       return;
-          
-    let target = e.currentTarget;
-    let id = $(target).find('input[name="id"]').val();
+
+    let cachedEvent = '#' + this.getCachedEvent();
+    let $target = $(cachedEvent);
+    let id = $target.find('input[name="id"]').val();
     
     if (id != 0 && EventForm.formCanOpen()) {
-      let color = $(target).css('background-color');
-      EventInfo.open(id);
-      this.cacheEvent(target.id);      
+      let color = $target.css('background-color');
+      EventInfo.open(id);      
       this.cacheColor(color);
     }        
   },
@@ -166,13 +170,13 @@ export let Daily = {
     this.renderEvent(container, selector, eventId, '(No title)', timeStart, timeFinish, color);
 
     let targetCoords = this.getCoords(container);
-    this.data.cache.c_targetCellShift = Math.abs(e.clientY - targetCoords.y);
-    this.data.ux.pos_mouseStart = e.clientY;
+    this.data.cache.targetCellShift = Math.abs(e.clientY - targetCoords.y);
+    this.data.ux.dragStartPoint = e.clientY;
     this.data.cache.timeStart = timeStart;
     this.data.cache.timeFinish = timeFinish;
     this.data.cache.state = 'create';
     this.data.cache.cachedColor = color;
-    $(this.data.selectors.s_table).addClass(this.data.css.с_eventDrag);    
+    this.addTableState(this.data.css.с_eventDrag);
   },
 
   // Stretch mouse up
@@ -193,9 +197,9 @@ export let Daily = {
         
     $(document).unbind('mouseup');
     $(document).unbind('mousemove');    
-    $(s.s_table).removeClass(this.data.css.с_eventDrag);    
+    this.removeTableState(this.data.css.с_eventDrag);
 
-    this.data.cache.state = '';
+    this.data.cache.state = '';    
   },
 
   onStretchEvent(e) {    
@@ -204,9 +208,9 @@ export let Daily = {
 
     let cache = this.data.cache;
     
-    let mouseStart = this.data.ux.pos_mouseStart;
+    let mouseStart = this.data.ux.dragStartPoint;
     let mouseEnd = e.clientY;
-    let mouseOffset = mouseEnd - mouseStart + cache.c_targetCellShift;
+    let mouseOffset = mouseEnd - mouseStart + cache.targetCellShift;
 
     if (mouseOffset >= 25) {
       let step = this.data.ux.eventDraggableStep;
@@ -361,12 +365,38 @@ export let Daily = {
 
     $el.css('background-color', color);    
     $el.mousedown(e => this.onDeleteEvent(e));
+    $el.mousedown(e => this.onStartDragEvent(e));
     $el.mouseup(e => {
       if (this.data.cache.state == 'create')
         this.onOpenCreateForm(e);
       else 
         this.onShowEventInfo(e);
     });
+  },
+
+  renderGhostEvent(container, selector, id, title, start, finish, color) {
+    if (!title || title.trim() === '') {
+      title = '(No title)';
+    }    
+
+    var el = 
+    `<div class="daily-event-ghost" style="background: ${color}" id="${selector}">
+      <div class="${this.data.css.s_eventContentWrapper}">
+        <input type="hidden" name="id" value="${id}">
+        <h6 class="title">${title}</h4>
+        <div class="time">
+          <span class="start">${moment(start).format('LT')}</span>
+          <span> &mdash; </span>
+          <span class="end">${moment(finish).format('LT')}</span>
+        </div>
+      </div>
+      <div class="${this.data.css.c_loadDeleteEvent}"></div>
+    </div>`;  
+    
+    $(container).append(el);
+    
+    this.calcEventPosition(selector, start, finish);
+    this.cacheEventGhost(selector);
   },
 
   renderAllDayEvent(selector, id, title, color) {
@@ -391,12 +421,116 @@ export let Daily = {
     $(`#${selector}`).mouseup(e => this.onShowEventInfo(e));
   },
 
+  onStartDragEvent(e) {    
+    if (e.which != this.data.ux.leftMouseBtn) return;   
+    
+    let cssGhostState = this.data.css.c_ghostState;
+    let root = e.currentTarget;    
+    let $el = $(root);
+    $el.addClass(cssGhostState);
+    $el.unbind('mouseup');
+    
+    const { id, title, start, finish, color } = this.getEventInfoByRoot(root);    
+    
+    let container = this.findCellByTime(start);    
+    let ghostSelector = GUID();    
+
+    this.renderGhostEvent(container, ghostSelector, id, title, start, finish, color);    
+    let $ghost = $('#' + ghostSelector);
+    $ghost.css('opacity', '0');
+
+    this.cacheEvent(root.id);
+    this.cacheEventGhost(ghostSelector);
+
+    let $doc = $(document);
+    $doc.mousemove(e => this.onEventDrag(e));
+    $doc.mouseup(e => this.onFinishEventDrag(e)); 
+
+    let m_start = moment(start);
+    let m_finish = moment(finish);
+
+    let duration = moment.duration(m_finish.diff(m_start));
+    let timeRange = duration.asMinutes();    
+    
+    this.data.cache.timeRange = timeRange;    
+    this.data.cache.timeStart = start;
+    this.data.ux.dragStartPoint = e.clientY;
+    
+    const cssGrabbing = this.data.css.c_tableGrab;
+    this.addTableState(cssGrabbing);
+  },
+
+  onEventDrag(e) {
+    const cellHeight = this.data.ux.cellHeight;
+    const step = this.data.ux.eventDraggableStep;
+    const startPoint = this.data.ux.dragStartPoint;    
+    const currentPoint = e.clientY;
+    const offset = currentPoint - startPoint;     
+    
+    let ghost = this.getCachedEventGhost();    
+    let $ghost = $('#' + ghost);
+    
+    const minutesOffset = (offset * 60) / cellHeight; 
+    const minutes = this.roundUpToAny(minutesOffset, step);    
+    const timeRange = this.data.cache.timeRange;
+    const prevStart = this.data.cache.timeStart;    
+    const timeStart = moment(prevStart).add(minutes, 'm').toDate();
+    const timeFinish = moment(timeStart).add(timeRange, 'm').toDate();
+
+    const { id, title, color } = this.getEventInfoByRoot($ghost);
+    const container = this.findCellByTime(timeStart);
+    
+    let m_timeFinish = moment(timeFinish);
+    let isValidTime = moment(timeStart).isSame(prevStart, 'day') &&
+                      !(m_timeFinish.hours() == 0 && m_timeFinish.minutes() > 0);  
+    if (isValidTime) {
+      $ghost.remove();
+      this.renderGhostEvent(container, ghost, id, title, timeStart, timeFinish, color);
+  
+      this.setEventTime(
+        moment(timeStart).format('LT'),
+        moment(timeFinish).format('LT'),
+        ghost
+      );
+    }
+  },
+
+  onFinishEventDrag(e) {    
+    let $doc = $(document);    
+    $doc.unbind('mousemove');
+    $doc.unbind('mouseup');   
+    
+    let $el = $('#' + this.getCachedEvent());    
+    let $ghost = $('#' + this.getCachedEventGhost());
+
+    const { id, title, start, finish, color } = this.getEventInfoByRoot($ghost);
+    const prevStart = this.data.cache.timeStart;    
+    
+    if (moment(prevStart).isSame(start)) {
+      document.body.style.cursor = "default";
+      let cssGhostState = this.data.css.c_ghostState;
+      $el.removeClass(cssGhostState);
+      this.onShowEventInfo(e);      
+    } else {
+      $el.remove();
+      const container = this.findCellByTime(start);
+      const selector = GUID();      
+      this.renderEvent(container, selector, id, title, start, finish, color);
+
+      this.dbEditEventTime(id, start, finish);
+    }
+
+    $ghost.remove();    
+
+    const cssGrabbing = this.data.css.c_tableGrab;    
+    this.removeTableState(cssGrabbing);    
+  },
+
   onEventStretchMouseDown(e, $stretch) {    
     e.stopPropagation();
     let s = this.data.selectors;
 
-    if (e.which != this.data.ux.leftMouseBtn) 
-      return;    
+    if (e.which != this.data.ux.leftMouseBtn) return;    
     $(s.s_cell).unbind('mousedown');   
         
     let root = $stretch.parentElement;
@@ -406,15 +540,6 @@ export let Daily = {
     $root.unbind('mouseup');    
 
     let event = this.getEventInfoByRoot(root);    
-    let container = root.parentElement;    
-
-    let targetCoords = this.getCoords(container);
-    this.data.cache.c_targetCellShift = Math.abs(e.clientY - targetCoords.y);
-    this.data.ux.pos_mouseStart = e.clientY;
-    this.data.cache.timeStart = event.start;
-    this.data.cache.timeFinish = event.finish;        
-    $(s.s_cell).addClass(this.data.css.c_tableEventStretch);          
-    $(s.s_table).addClass(this.data.css.c_tableEventStretch);
 
     let $doc = $(document);
     $doc.mousemove(e => this.onStretchEvent(e));
@@ -422,8 +547,7 @@ export let Daily = {
       $doc.unbind('mousemove');  
       $doc.unbind('mouseup');    
 
-      $(s.s_cell).removeClass(this.data.css.c_tableEventStretch);  
-      $(s.s_table).removeClass(this.data.css.c_tableEventStretch);  
+      this.removeTableState(this.data.css.c_tableEventStretch);
       $root.mouseup(e => this.onShowEventInfo(e));
 
       event = this.getEventInfoByRoot(root);
@@ -431,11 +555,21 @@ export let Daily = {
       this.setUpListeners();
       this.cacheEvent(null);
     });
+
+    let container = root.parentElement;    
+
+    let targetCoords = this.getCoords(container);
+    this.data.cache.targetCellShift = Math.abs(e.clientY - targetCoords.y);
+    this.data.ux.dragStartPoint = e.clientY;
+    this.data.cache.timeStart = event.start;
+    this.data.cache.timeFinish = event.finish;        
+    this.addTableState(this.data.css.c_tableEventStretch);
   },
 
   dbEditEventTime(id, start, finish)  {        
     let repo = new EventRepository();
 
+    Toast.display('Saving...');
     repo.get(id, 
     event => {  
       let dbStart = moment(new Date(event.start));
@@ -510,11 +644,14 @@ export let Daily = {
     let start = moment(startText, ['h:m a', 'H:m']).toDate();
     let finish = moment(finishText, ['h:m a', 'H:m']).toDate();
 
+    let color = $root.css('background-color');
+
     return {
       id,
       title, 
       start,
-      finish
+      finish,
+      color
     }
   },
 
@@ -656,6 +793,10 @@ export let Daily = {
     this.data.cache.cachedEvent = selector;
   },
 
+  cacheEventGhost(selector) {
+    this.data.cache.cacheEventGhost = selector;
+  },
+
   cacheColor(color) {
     this.data.cache.cachedColor = color;
   },
@@ -670,5 +811,23 @@ export let Daily = {
 
   getCachedEvent() {
     return this.data.cache.cachedEvent;
-  }  
+  },
+  
+  getCachedEventGhost() {
+    return this.data.cache.cacheEventGhost;
+  },
+
+  addTableState(style) {
+    const table = this.data.selectors.s_table;
+    $(table).addClass(style);
+    $('.daily-event').css('pointer-events', 'none');
+    $('.cell').css('pointer-events', 'none');
+  },
+
+  removeTableState(style) {
+    const table = this.data.selectors.s_table;
+    $(table).removeClass(style);
+    $('.daily-event').css('pointer-events', 'all');
+    $('.cell').css('pointer-events', 'all');
+  }
 }; 

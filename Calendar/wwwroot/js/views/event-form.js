@@ -171,6 +171,7 @@ export let EventForm = {
   onCreate() {    
     let data = this.getEvent();
     
+    Toast.display('Saving...');
     new EventRepository()
     .insert(data, 
     id => {
@@ -191,6 +192,7 @@ export let EventForm = {
   onEdit() {
     let event = this.getEvent();
     
+    Toast.display('Saving...');
     new EventRepository().update(event, 
     () => {
       Toast.display('Event changed');

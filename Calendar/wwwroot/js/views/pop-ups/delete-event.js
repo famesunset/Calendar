@@ -37,8 +37,7 @@ export let DeleteEvent = {
   onDeleteEvent() {
     this.deleteEvent();
     this.close();
-    Modal.close();
-    Toast.display('Event deleted');
+    Modal.close();    
   },
 
   open(id, pos) {    
@@ -87,10 +86,12 @@ export let DeleteEvent = {
   },
 
   deleteEvent() {
+    Toast.display('Deleting...');
     new EventRepository().delete(this.data.cache.eventId,
     () => {
       let selector = ViewMode.getCachedEvent();
       ViewMode.deleteEvent(selector);
+      Toast.display('Event deleted');
     });    
   }
 };

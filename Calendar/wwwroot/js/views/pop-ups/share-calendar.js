@@ -60,6 +60,7 @@ export let ShareCalendar = {
       PopUp.open(content, result => {
         let response = PopUp.data.response;
 
+        Toast.display('Sharing...')
         if (result == response.SUBMIT) {
           new CalendarRepository().subscribe(email, calendarId,
           () => Toast.display('Calendar was shared'));

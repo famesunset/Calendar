@@ -88,6 +88,7 @@ export let EventInfo = {
     let id = $(s.s_eventId).val();
     let selector = ViewMode.getCachedEvent();    
 
+    Toast.display('Deleting...');
     new EventRepository().delete(id, 
     () => {
       this.close();

@@ -74,7 +74,7 @@
   z-index: 0;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: scroll;    
   padding-left: 45px;
   max-height: 1540px;
 }
@@ -130,6 +130,22 @@
   color: var(--color-small-font-size);
 }
 
+.daily-event-ghost {  
+  position: absolute;
+  user-select: none;
+  -moz-user-select: none;
+  z-index: 20000;
+  background-color: var(--displayed-event-bg);  
+  height: 46px;
+  width: calc(100% - 20px);
+  min-height: 28px;
+  border-radius: 4px;  
+  margin-left: 10px;  
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+    0 1px 18px 0 rgba(0, 0, 0, 0.12),
+    0 3px 5px -1px rgba(0, 0, 0, 0.2);
+}
+
 .daily-event {  
   position: relative;
   user-select: none;
@@ -146,6 +162,14 @@
     0 3px 5px -1px rgba(0, 0, 0, 0.2);
 }
 
+.daily-ghost-state {
+  opacity: .8;
+}
+
+.grabbing:hover {
+  cursor: grabbing !important;
+}
+
 .daily-event-tiny {
   display: flex;
   justify-content: flex-start;
@@ -154,7 +178,9 @@
 
 .all-day-event .title,
 .daily-event .title,
-.daily-event .time span {
+.daily-event .time span,
+.daily-event-ghost .title,
+.daily-event-ghost .time span {
   color: #fff;
   font-size: 12px;
   margin: 5px 0 0 5px;

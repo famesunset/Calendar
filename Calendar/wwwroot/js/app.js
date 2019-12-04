@@ -18,8 +18,8 @@ $(function() {
       CalendarList.run(() => {        
         ViewMode.run();   
       });          
-      UserMenu.run();
-    }
+      UserMenu.run();            
+    },
   };
 
   app.run();
