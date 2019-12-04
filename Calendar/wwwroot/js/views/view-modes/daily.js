@@ -418,7 +418,10 @@ export let Daily = {
     this.cacheEvent(selector); 
     $(`#${selector}`).css('background-color', color);
     $(`#${selector}`).mousedown(e => this.onDeleteEvent(e));
-    $(`#${selector}`).mouseup(e => this.onShowEventInfo(e));
+    $(`#${selector}`).mouseup(e => {
+      this.cacheEvent(selector);
+      this.onShowEventInfo(e)
+    });
   },
 
   onStartDragEvent(e) {    
