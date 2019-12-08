@@ -6,6 +6,7 @@
     [CalendarDefaultId] INT            NOT NULL,
     [IdentityId]        NVARCHAR (MAX) NOT NULL,
     [Picture]           NVARCHAR (MAX) NULL,
+    [CreationDate]      DATETIME       DEFAULT (getdate()) NOT NULL,
     CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

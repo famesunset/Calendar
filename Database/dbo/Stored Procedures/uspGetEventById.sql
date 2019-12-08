@@ -17,6 +17,8 @@ left join Access a ON a.Id = ca.AccessId
 left join Events e ON e.CalendarId = ca.Id
 left join Color color on color.Id = ca.ColorId
 left join Notification n on n.EventId = e.Id
+
+
 WHERE
 e.Id = @eventId
 

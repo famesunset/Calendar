@@ -127,6 +127,7 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Stored Procedures\" />
     <Folder Include="dbo\User Defined Types\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Snapshots\Database_20191120_01-08-50.dacpac" />
@@ -344,7 +345,15 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <Build Include="dbo\Stored Procedures\uspRemoveBrowser.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
     <Build Include="dbo\Stored Procedures\uspGetCalendarsByUserId.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Stored Procedures\uspGetUserById.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -363,5 +372,6 @@
     <Build Include="dbo\User Defined Types\idsCalendars.sql" />
     <Build Include="dbo\User Defined Types\CalendarsUsers.sql" />
     <Build Include="dbo\User Defined Types\Schedule.sql" />
+    <Build Include="Security\Permissions.sql" />
   </ItemGroup>
 </Project>

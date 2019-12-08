@@ -8,11 +8,10 @@
     [AllDay]       BIT            NOT NULL,
     [RepeatId]     INT            NOT NULL,
     [CreationDate] DATETIME       DEFAULT (getdate()) NOT NULL,
-	[CreatorId]	   INT			   NOT NULL
+    [CreatorId]    INT            NOT NULL,
     CONSTRAINT [PK_Events] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Events_Calendars] FOREIGN KEY ([CalendarId]) REFERENCES [dbo].[Calendars] ([Id]),
-    CONSTRAINT [FK_Events_Repeat] FOREIGN KEY ([RepeatId]) REFERENCES [dbo].[Repeat] ([Id]),
-    CONSTRAINT [FK_Creator_User] FOREIGN KEY ([CreatorId]) REFERENCES [dbo].[Users] ([Id])
+    CONSTRAINT [FK_Events_Repeat] FOREIGN KEY ([RepeatId]) REFERENCES [dbo].[Repeat] ([Id])
 );
 
 
