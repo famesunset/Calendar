@@ -3,6 +3,7 @@ import { SideBar } from './views/side-bar.js';
 import { ViewMode } from './views/view-mode.js';
 import { CalendarList } from './views/calendar-list.js';
 import { UserMenu } from './views/user-menu.js';
+import { Daily } from './views/view-modes/daily.js';
 
 $(function() {
   let app = {
@@ -18,7 +19,7 @@ $(function() {
       CalendarList.run(() => {        
         ViewMode.run();   
       });          
-      UserMenu.run();            
+      UserMenu.run();          
     },
   };
 
